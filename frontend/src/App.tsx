@@ -6,6 +6,7 @@ import MenuPage from "./pages/MenuPage";
 
 function App() {
   return (
+
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
       <Navbar />
       <Routes>
