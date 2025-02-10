@@ -29,7 +29,7 @@ mongoose.connect(MONG_URI)
         })
     })
     .catch((error)=>{
-        console.log(error);
+        console.log("here "+error);
     })
 
 app.use(express.json());
