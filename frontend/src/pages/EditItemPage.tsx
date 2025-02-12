@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 
-const MenuPage = () => {
+const EditItemPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [category, setCategory] = useState("All");
-
     useEffect(() => {
         fetchItems();
         const link = document.createElement("link");
@@ -144,23 +143,6 @@ const MenuPage = () => {
                         }}>
                             {item.available ? "Available" : "Out of Stock"}
                         </p>
-                        <button 
-                            className="m-8"  
-                            style={{
-                                backgroundColor: item.available ? "#D8E2DC" : "#FFC2D1",
-                                color: "#7A3E3E",
-                                fontSize: "1rem",
-                                padding: "8px 15px",
-                                borderRadius: "8px",
-                                cursor: 'pointer',
-                                display: "inline-block",
-                                fontWeight: "600"
-                            }}
-                            onClick={() => item.available && handleAddToCart(item)}
-                            disabled={!item.available}
-                        >
-                            {item.available ? "ADD to Cart" : "Out of Stock"}
-                        </button>
                     </div>
                 ))}
             </div>
@@ -168,4 +150,4 @@ const MenuPage = () => {
     );
 };
 
-export default MenuPage;
+export default EditItemPage;

@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <div className="bg-red-100 flex justify-around">
       Navbar
-      <button>
+      <button style={{mouse: "pointer"}}>
       <Link to={"/add"}>ADD items</Link>
       </button>
       <button>
@@ -41,6 +41,12 @@ const Navbar = () => {
       </button>
       <button>
       <Link to={"/menu"}>Menu</Link>
+      </button>
+      <button>
+      <Link to={"/login"}>Login</Link>
+      </button>
+      <button>
+      <Link to={"/edit"}>Edit</Link>
       </button>
       <NavLink to="/cart" style={{ position: 'relative' }}>
         Cart
