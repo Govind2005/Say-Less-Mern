@@ -3,7 +3,7 @@ import HomePage from "./pages/HomePage";
 import CreateItem from "./pages/CreateItem";
 import Navbar from "./components/Navbar";
 import MenuPage from "./pages/MenuPage";
-
+import SignInPage from "./pages/SignInPage";
 function App() {
   return (
 
@@ -13,6 +13,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/add" element={<CreateItem />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+
       </Routes>
     </BrowserRouter>
   );

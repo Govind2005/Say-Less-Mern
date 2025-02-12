@@ -38,10 +38,10 @@ const MenuPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
+        <div style={{ backgroundColor: "#FDE4F4", padding: "40px", fontFamily: "'Poppins', sans-serif",  }}>
             {/* Filter Bar */}
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
-                {["All", "Cake", "Cupcakes", "Pastry"].map((cat) => (
+                {["All", "Donut", "Brownie Tub", "Brownie", "Truffle Balls", "Cookie"].map((cat) => (
                     <button
                         key={cat}
                         onClick={() => setCategory(cat)}
@@ -49,6 +49,7 @@ const MenuPage = () => {
                             padding: "10px 20px",
                             borderRadius: "20px",
                             border: "none",
+                         
                             backgroundColor: category === cat ? "#7A3E3E" : "#F4D0D0",
                             color: category === cat ? "white" : "#7A3E3E",
                             fontSize: "1rem",
@@ -87,7 +88,10 @@ const MenuPage = () => {
                         textAlign: "left",
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                         transition: "transform 0.3s ease-in-out",
-                        border: "2px solid #EAC4D5"
+                        border: "2px solid #EAC4D5",
+                      //  backgroundImage: "url('https://media.istockphoto.com/id/1499676157/vector/cute-cupcake-line-art-pastel-pink-pattern.jpg?s=612x612&w=0&k=20&c=-mHk6af2KHOuSWO3qpNy10aqFJ4mkcNa9Zj0LYBfHGM=')", backgroundSize: "cover", backgroundPosition: "center" 
+                    
+    
                     }}
                         onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.05)"}
                         onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
@@ -103,7 +107,8 @@ const MenuPage = () => {
                                 borderBottom: "4px solid #EAC4D5"
                             }}
                         />
-                        <h2 style={{ color: "#7A3E3E", fontSize: "1.8rem", marginTop: "15px" }}>{item.name}</h2>
+                        <h2 style={{ color: "#7A3E3E",  fontFamily: "'Monsieur La Doulaise', serif",
+               fontSize: "2.5rem", marginTop: "15px" }}>{item.name}</h2>
                         <p style={{ color: "#B56576", fontSize: "1.2rem", fontWeight: "500" }}>Type: {item.type}</p>
                         <p style={{ color: "#6D6875", fontSize: "1.2rem" }}>Price: <span style={{ fontWeight: "bold", color: "#7A3E3E" }}>${item.price}</span></p>
                         <p style={{
