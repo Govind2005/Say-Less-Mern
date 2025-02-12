@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [category, setCategory] = useState("All");
+    const navigate = useNavigate();
 
+    interface Item {
+        name: String, 
+  type: String, 
+  image: String, 
+  price:  Number, 
+  available:  Boolean, 
+    }
     useEffect(() => {
         fetchItems();
         const link = document.createElement("link");
@@ -34,14 +43,41 @@ const MenuPage = () => {
     // Filtered Items based on category selection
     const filteredItems = category === "All" ? items : items.filter(item => item.type === category);
 
+    const handleAddToCart = (item: any) => {
+        // Get existing cart items from localStorage
+        const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        // Check if item already exists in cart
+        const existingItemIndex = existingCart.findIndex((cartItem: any) => cartItem._id === item._id);
+        
+        if (existingItemIndex !== -1) {
+            // If item exists, increment quantity
+            existingCart[existingItemIndex].quantity += 1;
+        } else {
+            // If item doesn't exist, add it with quantity 1
+            existingCart.push({
+                ...item,
+                quantity: 1
+            });
+        }
+        
+        // Calculate total items
+        const totalItems = existingCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+        
+        // Save updated cart and total back to localStorage
+        localStorage.setItem('cart', JSON.stringify(existingCart));
+        localStorage.setItem('cartCount', totalItems.toString());
+        console.log('Added to cart:', item.name);
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div style={{ backgroundColor: "#FDE4F4", padding: "40px", fontFamily: "'Poppins', sans-serif",  }}>
+        <div style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
             {/* Filter Bar */}
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
-                {["All", "Donut", "Brownie Tub", "Brownie", "Truffle Balls", "Cookie"].map((cat) => (
+                {["All", "Cake", "Cupcakes", "Pastry"].map((cat) => (
                     <button
                         key={cat}
                         onClick={() => setCategory(cat)}
@@ -49,7 +85,6 @@ const MenuPage = () => {
                             padding: "10px 20px",
                             borderRadius: "20px",
                             border: "none",
-                         
                             backgroundColor: category === cat ? "#7A3E3E" : "#F4D0D0",
                             color: category === cat ? "white" : "#7A3E3E",
                             fontSize: "1rem",
@@ -88,10 +123,7 @@ const MenuPage = () => {
                         textAlign: "left",
                         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                         transition: "transform 0.3s ease-in-out",
-                        border: "2px solid #EAC4D5",
-                      //  backgroundImage: "url('https://media.istockphoto.com/id/1499676157/vector/cute-cupcake-line-art-pastel-pink-pattern.jpg?s=612x612&w=0&k=20&c=-mHk6af2KHOuSWO3qpNy10aqFJ4mkcNa9Zj0LYBfHGM=')", backgroundSize: "cover", backgroundPosition: "center" 
-                    
-    
+                        border: "2px solid #EAC4D5"
                     }}
                         onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.05)"}
                         onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
@@ -107,8 +139,7 @@ const MenuPage = () => {
                                 borderBottom: "4px solid #EAC4D5"
                             }}
                         />
-                        <h2 style={{ color: "#7A3E3E",  fontFamily: "'Monsieur La Doulaise', serif",
-               fontSize: "2.5rem", marginTop: "15px" }}>{item.name}</h2>
+                        <h2 style={{ color: "#7A3E3E", fontSize: "1.8rem", marginTop: "15px" }}>{item.name}</h2>
                         <p style={{ color: "#B56576", fontSize: "1.2rem", fontWeight: "500" }}>Type: {item.type}</p>
                         <p style={{ color: "#6D6875", fontSize: "1.2rem" }}>Price: <span style={{ fontWeight: "bold", color: "#7A3E3E" }}>${item.price}</span></p>
                         <p style={{
@@ -122,6 +153,23 @@ const MenuPage = () => {
                         }}>
                             {item.available ? "Available" : "Out of Stock"}
                         </p>
+                        <button 
+                            className="m-8"  
+                            style={{
+                                backgroundColor: item.available ? "#D8E2DC" : "#FFC2D1",
+                                color: "#7A3E3E",
+                                fontSize: "1rem",
+                                padding: "8px 15px",
+                                borderRadius: "8px",
+                                cursor: 'pointer',
+                                display: "inline-block",
+                                fontWeight: "600"
+                            }}
+                            onClick={() => item.available && handleAddToCart(item)}
+                            disabled={!item.available}
+                        >
+                            {item.available ? "ADD to Cart" : "Out of Stock"}
+                        </button>
                     </div>
                 ))}
             </div>
