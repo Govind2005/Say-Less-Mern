@@ -83,7 +83,7 @@ const CreateItem = () => {
         
         <input 
             type="text"
-            placeholder="Available"
+            placeholder="true/false"
             name="available"
             value={newItem.available}
             onChange={(e) => setNewItem({ ...newItem, available: e.target.value })}

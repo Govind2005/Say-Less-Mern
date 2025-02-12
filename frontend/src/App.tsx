@@ -7,6 +7,7 @@ import CartPage from "./pages/CartPage";
 import LoginPage from './pages/LoginPage';
 import EditItemPage from './pages/EditItemPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import EditItemDetailsPage from "./pages/EditItem";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
+        {/* <Route path="/edit/:id" element={<EditItemDetailsPage />} /> */}
         <Route 
           path="/add" 
           element={
@@ -30,6 +32,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditItemPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/edit/:id" 
+          element={
+            <ProtectedRoute>
+              <EditItemDetailsPage />
             </ProtectedRoute>
           } 
         />
