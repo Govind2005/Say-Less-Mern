@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const MenuPage = () => {
+const EditItemPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [category, setCategory] = useState("All");
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchItems();
@@ -34,31 +36,20 @@ const MenuPage = () => {
     // Filtered Items based on category selection
     const filteredItems = category === "All" ? items : items.filter(item => item.type === category);
 
-    const handleAddToCart = (item: any) => {
-        // Get existing cart items from localStorage
-        const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
-        
-        // Check if item already exists in cart
-        const existingItemIndex = existingCart.findIndex((cartItem: any) => cartItem._id === item._id);
-        
-        if (existingItemIndex !== -1) {
-            // If item exists, increment quantity
-            existingCart[existingItemIndex].quantity += 1;
-        } else {
-            // If item doesn't exist, add it with quantity 1
-            existingCart.push({
-                ...item,
-                quantity: 1
+    const handleDeleteItem = async (id: string) => {
+        try {
+            const response = await fetch(`http://localhost:4000/api/item/${id}`, {
+                method: "DELETE",
             });
+            if (response.ok) {
+                setItems((prevItems) => prevItems.filter(item => item._id !== id)); // Remove item from the list
+                console.log(`Item with ID ${id} deleted successfully`);
+            } else {
+                setError("Failed to delete the item");
+            }
+        } catch (error) {
+            setError("Error deleting item: " + error.message);
         }
-        
-        // Calculate total items
-        const totalItems = existingCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-        
-        // Save updated cart and total back to localStorage
-        localStorage.setItem('cart', JSON.stringify(existingCart));
-        localStorage.setItem('cartCount', totalItems.toString());
-        console.log('Added to cart:', item.name);
     };
 
     if (loading) return <div>Loading...</div>;
@@ -102,7 +93,7 @@ const MenuPage = () => {
                 gap: "15px"
             }}>
                 ~~~ Our Delicious Creations ~~~
-             </h1>
+            </h1>
 
             {/* Items Grid */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "25px", padding: "20px" }}>
@@ -144,23 +135,40 @@ const MenuPage = () => {
                         }}>
                             {item.available ? "Available" : "Out of Stock"}
                         </p>
-                        <button 
-                            className="m-8"  
-                            style={{
-                                backgroundColor: item.available ? "#D8E2DC" : "#FFC2D1",
-                                color: "#7A3E3E",
-                                fontSize: "1rem",
-                                padding: "8px 15px",
-                                borderRadius: "8px",
-                                cursor: 'pointer',
-                                display: "inline-block",
-                                fontWeight: "600"
-                            }}
-                            onClick={() => item.available && handleAddToCart(item)}
-                            disabled={!item.available}
-                        >
-                            {item.available ? "ADD to Cart" : "Out of Stock"}
-                        </button>
+
+                        {/* Edit and Delete buttons */}
+                        <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+                            <button
+                                onClick={() => navigate(`/edit/${item._id}`)}
+                                style={{
+                                    padding: "10px 20px",
+                                    backgroundColor: "#7A3E3E",
+                                    color: "white",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    fontSize: "1rem",
+                                    fontWeight: "bold",
+                                    transition: "0.3s"
+                                }}
+                            >
+                                Edit
+                            </button>
+                            <button
+                                onClick={() => handleDeleteItem(item._id)}
+                                style={{
+                                    padding: "10px 20px",
+                                    backgroundColor: "#B56576",
+                                    color: "white",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    fontSize: "1rem",
+                                    fontWeight: "bold",
+                                    transition: "0.3s"
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>
@@ -168,4 +176,4 @@ const MenuPage = () => {
     );
 };
 
-export default MenuPage;
+export default EditItemPage;
