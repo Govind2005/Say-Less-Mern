@@ -8,6 +8,8 @@ import LoginPage from './pages/LoginPage';
 import EditItemPage from './pages/EditItemPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import EditItemDetailsPage from "./pages/EditItem";
+import Gallery from "./components/Gallery";
+import About from "./components/About";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
 
         <Route path="/cart" element={<CartPage />} />
