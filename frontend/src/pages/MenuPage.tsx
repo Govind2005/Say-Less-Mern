@@ -65,7 +65,7 @@ const MenuPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
+        <div style={{ padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
             {/* Filter Bar */}
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
                 {["All", "Cake", "Cupcakes", "Pastry", "Donut", "Cookie"].map((cat) => (
@@ -105,65 +105,91 @@ const MenuPage = () => {
              </h1>
 
             {/* Items Grid */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "25px", padding: "20px" }}>
-                {filteredItems.map((item) => (
-                    <div key={item._id} style={{
-                        backgroundColor: "#FFF5F7",
-                        borderRadius: "15px",
-                        padding: "20px",
-                        textAlign: "left",
-                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                        transition: "transform 0.3s ease-in-out",
-                        border: "2px solid #EAC4D5"
-                    }}
-                        onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                        onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
-                    >
-                        <img
-                            src={item.image}
-                            alt={item.name}
-                            style={{
-                                width: "100%",
-                                height: "250px",
-                                objectFit: "cover",
-                                borderRadius: "10px",
-                                borderBottom: "4px solid #EAC4D5"
-                            }}
-                        />
-                        <h2 style={{ color: "#7A3E3E", fontSize: "1.8rem", marginTop: "15px" }}>{item.name}</h2>
-                        <p style={{ color: "#B56576", fontSize: "1.2rem", fontWeight: "500" }}>Type: {item.type}</p>
-                        <p style={{ color: "#6D6875", fontSize: "1.2rem" }}>Price: <span style={{ fontWeight: "bold", color: "#7A3E3E" }}>${item.price}</span></p>
-                        <p style={{
-                            backgroundColor: item.available ? "#D8E2DC" : "#FFC2D1",
-                            color: "#7A3E3E",
-                            fontSize: "1rem",
-                            padding: "8px 15px",
-                            borderRadius: "8px",
-                            display: "inline-block",
-                            fontWeight: "600"
-                        }}>
-                            {item.available ? "Available" : "Out of Stock"}
-                        </p>
-                        <button 
-                            className="m-8"  
-                            style={{
-                                backgroundColor: item.available ? "#D8E2DC" : "#FFC2D1",
-                                color: "#7A3E3E",
-                                fontSize: "1rem",
-                                padding: "8px 15px",
-                                borderRadius: "8px",
-                                cursor: 'pointer',
-                                display: "inline-block",
-                                fontWeight: "600"
-                            }}
-                            onClick={() => item.available && handleAddToCart(item)}
-                            disabled={!item.available}
-                        >
-                            {item.available ? "ADD to Cart" : "Out of Stock"}
-                        </button>
-                    </div>
-                ))}
-            </div>
+            <div 
+  style={{ 
+    display: "grid", 
+    gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", // Fewer columns
+    gridAutoRows: "10px", // Bigger row height to make images squarer
+    gap: "20px", 
+    padding: "20px"
+  }}
+>
+  {filteredItems.map((item, index) => {
+    const randomHeight = Math.floor(Math.random() * 70) + 280; // 280px - 350px
+
+    return (
+      <div 
+        key={item._id} 
+        style={{
+          position: "relative",
+         // borderRadius: "30px",
+          overflow: "hidden",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+          transition: "transform 0.3s ease-in-out",
+          cursor: "pointer",
+          gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
+        }}
+        onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
+        onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+      >
+        <img
+          src={item.image}
+          alt={item.name}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transition: "opacity 0.3s ease"
+          }}
+        />
+        <div 
+          style={{
+            position: "absolute",
+            bottom: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+            padding: "15px",
+            color: "#fff"
+          }}
+        >
+          <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", marginBottom: "5px" }}>
+            {item.name}
+          </h2>
+          <p style={{ fontSize: "1rem", fontWeight: "500" }}>Type: {item.type}</p>
+          <p style={{ fontSize: "1rem" }}>
+            Price: <span style={{ fontWeight: "bold", color: "#FFD700" }}>${item.price}</span>
+          </p>
+          <button 
+            style={{
+                background: "transparent",
+                color: "white",
+                fontSize: "1rem",
+                padding: "10px 25px",
+                border: "2px solid white",
+                borderRadius: "5px",
+               // cursor: "pointer",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                transition: "background 0.3s ease, color 0.3s ease",
+              cursor: item.available ? 'pointer' : 'not-allowed'
+              
+            }}
+            onClick={() => item.available && handleAddToCart(item)}
+            disabled={!item.available}
+          >
+            {item.available ? "Add to Cart" : "Out of Stock"}
+          </button>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
         </div>
     );
 };

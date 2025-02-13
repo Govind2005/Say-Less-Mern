@@ -11,6 +11,14 @@ function HomePage() {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href = "https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }, []);
+
   
   const slides = [
     {
@@ -218,8 +226,8 @@ function HomePage() {
 
               <section className="hero">
                 <div className={`hero-content ${currentSlide === 1 ? 'slide-in' : ''}`}>
-                  <h2>{slides[currentSlide].tagline}</h2>
-                  <h1>{slides[currentSlide].heading.split('\n').map((line, i) => (
+                  <h2 style={{ fontFamily: "'Libre Caslon Display', serif"}} >{slides[currentSlide].tagline}</h2>
+                  <h1 style={{ fontFamily: "'Libre Caslon Display', serif"}} >{slides[currentSlide].heading.split('\n').map((line, i) => (
                     <span key={i}>
                       {line}
                       {i === 0 && <br />}
