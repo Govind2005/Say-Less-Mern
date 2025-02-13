@@ -2,7 +2,7 @@ import  { useState } from 'react';
 import './Gallery.css';
 
 function Gallery() {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const galleryImages = [
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',

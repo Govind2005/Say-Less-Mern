@@ -25,7 +25,8 @@ const EditItemDetailsPage = () => {
                 setLoading(false);
             }
         } catch (error) {
-            setError("Error fetching item: " + error.message);
+            setError("Error fetching item: " + (error as Error).message);
+
             setLoading(false);
         }
     };
@@ -43,7 +44,8 @@ const EditItemDetailsPage = () => {
                 setError("Failed to update item");
             }
         } catch (error) {
-            setError("Error updating item: " + error.message);
+            setError("Error updating item: " + (error as Error).message);
+
         }
     };
 

@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 const EditItemPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+
     const [category, setCategory] = useState("All");
     const navigate = useNavigate();
 
@@ -28,7 +29,8 @@ const EditItemPage = () => {
                 setLoading(false);
             }
         } catch (error) {
-            setError('Error fetching items: ' + error.message);
+            setError('Error fetching items: ' + (error as Error).message);
+
             setLoading(false);
         }
     };
@@ -48,7 +50,8 @@ const EditItemPage = () => {
                 setError("Failed to delete the item");
             }
         } catch (error) {
-            setError("Error deleting item: " + error.message);
+            setError('Error deleting items: ' + (error as Error).message);
+
         }
     };
 

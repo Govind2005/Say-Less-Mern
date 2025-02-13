@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <div className="bg-red-100 flex justify-around">
       Navbar
-      <button style={{mouse: "pointer"}}>
+      <button style={{cursor: "pointer"}}>
       <Link to={"/add"}>ADD items</Link>
       </button>
       <button>

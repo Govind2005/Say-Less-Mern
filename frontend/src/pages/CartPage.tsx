@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 
 interface CartItem {
     _id: string;
@@ -11,7 +11,6 @@ interface CartItem {
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [mobileNumber, setMobileNumber] = useState('');
 
     useEffect(() => {
         // Load cart items from localStorage when component mounts
@@ -20,28 +19,7 @@ const CartPage = () => {
     }, []);
 
 
-    const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const number = e.target.value;
-        setMobileNumber(number);
-    };
-
-    const handleSendOrder = () => {
-        // Create WhatsApp message
-        let message = "🎂 *New Order:*\n\n";
-        cartItems.forEach(item => {
-            message += `*${item.name}* x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
-        });
-        message += `\n*Total: $${total.toFixed(2)}*`;
-
-        // Format phone number (add country code if needed)
-        const formattedNumber = `91${mobileNumber}`; // Adding Indian country code
-        
-        // Create WhatsApp URL
-        const whatsappUrl = `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`;
-        
-        // Open WhatsApp
-        window.open(whatsappUrl, '_blank');
-    };
+    
 
     const updateCartCount = (items: CartItem[]) => {
         const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -71,7 +49,7 @@ const CartPage = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
   const [messageStatus, setMessageStatus] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: { target: { value: SetStateAction<string>; }; }) => {
     setPhoneNumber(e.target.value);
   };
 
@@ -216,15 +194,7 @@ const CartPage = () => {
                                     fontSize: "1rem"
                                 }}
                             />
-                            {mobileNumber && (
-                                <p style={{ 
-                                    color: "#FF4D4D", 
-                                    fontSize: "0.9rem",
-                                    marginTop: "4px" 
-                                }}>
-                                    Please enter a valid 10-digit mobile number
-                                </p>
-                            )}
+                            
                         </div>
 
                         <div style={{ 

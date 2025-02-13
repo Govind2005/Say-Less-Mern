@@ -50,7 +50,8 @@ const CreateItem = () => {
             placeholder="Name"
             name="name"
             value={newItem.name}
-            onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+            onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })}
+
             className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         
@@ -77,7 +78,8 @@ const CreateItem = () => {
             placeholder="Price"
             name="price"
             value={newItem.price}
-            onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+            onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })}
+
             className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         
