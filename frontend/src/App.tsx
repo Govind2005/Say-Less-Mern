@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import EditItemDetailsPage from "./pages/EditItem";
 import Gallery from "./components/Gallery";
 import About from "./components/About";
+import WhatsappPage from "./pages/WhatsappPage";
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
-        <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/what" element={<WhatsappPage />} />
         {/* <Route path="/edit/:id" element={<EditItemDetailsPage />} /> */}
         <Route 
           path="/add" 
