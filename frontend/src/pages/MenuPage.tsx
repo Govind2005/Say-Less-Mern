@@ -9,14 +9,8 @@ const MenuPage = () => {
     useEffect(() => {
         fetchItems();
         const link = document.createElement("link");
-        useEffect(() => {
-            fetchItems();
-            const link = document.createElement("link");
-            link.rel = "stylesheet";
-            link.href = "https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Monsieur+La+Doulaise&family=Bodoni+Moda:ital,wght@0,400;1,400&display=swap";
-            document.head.appendChild(link);
-        }, []);
-         link.rel = "stylesheet";
+        link.href = "https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Monsieur+La+Doulaise&family=Bodoni+Moda:ital,wght@0,400;1,400&display=swap";
+        link.rel = "stylesheet";
         document.head.appendChild(link);
     }, []);
 
@@ -71,10 +65,10 @@ const MenuPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: "'Libre Caslon Display', serif"  }}>
+        <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}
-            <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
-                {["All", "Cake", "Cupcakes", "Pastry", "Donut", "Cookie"].map((cat) => (
+            <div style={{ fontFamily: '"Bodoni Moda", serif' , display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
+                {["All", "Cake", "Truffle Balls", "Brownie & Brownie Tub", "Donut", "Cookie"].map((cat) => (
                     <button
                         key={cat}
                         onClick={() => setCategory(cat)}
@@ -100,8 +94,8 @@ const MenuPage = () => {
                 textAlign: "center",
                 color: "#7A3E3E",
                 fontSize: "4rem",
-               fontFamily: "'Libre Caslon Display', serif",
-                marginBottom: "20px",
+ fontFamily: '"Monsieur La Doulaise", cursive' ,     
+            marginBottom: "20px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -114,14 +108,14 @@ const MenuPage = () => {
             <div 
   style={{ 
     display: "grid", 
-    gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", // Fewer columns
+    gridTemplateColumns: "repeat(auto-fill, minmax(500px, 2fr))", // Fewer columns
     gridAutoRows: "10px", // Bigger row height to make images squarer
     gap: "20px", 
     padding: "20px"
   }}
 >
   {filteredItems.map((item, index) => {
-    const randomHeight = Math.floor(Math.random() * 70) + 280; // 280px - 350px
+    const randomHeight = Math.floor(Math.random() * 90) + 200; // 280px - 350px
 
     return (
       <div 
@@ -132,6 +126,7 @@ const MenuPage = () => {
           overflow: "hidden",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
           transition: "transform 0.3s ease-in-out",
+          fontFamily: '"Bodoni Moda", serif' ,
           cursor: "pointer",
           gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
         }}
@@ -158,17 +153,18 @@ const MenuPage = () => {
             background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
             display: "flex",
             flexDirection: "column",
+            fontFamily: '"Bodoni Moda", serif' ,
             justifyContent: "flex-end",
             padding: "15px",
             color: "#fff"
           }}
         >
-          <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", marginBottom: "5px" }}>
+          <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif' ,marginBottom: "5px" }}>
             {item.name}
           </h2>
-          <p style={{ fontSize: "1rem", fontWeight: "500" }}>Type: {item.type}</p>
-          <p style={{ fontSize: "1rem" }}>
-            Price: <span style={{ fontWeight: "bold", color: "#FFD700" }}>${item.price}</span>
+          <p style={{ fontSize: "1rem", fontFamily: '"Bodoni Moda", serif' ,fontWeight: "500" }}>Type: {item.type}</p>
+          <p style={{fontFamily: '"Bodoni Moda", serif' , fontSize: "1rem" }}>
+            Price: <span style={{ fontFamily: '"Bodoni Moda", serif' ,fontWeight: "bold"}}>${item.price}</span>
           </p>
           <button 
             style={{
@@ -177,6 +173,7 @@ const MenuPage = () => {
                 fontSize: "1rem",
                 padding: "10px 25px",
                 border: "2px solid white",
+                fontFamily: '"Bodoni Moda", serif' ,
                 borderRadius: "5px",
                // cursor: "pointer",
                 fontWeight: "bold",
