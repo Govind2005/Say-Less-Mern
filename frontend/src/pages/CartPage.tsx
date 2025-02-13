@@ -12,7 +12,6 @@ interface CartItem {
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [mobileNumber, setMobileNumber] = useState('');
-    const [isValidNumber, setIsValidNumber] = useState(false);
 
     useEffect(() => {
         // Load cart items from localStorage when component mounts
@@ -20,16 +19,10 @@ const CartPage = () => {
         setCartItems(savedCart);
     }, []);
 
-    // Validate mobile number (simple 10-digit validation)
-    const validateMobileNumber = (number: string) => {
-        const phoneRegex = /^[0-9]{10}$/;
-        return phoneRegex.test(number);
-    };
 
     const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const number = e.target.value;
         setMobileNumber(number);
-        setIsValidNumber(validateMobileNumber(number));
     };
 
     const handleSendOrder = () => {
@@ -74,6 +67,45 @@ const CartPage = () => {
     };
 
     const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    const [phoneNumber, setPhoneNumber] = useState('');
+  const [messageStatus, setMessageStatus] = useState('');
+
+  const handleInputChange = (e) => {
+    setPhoneNumber(e.target.value);
+  };
+
+  const handleButtonClick = async () => {
+    if (phoneNumber) {
+      try {
+        let message = "🎂 *New Order:*\n\n";
+        cartItems.forEach(item => {
+            message += `*${item.name}* x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+        });
+        message += `\n*Total: $${total.toFixed(2)}*`;
+        const response = await fetch('http://localhost:4000/send-whatsapp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ phoneNumber,message }),
+        });
+
+        const data = await response.json();
+        console.log(data)
+        if (data.success) {
+          setMessageStatus('Message sent successfully!');
+        } else {
+          setMessageStatus('Failed to send message.');
+        }
+      } catch (error) {
+        console.error(error);
+        setMessageStatus('Error occurred while sending message.');
+      }
+    } else {
+      setMessageStatus('Please enter a phone number.');
+    }
+  };
 
     return (
         <div style={{ padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
@@ -171,10 +203,10 @@ const CartPage = () => {
                                 Enter your mobile number:
                             </label>
                             <input
-                                type="tel"
-                                value={mobileNumber}
-                                onChange={handleMobileChange}
-                                placeholder="10-digit mobile number"
+                            type="text"
+                            value={phoneNumber}
+                            onChange={handleInputChange}
+                            placeholder="Enter phone number"
                                 style={{
                                     padding: "8px 12px",
                                     borderRadius: "6px",
@@ -184,7 +216,7 @@ const CartPage = () => {
                                     fontSize: "1rem"
                                 }}
                             />
-                            {mobileNumber && !isValidNumber && (
+                            {mobileNumber && (
                                 <p style={{ 
                                     color: "#FF4D4D", 
                                     fontSize: "0.9rem",
@@ -209,16 +241,16 @@ const CartPage = () => {
                                 Total: ${total.toFixed(2)}
                             </div>
                             <button 
-                                onClick={handleSendOrder}
-                                disabled={!isValidNumber || cartItems.length === 0}
+                                onClick={handleButtonClick}
+                                disabled={cartItems.length === 0}
                                 style={{
                                     padding: "12px 24px",
                                     borderRadius: "8px",
                                     border: "none",
-                                    backgroundColor: isValidNumber ? "#7A3E3E" : "#CCCCCC",
+                                    backgroundColor: "#7A3E3E" ,
                                     color: "white",
                                     fontSize: "1.1rem",
-                                    cursor: isValidNumber ? "pointer" : "not-allowed",
+                                    cursor:  "pointer" ,
                                     transition: "0.3s",
                                 }}
                             >
@@ -227,7 +259,9 @@ const CartPage = () => {
                         </div>
                     </div>
                 </div>
+                
             )}
+      <p>{messageStatus}</p>
         </div>
     );
 };
