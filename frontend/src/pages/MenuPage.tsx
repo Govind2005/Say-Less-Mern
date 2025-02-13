@@ -9,8 +9,14 @@ const MenuPage = () => {
     useEffect(() => {
         fetchItems();
         const link = document.createElement("link");
-        link.href = "https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap";
-        link.rel = "stylesheet";
+        useEffect(() => {
+            fetchItems();
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = "https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Monsieur+La+Doulaise&family=Bodoni+Moda:ital,wght@0,400;1,400&display=swap";
+            document.head.appendChild(link);
+        }, []);
+         link.rel = "stylesheet";
         document.head.appendChild(link);
     }, []);
 
@@ -65,7 +71,7 @@ const MenuPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div style={{ padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
+        <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: "'Libre Caslon Display', serif"  }}>
             {/* Filter Bar */}
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
                 {["All", "Cake", "Cupcakes", "Pastry", "Donut", "Cookie"].map((cat) => (
@@ -94,7 +100,7 @@ const MenuPage = () => {
                 textAlign: "center",
                 color: "#7A3E3E",
                 fontSize: "4rem",
-                fontFamily: "'Monsieur La Doulaise', serif",
+               fontFamily: "'Libre Caslon Display', serif",
                 marginBottom: "20px",
                 display: "flex",
                 alignItems: "center",
