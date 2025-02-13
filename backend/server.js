@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import ItemRoutes from "./routes/items.route.js"
+import ItemRoutes from "./routes/items.route.js";
+import ReviewRoutes from "./routes/review.route.js";
 import cors from "cors";
 import twilio from "twilio";
 
@@ -40,6 +41,7 @@ mongoose.connect(MONG_URI)
 
 app.use(express.json());
 app.use("/api/item",ItemRoutes);
+app.use("/api/review",ReviewRoutes);
 
 app.post("/send-whatsapp", (req,res)=>{
     res.json({ message: 'Message sent successfully:', success: true });

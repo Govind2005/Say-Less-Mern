@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import EditItemDetailsPage from "./pages/EditItem";
 import Gallery from "./components/Gallery";
 import About from "./components/About";
+import ReviewPage from "./pages/ReviewPage";
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
@@ -34,6 +35,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditItemPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/review" 
+          element={
+            <ProtectedRoute>
+              <ReviewPage />
             </ProtectedRoute>
           } 
         />
