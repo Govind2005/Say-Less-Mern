@@ -17,7 +17,7 @@ import Slider from "./pages/Slider";
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/gallery" element={<Gallery />} />
