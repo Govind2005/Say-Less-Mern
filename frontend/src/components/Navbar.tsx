@@ -31,7 +31,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div
+    <div className="-z-10"
       style={{
         position: 'fixed',
         top: 0,
@@ -45,7 +45,6 @@ const Navbar = () => {
         alignItems: 'center',
         fontFamily: '"Bodoni Moda", serif',
         fontSize: '1.3rem',
-        zIndex: 1000,
         boxShadow: '0 6px 10px rgba(0,0,0,0.6)', // Subtle shadow
       }}
     >
