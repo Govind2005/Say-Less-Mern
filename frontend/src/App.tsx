@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage";
 import CreateItem from "./pages/CreateItem";
 import Navbar from "./components/Navbar";
 import MenuPage from "./pages/MenuPage";
-import CartPage from "./pages/CartPage";
 import LoginPage from './pages/LoginPage';
 import EditItemPage from './pages/EditItemPage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -12,6 +11,7 @@ import Gallery from "./components/Gallery";
 import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
 import OrderPage from "./pages/OrderPage";
+import CartBox from "./components/CartBox";
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
@@ -22,7 +22,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart" element={<CartBox />} />
         <Route 
           path="/add" 
           element={
