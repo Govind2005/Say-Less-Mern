@@ -29,7 +29,7 @@ const Login = () => {
     return (
         <>
         {localStorage.getItem('isLoggedIn') === 'false' &&
-        <form onSubmit={handleLogin} className="max-w-sm mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
+        <form onSubmit={handleLogin} className="max-w-sm mx-auto p-6 bg-red-500 rounded-lg shadow-lg mt-10">
     <h2 className="text-3xl font-semibold text-center mb-6">Login</h2>
 
     <input 

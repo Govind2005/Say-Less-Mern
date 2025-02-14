@@ -1,0 +1,16 @@
+body {
+  height: 200vh; /* For scrolling effect */
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #c58b6b, #fff);
+  overflow-x: hidden;
+}
+
+.circle {
+  position: fixed;
+  border-radius: 50%;
+  background-color: black;
+  transition: all 0.5s ease;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
