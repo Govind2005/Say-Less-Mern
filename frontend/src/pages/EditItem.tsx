@@ -41,7 +41,7 @@ const EditItemDetailsPage = () => {
             if (response.ok) {
                 navigate("/edit");
             } else {
-                setError("Failed to update item ");
+                setError("Failed to update item here");
             }
         } catch (error) {
             setError("Error updating item: " + (error as Error).message);
