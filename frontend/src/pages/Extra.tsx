@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+
     const [category, setCategory] = useState("All");
 
     useEffect(() => {
@@ -25,8 +26,8 @@ const MenuPage = () => {
                 setError('Failed to fetch items');
                 setLoading(false);
             }
-        } catch (error) {
-            setError('Error fetching items: ' + error.message);
+        } catch (error: unknown) {
+            setError('Error fetching items: ' + (error as Error).message);
             setLoading(false);
         }
     };
@@ -114,7 +115,7 @@ const MenuPage = () => {
     padding: "20px"
   }}
 >
-  {filteredItems.map((item, index) => {
+  {filteredItems.map((item) => {
     const randomHeight = Math.floor(Math.random() * 90) + 200; // 280px - 350px
 
     return (

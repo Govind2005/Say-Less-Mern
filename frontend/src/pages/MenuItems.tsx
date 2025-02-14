@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const [category, setCategory] = useState("All");
 
     useEffect(() => {
@@ -25,8 +25,8 @@ const MenuPage = () => {
                 setError('Failed to fetch items');
                 setLoading(false);
             }
-        } catch (error) {
-            setError('Error fetching items: ' + error.message);
+        } catch (error : unknown) {
+            setError('Error fetching items: ' + (error as Error).message);
             setLoading(false);
         }
     };
@@ -65,6 +65,8 @@ const MenuPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
+      <>
+      
         <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}
             <br></br>
@@ -74,11 +76,11 @@ const MenuPage = () => {
             
             <div style={{ fontFamily: '"Bodoni Moda", serif' , display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
                 {["All", "Cake", "Truffle Balls", "Brownie & Brownie Tub", "Donut", "Cookie"].map((cat) => (
-                    <button
-                        key={cat}
-                        onClick={() => setCategory(cat)}
-                        style={{
-                            padding: "10px 20px",
+                  <button
+                  key={cat}
+                  onClick={() => setCategory(cat)}
+                  style={{
+                    padding: "10px 20px",
                             borderRadius: "20px",
                             border: "none",
                             backgroundColor: category === cat ? "#7A3E3E" : "#F4D0D0",
@@ -87,23 +89,23 @@ const MenuPage = () => {
                             cursor: "pointer",
                             transition: "0.3s",
                             fontWeight: "bold"
-                        }}
-                    >
+                          }}
+                          >
                         {cat}
                     </button>
                 ))}
             </div>
            {/* Fancy Heading with SVG Lines */}
             <h1 style={{
-                textAlign: "center",
-                color: "#7A3E3E",
-                fontSize: "6rem",
- fontFamily: '"Monsieur La Doulaise", cursive' ,     
-            marginBottom: "20px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "15px"
+              textAlign: "center",
+              color: "#7A3E3E",
+              fontSize: "6rem",
+              fontFamily: '"Monsieur La Doulaise", cursive' ,     
+              marginBottom: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "15px"
             }}>
                 ~~~ Our Delicious Creations ~~~
              </h1>
@@ -118,24 +120,24 @@ const MenuPage = () => {
     padding: "20px"
   }}
 >
-  {filteredItems.map((item, index) => {
-const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
-
+  {filteredItems.map((item) => {
+    const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
+    
     return (
       <div 
-        key={item._id} 
-        style={{
-          position: "relative",
-         // borderRadius: "30px",
-          overflow: "hidden",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-          transition: "transform 0.3s ease-in-out",
-          fontFamily: '"Bodoni Moda", serif' ,
-          cursor: "pointer",
-          gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
-        }}
-        onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
-        onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+      key={item._id} 
+      style={{
+        position: "relative",
+        // borderRadius: "30px",
+        overflow: "hidden",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+        transition: "transform 0.3s ease-in-out",
+        fontFamily: '"Bodoni Moda", serif' ,
+        cursor: "pointer",
+        gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
+      }}
+      onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
+      onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
       >
         <img
           src={item.image}
@@ -146,7 +148,7 @@ const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
             objectFit: "cover",
             transition: "opacity 0.3s ease"
           }}
-        />
+          />
         <div 
           style={{
             position: "absolute",
@@ -162,7 +164,7 @@ const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
             padding: "15px",
             color: "#fff"
           }}
-        >
+          >
           <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif' ,marginBottom: "5px" }}>
             {item.name}
           </h2>
@@ -172,23 +174,23 @@ const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
           </p>
           <button 
             style={{
-                background: "transparent",
-                color: "white",
-                fontSize: "1rem",
-                padding: "10px 25px",
-                border: "2px solid white",
-                fontFamily: '"Bodoni Moda", serif' ,
-                borderRadius: "5px",
-               // cursor: "pointer",
-                fontWeight: "bold",
-                textTransform: "uppercase",
-                transition: "background 0.3s ease, color 0.3s ease",
+              background: "transparent",
+              color: "white",
+              fontSize: "1rem",
+              padding: "10px 25px",
+              border: "2px solid white",
+              fontFamily: '"Bodoni Moda", serif' ,
+              borderRadius: "5px",
+              // cursor: "pointer",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              transition: "background 0.3s ease, color 0.3s ease",
               cursor: item.available ? 'pointer' : 'not-allowed'
               
             }}
             onClick={() => item.available && handleAddToCart(item)}
             disabled={!item.available}
-          >
+            >
             {item.available ? "Add to Cart" : "Out of Stock"}
           </button>
         </div>
@@ -198,6 +200,7 @@ const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
 </div>
 
         </div>
+  </>
     );
 };
 

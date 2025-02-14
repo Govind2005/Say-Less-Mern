@@ -2,19 +2,20 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import '../App.css';
 import About from '../components/About.tsx';
-
 import Gallery from '../components/Gallery.tsx';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { useScrollDirection } from '../hooks/useScrollDirection';
+import ScrollReveal from 'scrollreveal';
 
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [showPromo, setShowPromo] = useState(true);
+  
   const isNavbarVisible = useScrollDirection();
 
   useEffect(() => {
@@ -198,8 +199,149 @@ function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const reviewTimer = setInterval(() => {
+      setCurrentReviewIndex((prev) => (prev + 1) % reviews.length);
+    }, 5000); // Change review every 5 seconds
+
+    return () => clearInterval(reviewTimer);
+  }, []);
+
+  // Add ScrollReveal initialization
+  useEffect(() => {
+    const sr = ScrollReveal({
+      origin: 'bottom',
+      distance: '60px',
+      duration: 1200,
+      delay: 300,
+      reset: false
+    });
+
+    // Hero Section
+    sr.reveal('.hero-content', {
+      origin: 'top',
+      delay: 400
+    });
+
+    // Services Section
+    sr.reveal('.services-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.services-carousel', {
+      delay: 500
+    });
+
+    // About Section
+    sr.reveal('.about-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.about-left', {
+      origin: 'left',
+      delay: 500
+    });
+    sr.reveal('.about-center', {
+      delay: 600
+    });
+    sr.reveal('.about-right', {
+      origin: 'right',
+      delay: 500
+    });
+
+    // Gallery Section
+    sr.reveal('.gallery-title', {
+      delay: 300
+    });
+
+    // Gallery Grid - reveal items sequentially
+    document.querySelectorAll('.gallery-item').forEach((item, index) => {
+      sr.reveal(item as HTMLElement, {
+        delay: 300 + (index * 100),
+        origin: 'bottom',
+        interval: 100
+      });
+    });
+
+    // Gallery Image Dialog
+    sr.reveal('.image-dialog', {
+      origin: 'center',
+      distance: '0px',
+      duration: 800,
+      scale: 0.8,
+      opacity: 0
+    });
+
+    // Products Section
+    sr.reveal('.products-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.products-carousel', {
+      delay: 500
+    });
+
+    // Chefs Section
+    sr.reveal('.chefs-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.chefs-carousel', {
+      delay: 500
+    });
+
+    // Reviews Section
+    sr.reveal('.reviews-section h2', {
+      delay: 300
+    });
+    sr.reveal('.reviews-container', {
+      delay: 500
+    });
+
+    // Footer
+    sr.reveal('.footer-content', {
+      delay: 300,
+      origin: 'bottom'
+    });
+
+    return () => sr.destroy();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPromo(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleClosePromo = () => {
+    setShowPromo(false);
+  };
+
   return (
     <div className="app">
+      {/* Promotional Popup */}
+      {showPromo && (
+        <div className="promo-overlay" onClick={handleClosePromo}>
+          <div className="promo-popup" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="promo-close" 
+              onClick={handleClosePromo}
+            >
+              ×
+            </button>
+            <div className="promo-content">
+              <h2>Special Offer!</h2>
+              <p className="promo-highlight">Get 20% OFF on Your First Order</p>
+              <p>Use code: <span className="promo-code">WELCOME20</span></p>
+              <button 
+                className="promo-button"
+                onClick={handleClosePromo}
+              >
+                Order Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Navigation Bar */}
       <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
         <div className="rain-container">
@@ -208,15 +350,18 @@ function HomePage() {
           ))}
         </div>
         <div className="nav-links">
-          <Link to="/" className={location.pathname === "/" ? "active" : ""}>Home</Link>
+          <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
-          <div className="logo-container">
+          <div className="logo-container cursor-pointer">
+          <Link to="/" >
             <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+          </Link>
           </div>
-          <a href="#">Product</a>
+          <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
           <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
         </div>
       </nav>
+
       <Routes>
         <Route path="/" element={
           <>
@@ -240,8 +385,8 @@ function HomePage() {
 
               <section className="hero">
                 <div className={`hero-content ${currentSlide === 1 ? 'slide-in' : ''}`}>
-                  <h2 style={{ fontFamily: "'Libre Caslon Display', serif"}} >{slides[currentSlide].tagline}</h2>
-                  <h1 style={{ fontFamily: "'Libre Caslon Display', serif"}} >{slides[currentSlide].heading.split('\n').map((line, i) => (
+                  <h2>{slides[currentSlide].tagline}</h2>
+                  <h1>{slides[currentSlide].heading.split('\n').map((line, i) => (
                     <span key={i}>
                       {line}
                       {i === 0 && <br />}
@@ -254,6 +399,7 @@ function HomePage() {
 
             {/* About Section */}
             <section className="about-section">
+              <div className="about-decoration"></div>
               <div className="about-rain-container">
                 {Array.from({ length: 10 }).map((_, index) => (
                   <div key={index} className="about-raindrop" />
@@ -267,33 +413,38 @@ function HomePage() {
                     We create Experiences! Every dessert is Handcrafted with love, 
                     using 100% VEGETERIAN, EGGLESS, and Preservative-FREE Ingredients.
                   </p>
-                  <p className="sub-text">
-                    From Rich, Fudgy Brownies to Melt-in-your-Mouth Cupcakes and 
-                    Handcrafted Ice Creams, Every Bite is packed with FLAVOR, 
-                    FRESHNESS, and LOVE
-                  </p>
+                  <ul className="features-list">
+                    <li>Premium Quality Ingredients</li>
+                    <li>100% Eggless Recipes</li>
+                    <li>Fresh Daily Preparations</li>
+                  </ul>
                   <button className="learn-more light">Learn More</button>
                 </div>
 
                 <div className="about-center">
-                  <img 
-                    src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274920/about_p50wfw.jpg" 
-                    alt="Featured dessert" 
-                  />
+                  <div className="image-container">
+                    <div className="image-frame"></div>
+                    <div className="flower-decoration"></div>
+                    <div className="flower-decoration"></div>
+                    <div className="flower-decoration"></div>
+                    <div className="flower-decoration"></div>
+                    <img 
+                      src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274920/about_p50wfw.jpg" 
+                      alt="Featured dessert" 
+                    />
+                  </div>
                 </div>
 
                 <div className="about-right">
                   <h2>Our Features</h2>
                   <p className="main-text">
-                    We don't just bake treats—we create personalized experiences. 
-                    From custom dessert hampers for special occasions to seasonal 
-                    delicacies that capture the flavors of the moment, there's always 
-                    something delightful to discover.
+                    We don't just bake treats—we create personalized experiences 
+                    that bring joy to every celebration and special moment.
                   </p>
                   <ul className="features-list">
-                    <li>✓ Wholesome & Pure</li>
-                    <li>✓ Custom Hampers</li>
-                    <li>✓ Drool-Worthy Aesthetics</li>
+                    <li>Wholesome & Pure</li>
+                    <li>Custom Hampers</li>
+                    <li>Drool-Worthy Aesthetics</li>
                   </ul>
                   <button className="learn-more pink">Learn More</button>
                 </div>
@@ -330,7 +481,9 @@ function HomePage() {
                     gathering. Because the best memories are made with LOVE, 
                     LAUGHTER, AND A BOX FULL OF SWEETNESS!
                   </p>
-                  
+                  <button className="learn-more">
+                    <span>Learn More</span>
+                  </button>
                 </div>
               </div>
             </section>
@@ -377,12 +530,7 @@ function HomePage() {
 
             {/* Gallery Section */}
             <section className="gallery-section">
-              <div className="rain-container">
-                {Array.from({ length: 10 }).map((_, index) => (
-                  <div key={index} className="raindrop" />
-                ))}
-              </div>
-              <h2>Our Delicacies!</h2>
+              <h2 className="gallery-title">Our Delicacies!</h2>
               <div className="gallery-grid">
                 {galleryImages.map((image, index) => (
                   <div 
@@ -390,16 +538,30 @@ function HomePage() {
                     className="gallery-item"
                     onClick={() => setSelectedImage(image)}
                   >
-                    <img src={image} alt={`Gallery image ${index + 1}`} />
+                    <div className="gallery-image-wrapper">
+                      <img src={image} alt={`Gallery image ${index + 1}`} />
+                      <div className="gallery-item-overlay">
+                        <span className="view-text">View</span>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
 
               {selectedImage && (
-                <div className="image-dialog-overlay" onClick={() => setSelectedImage(null)}>
+                <div 
+                  className="image-dialog-overlay" 
+                  onClick={() => setSelectedImage(null)}
+                >
                   <div className="image-dialog">
                     <img src={selectedImage} alt="Selected gallery image" />
-                    <button className="close-button" onClick={() => setSelectedImage(null)}>
+                    <button 
+                      className="close-button" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImage(null);
+                      }}
+                    >
                       ×
                     </button>
                   </div>
@@ -429,22 +591,43 @@ function HomePage() {
                 <div 
                   className="products-track" 
                   style={{ 
-                    transform: `translateX(-${currentProductIndex * (28 + 3)}%)`,
+                    transform: `translateX(-${currentProductIndex * 40}%)`,
                     transition: 'transform 0.5s ease-in-out'
                   }}
                 >
                   {products.map((product, index) => (
                     <div key={index} className="product-card">
-                      <div className="product-image-container">
+                      <div className="product-image">
                         <img src={product.image} alt={product.name} />
                       </div>
                       <h3>{product.title}</h3>
                       <p>{product.name}</p>
                     </div>
                   ))}
+                  
+                  {/* Add the Season Seller card */}
+                  <div className="product-card">
+                    <div className="product-image">
+                      <img 
+                        src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739242354/samples/dessert-on-a-plate.jpg" 
+                        alt="Season Seller" 
+                      />
+                    </div>
+                    <h3>Season Seller</h3>
+                    <p>Special Dessert</p>
+                  </div>
                 </div>
               </div>
             </section>
+
+            {/* Add rain transition between products and chefs sections */}
+            <div className="section-transition">
+              <div className="rain-container">
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <div key={index} className="raindrop" />
+                ))}
+              </div>
+            </div>
 
             {/* Chefs Section */}
             <section className="chefs-section">
@@ -486,19 +669,26 @@ function HomePage() {
               </div>
             </section>
 
+            {/* Reviews Section */}
             <section className="reviews-section">
-              <h2>Clients Say About Our<br />Famous Delicacies</h2>
+              <h2>What Our Customers Say</h2>
               <div className="reviews-container">
                 {reviews.map((review, index) => (
                   <div 
                     key={index} 
-                    className={`review-card ${currentReviewIndex === index ? 'active' : ''}`}
+                    className={`review-card ${index === currentReviewIndex ? 'active' : ''}`}
                   >
                     <div className="review-content">
-                      <p className="review-text">{review.text}</p>
+                      <div className="review-text">
+                        {review.text}
+                      </div>
                       <div className="reviewer-info">
-                        <img src={review.image} alt={review.name} className="reviewer-image" />
-                        <h4 className="reviewer-name">{review.name}</h4>
+                        <img 
+                          src={review.image} 
+                          alt={review.name} 
+                          className="reviewer-image"
+                        />
+                        <h3 className="reviewer-name">{review.name}</h3>
                       </div>
                     </div>
                   </div>
@@ -508,7 +698,7 @@ function HomePage() {
                 {reviews.map((_, index) => (
                   <button
                     key={index}
-                    className={`pagination-dot ${currentReviewIndex === index ? 'active' : ''}`}
+                    className={`pagination-dot ${index === currentReviewIndex ? 'active' : ''}`}
                     onClick={() => setCurrentReviewIndex(index)}
                   />
                 ))}

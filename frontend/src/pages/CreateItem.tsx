@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
 
 const CreateItem = () => {
     const [newItem,setNewItem] = useState({
@@ -99,14 +98,7 @@ const CreateItem = () => {
             <h2 className="font-bold text-lg">Add Item</h2>
         </button>
 
-        <NavLink to={"/"}>
-            <button 
-                onClick={() => localStorage.setItem('isLoggedIn', 'false')}
-                className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 transition duration-300"
-            >
-                Log Out
-            </button>
-        </NavLink>
+        
     </div>
 </>
 

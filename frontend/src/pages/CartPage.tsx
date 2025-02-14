@@ -71,9 +71,8 @@ const CartPage = () => {
   };
 
   const paymentHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const total = cartItems.reduce((total, item) => {
-        return total + item.price
-    }, 0)
+      
+    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const response = await fetch("http://localhost:5000/payment/create-order", {
       method: "POST",
       body: JSON.stringify({

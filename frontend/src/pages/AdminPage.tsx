@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import CryptoJS from 'crypto-js';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const CORRECT_USERNAME = 'user';
 const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('cake').toString(CryptoJS.enc.Base64); // Hash the correct password
 
-const Login = () => {
+const AdminPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -20,11 +20,17 @@ const Login = () => {
 
         if (username === CORRECT_USERNAME && hashedPassword === CORRECT_PASSWORD_HASH) {
             localStorage.setItem('isLoggedIn', 'true');
-            navigate('/add');
+            navigate('/admin');
         } else {
             setError('Invalid username or password');
         }
     };
+
+    const handleLogout = () => {
+      localStorage.setItem('isLoggedIn', 'false');
+      setUsername(''); // Clear the username input
+      setPassword(''); // Clear the password input
+  };
 
     return (
         <>
@@ -58,17 +64,47 @@ const Login = () => {
     {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
 </form>  }
 {localStorage.getItem('isLoggedIn') === 'true' &&
- <NavLink to={"/"}>
- <button 
-     onClick={() => localStorage.setItem('isLoggedIn', 'false')}
-     className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 transition duration-300"
- >
-     Log Out
- </button>
-</NavLink>
+<>
+<div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8 space-y-6">
+        <h2 className="text-3xl font-semibold text-center text-gray-700">Admin Panel</h2>
+        
+        <div className="space-y-4">
+          <Link to="/add">
+            <button className="w-full py-3 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+              Add New Item
+            </button>
+          </Link>
+          
+          <Link to="/edit">
+            <button className="w-full py-3 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition">
+              Edit Existing Items
+            </button>
+          </Link>
+          
+          <Link to="/order">
+            <button className="w-full py-3 px-4 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition">
+              Manage Orders
+            </button>
+          </Link>
+        </div>
+
+        <footer className="text-center text-gray-500 text-sm mt-8">
+          <p>© 2025 Admin Panel - All Rights Reserved</p>
+        </footer>
+        <NavLink to={"/admin"}>
+        <button 
+        onClick={handleLogout}
+        className="w-full py-3 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition">
+            Logout
+          </button>
+          </NavLink>
+      </div>
+    </div>
+     </>
             }
 </>
     );
 };
 
-export default Login;
+export default AdminPage;

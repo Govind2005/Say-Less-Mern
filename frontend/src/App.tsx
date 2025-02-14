@@ -3,10 +3,9 @@ import HomePage from "./pages/HomePage";
 import CreateItem from "./pages/CreateItem";
 import Navbar from "./components/Navbar";
 import MenuPage from "./pages/MenuPage";
-
 import MenuItems from "./pages/MenuItems";
 import CartPage from "./pages/CartPage";
-import LoginPage from './pages/LoginPage';
+import AdminPage from './pages/AdminPage';
 import EditItemPage from './pages/EditItemPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import EditItemDetailsPage from "./pages/EditItem";
@@ -25,12 +24,9 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/menuitems" element={<MenuItems />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/slider" element={<Slider/>} />
-        {/* <Route path="/what" element={<WhatsappPage />} /> */}
-        
-        {/* <Route path="/edit/:id" element={<EditItemDetailsPage />} /> */}
         <Route 
           path="/add" 
           element={

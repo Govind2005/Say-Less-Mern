@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const SweetCravingText = () => {
-  const [textColor, setTextColor] = useState('white');
   const [opacity, setOpacity] = useState(1);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const scrollThreshold = 500;
+      console.log(scrollThreshold)
       const fadeStart = 700;
       const fadeEnd = 900;
 
@@ -17,7 +17,6 @@ const SweetCravingText = () => {
         newOpacity = Math.max(0, 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart));
       }
 
-      setTextColor(scrollY > scrollThreshold ? 'black' : 'white');
       setOpacity(newOpacity);
     };
 
@@ -50,7 +49,7 @@ const AnimatedCircle = () => {
     transform: 'translate(0, 0) scale(3)'
   });
   const [circleTextVisible, setCircleTextVisible] = useState(false);
-  const [circleOpacity, setCircleOpacity] = useState(1);
+  const circleOpacity = 1;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,6 +74,7 @@ const AnimatedCircle = () => {
   }, []);
 
   return (
+    <>
     <div
       style={{
         height: '300vh',
@@ -84,7 +84,7 @@ const AnimatedCircle = () => {
         backgroundPosition: 'center',
         backgroundAttachment: 'scroll'
       }}
-    >
+      >
       <div
         className="circle"
         style={{
@@ -108,7 +108,7 @@ const AnimatedCircle = () => {
           opacity: circleOpacity,
           ...circleStyle
         }}
-      >
+        >
         {circleTextVisible && (
           <div style={{
             fontFamily: '"Bodoni Moda", serif',
@@ -128,6 +128,7 @@ const AnimatedCircle = () => {
 
       <div style={{ height: '200vh' }}></div>
     </div>
+      </>
   );
 };
 
