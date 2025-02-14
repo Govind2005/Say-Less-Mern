@@ -38,7 +38,7 @@ const Navbar = () => {
         left: 0,
         width: '100%',
         height: '90px',
-        backgroundColor: 'black', // Solid black background
+        backgroundColor: 'lightpink', // Solid black background
         color: 'white',
         display: 'flex',
         justifyContent: 'space-around',

@@ -3,6 +3,8 @@ import HomePage from "./pages/HomePage";
 import CreateItem from "./pages/CreateItem";
 import Navbar from "./components/Navbar";
 import MenuPage from "./pages/MenuPage";
+
+import MenuItems from "./pages/MenuItems";
 import CartPage from "./pages/CartPage";
 import LoginPage from './pages/LoginPage';
 import EditItemPage from './pages/EditItemPage';
@@ -22,6 +24,7 @@ function App() {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/menuitems" element={<MenuItems />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/slider" element={<Slider/>} />
