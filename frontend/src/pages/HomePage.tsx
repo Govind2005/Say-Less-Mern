@@ -3,15 +3,18 @@ import { Routes, Route, Link } from 'react-router-dom'
 import '../App.css';
 import About from '../components/About.tsx';
 import Gallery from '../components/Gallery.tsx';
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { useScrollDirection } from '../hooks/useScrollDirection';
 
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  
+  const isNavbarVisible = useScrollDirection();
   
   const slides = [
     {
@@ -46,6 +49,11 @@ function HomePage() {
       image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275047/Brownie_Tub_3_m11kmr.jpg',
       title: 'Quality Maintain',
       description: 'At Bindi\'s Cupcakery, we USE ONLY THE FINEST INGREDIENTS, ensuring our desserts are 100% EGGLESS, PRESERVATIVE-FREE, AND FRESHLY MADE.'
+    },
+    {
+      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739242354/cld-sample-4.jpg',
+      title: 'Custom Orders',
+      description: 'We specialize in creating personalized desserts for your special occasions. From birthday cakes to wedding treats, we make your sweet dreams come true!'
     }
   ];
 
@@ -184,7 +192,12 @@ function HomePage() {
   return (
     <div className="app">
       {/* Navigation Bar */}
-      <nav className="navbar">
+      <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
+        </div>
         <div className="nav-links">
           <Link to="/" className={location.pathname === "/" ? "active" : ""}>Home</Link>
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
@@ -233,6 +246,11 @@ function HomePage() {
 
             {/* About Section */}
             <section className="about-section">
+              <div className="about-rain-container">
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <div key={index} className="about-raindrop" />
+                ))}
+              </div>
               <h1 className="section-title">Where Flavor Meets Love!</h1>
               <div className="about-content">
                 <div className="about-left">
@@ -273,6 +291,15 @@ function HomePage() {
                 </div>
               </div>
             </section>
+
+            {/* Subtle transition with rain */}
+            <div className="section-transition">
+              <div className="rain-container">
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <div key={index} className="raindrop" />
+                ))}
+              </div>
+            </div>
 
             {/* Custom Hampers Section */}
             <section className="hampers-section">
@@ -342,6 +369,11 @@ function HomePage() {
 
             {/* Gallery Section */}
             <section className="gallery-section">
+              <div className="rain-container">
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <div key={index} className="raindrop" />
+                ))}
+              </div>
               <h2>Our Delicacies!</h2>
               <div className="gallery-grid">
                 {galleryImages.map((image, index) => (
@@ -503,13 +535,13 @@ function HomePage() {
               <h3>Follow Us</h3>
               <div className="social-icons">
                 <a href="#" className="social-icon">
-                  <i className="fab fa-facebook-f"></i>
+                  <FaFacebookF />
                 </a>
                 <a href="#" className="social-icon">
-                  <i className="fab fa-instagram"></i>
+                  <FaInstagram />
                 </a>
                 <a href="#" className="social-icon">
-                  <i className="fab fa-youtube"></i>
+                  <FaYoutube />
                 </a>
               </div>
             </div>

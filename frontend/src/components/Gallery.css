@@ -9,7 +9,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -20px;
 }
 
 .gallery-hero::before {
@@ -43,17 +42,21 @@
   margin-bottom: 3rem;
   color: #333;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .section-title::after {
   content: '';
   position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: -20px;
   width: 80px;
   height: 3px;
   background-color: #E5A1B7;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .gallery-grid {

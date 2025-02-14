@@ -1,8 +1,16 @@
-import  { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './About.css';
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { useScrollDirection } from '../hooks/useScrollDirection';
 
 function About() {
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
+  const isNavbarVisible = useScrollDirection();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const nextChef = () => {
     setCurrentChefIndex((prev) => 
@@ -45,7 +53,25 @@ function About() {
   ];
 
   return (
-    <>
+    <div className="app">
+      {/* Add Navigation Bar */}
+      <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
+        <div className="nav-links">
+          <Link to="/" className={location.pathname === "/" ? "active" : ""}>Home</Link>
+          <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
+          <div className="logo-container">
+            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+          </div>
+          <a href="#">Product</a>
+          <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
+        </div>
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="about-hero">
         <h1>About Us</h1>
@@ -53,6 +79,11 @@ function About() {
 
       {/* About Section */}
       <section className="about-section">
+        <div className="about-rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="about-raindrop" />
+          ))}
+        </div>
         <h1 className="section-title">Where Flavor Meets Love!</h1>
         <div className="about-content">
           <div className="about-left">
@@ -94,8 +125,22 @@ function About() {
         </div>
       </section>
 
+      {/* Subtle transition with rain */}
+      <div className="section-transition">
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
+        </div>
+      </div>
+
       {/* Chefs Section */}
       <section className="chefs-section">
+        <div className="about-rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="about-raindrop" />
+          ))}
+        </div>
         <div className="section-header">
           <h1 className="section-title">
             Experienced & Most
@@ -133,7 +178,52 @@ function About() {
           </div>
         </div>
       </section>
-    </>
+
+      {/* Footer Section */}
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-logo">
+            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="Logo" />
+          </div>
+          
+          <div className="footer-sections">
+            <div className="footer-info">
+              <h3>Contact Info</h3>
+              <p>123 Bakery Street</p>
+              <p>New York, NY 10001</p>
+              <p>Tel: (555) 123-4567</p>
+              <p>Email: info@bindiscupcakery.com</p>
+            </div>
+
+            <div className="footer-hours">
+              <h3>Opening Hours</h3>
+              <p>Monday - Friday: 8am - 8pm</p>
+              <p>Saturday: 9am - 7pm</p>
+              <p>Sunday: 10am - 6pm</p>
+            </div>
+
+            <div className="footer-social">
+              <h3>Follow Us</h3>
+              <div className="social-icons">
+                <a href="#" className="social-icon">
+                  <FaFacebookF />
+                </a>
+                <a href="#" className="social-icon">
+                  <FaInstagram />
+                </a>
+                <a href="#" className="social-icon">
+                  <FaYoutube />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="footer-bottom">
+            <p>© 2024 Bindi's Cupcakery. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
 

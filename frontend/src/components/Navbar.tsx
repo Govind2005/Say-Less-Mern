@@ -49,6 +49,9 @@ const Navbar = () => {
       <Link to={"/review"}>Review</Link>
       </button>
       <button>
+      <Link to={"/order"}>Order</Link>
+      </button>
+      <button>
       <Link to={"/edit"}>Edit</Link>
       </button>
       <NavLink to="/cart" style={{ position: 'relative' }}>

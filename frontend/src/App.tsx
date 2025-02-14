@@ -11,6 +11,7 @@ import EditItemDetailsPage from "./pages/EditItem";
 import Gallery from "./components/Gallery";
 import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
+import OrderPage from "./pages/OrderPage";
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
@@ -43,6 +44,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ReviewPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/order" 
+          element={
+            <ProtectedRoute>
+              <OrderPage />
             </ProtectedRoute>
           } 
         />
