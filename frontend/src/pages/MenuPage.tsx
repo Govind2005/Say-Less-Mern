@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
@@ -35,6 +36,17 @@ const MenuPage = () => {
     const filteredItems = category === "All" ? items : items.filter(item => item.type === category);
 
     const handleAddToCart = (item: any) => {
+        toast.success('Item added successfully.', {
+            style: {
+              border: '1px solid purple',
+              padding: '16px',
+              color: 'pink',
+            },
+            iconTheme: {
+              primary: 'pink',
+              secondary: '#FFFAEE',
+            },
+          });
         // Get existing cart items from localStorage
         const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
         
@@ -67,6 +79,7 @@ const MenuPage = () => {
     return (
         <div style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
             {/* Filter Bar */}
+            
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
                 {["All", "Cake", "Cupcakes", "Pastry", "Donut", "Cookie"].map((cat) => (
                     <button
