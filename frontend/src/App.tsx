@@ -11,6 +11,7 @@ import EditItemDetailsPage from "./pages/EditItem";
 import Gallery from "./components/Gallery";
 import About from "./components/About";
 import WhatsappPage from "./pages/WhatsappPage";
+import Slider from "./pages/Slider";
 
 function App() {
   return (
@@ -23,7 +24,9 @@ function App() {
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/slider" element={<Slider/>} />
         <Route path="/what" element={<WhatsappPage />} />
+        
         {/* <Route path="/edit/:id" element={<EditItemDetailsPage />} /> */}
         <Route 
           path="/add" 

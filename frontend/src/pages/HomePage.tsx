@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import '../App.css';
 import About from '../components/About.tsx';
+
 import Gallery from '../components/Gallery.tsx';
 
 function HomePage() {
@@ -202,7 +203,6 @@ function HomePage() {
           <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
         </div>
       </nav>
-
       <Routes>
         <Route path="/" element={
           <>

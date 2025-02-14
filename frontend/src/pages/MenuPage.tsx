@@ -69,7 +69,7 @@ const AnimatedCircle = () => {
       style={{
         height: '200vh',
         position: 'relative',
-        backgroundImage: `url('/223.jpg')`, // Replace with your image path
+        backgroundImage: `url('/224.jpg')`, // Replace with your image path
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'scroll', // Keeps the background static
@@ -97,8 +97,8 @@ const AnimatedCircle = () => {
           transition: 'transform 0.2s ease-out',
           ...circleStyle,
         }}
-      >
-        BINDI'S<br />CUPCAKERY
+      > HAVE A LOOK <br> </br>AT OUR MENU
+       
       </div>
 
       {/* Right-side Text */}
