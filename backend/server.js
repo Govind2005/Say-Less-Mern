@@ -45,7 +45,8 @@ const accountSid = process.env.TWILIO_SID;  // Replace with your Twilio Account 
 const authToken = process.env.TWILIO_TOKEN; // Replace with your Twilio Auth Token
 
 const MONG_URI = process.env.MONG_URI || 200; 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
+const PAYMENT_PORT = process.env.PAYMENT_PORT || 5000;
 
 const client = new twilio(accountSid, authToken);
 

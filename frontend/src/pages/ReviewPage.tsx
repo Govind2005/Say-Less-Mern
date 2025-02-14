@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import AdminNavbar from '../components/AdminNavbar';
 
 const ReviewPage = () => {
   const [reviews, setReviews] = useState<{ _id: string; comment: string; name: string; star: number}[]>([]);
@@ -31,7 +32,9 @@ const ReviewPage = () => {
   }, []); // Empty dependency array ensures this only runs once on component mount
 
   return (
-    <div className="p-4">
+    <>
+    <AdminNavbar/>
+    <div className="p-4 mt-32">
       <h1 className="text-3xl font-semibold text-center mb-6">Customer Reviews</h1>
 
       {loading && <p className="text-center text-xl">Loading reviews...</p>}
@@ -52,6 +55,7 @@ const ReviewPage = () => {
         </div>
       )}
     </div>
+      </>
   );
 };
 

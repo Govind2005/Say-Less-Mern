@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AdminNavbar from "../components/AdminNavbar";
 
 const CreateItem = () => {
     const [newItem,setNewItem] = useState({
@@ -40,6 +41,9 @@ const CreateItem = () => {
 
     return (
         <>
+        <AdminNavbar/>
+        <div className="mt-32">
+            
         
     <h1 className="text-3xl font-semibold text-center mb-6">Create New Item</h1>
     
@@ -99,6 +103,7 @@ const CreateItem = () => {
         </button>
 
         
+    </div>
     </div>
 </>
 

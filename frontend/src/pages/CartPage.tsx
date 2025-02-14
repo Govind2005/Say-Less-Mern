@@ -1,10 +1,11 @@
 import { useState, useEffect, SetStateAction } from 'react';
+
 interface CartItem {
   _id: string;
   name: string;
-  image:string;
+  image: string;
   quantity: number;
-  price:number;
+  price: number;
   special?: string;  // Optional special instructions
   customize?: string; // Optional customization
 }
@@ -14,6 +15,7 @@ const CartPage = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
   const [messageStatus, setMessageStatus] = useState('');
+  const [orderDate, setOrderDate] = useState<string>(new Date().toISOString().split('T')[0]); // Set default date to today
 
   useEffect(() => {
     // Load cart items from localStorage when component mounts
@@ -70,8 +72,11 @@ const CartPage = () => {
     setName(e.target.value);
   };
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOrderDate(e.target.value);
+  };
+
   const paymentHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
-      
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const response = await fetch("http://localhost:5000/payment/create-order", {
       method: "POST",
@@ -89,34 +94,32 @@ const CartPage = () => {
     console.log(order);
 
     var options = {
-
-      key: "rzp_test_mZGFuX4QG8UG7y", // Enter the Key ID generated from the Dashboard
-      amount: total, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      key: 'rzp_test_mZGFuX4QG8UG7y',
+      amount: total,
       currency: "INR",
-      name: "Bindi Cupcake", //your business name
+      name: "Bindi Cupcake",
       description: "Test Transaction",
       image: "https://example.com/your_logo",
-      order_id: order.id, //This is a sample Order ID. Pass the id obtained in the response of Step 1
+      order_id: order.id,
       handler: async function (response: Response) {
         const body = {
           ...response,
         };
 
         const validateRes = await fetch("http://localhost:5000/payment/verify-payment", {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+          method: "POST",
+          body: JSON.stringify(body),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const jsonRes = await validateRes.json();
         console.log(jsonRes);
       },
       prefill: {
-        name: "Web Dev Matrix", //your customer's name
+        name: "Web Dev Matrix",
         email: "webdevmatrix@example.com",
-        contact: phoneNumber.startsWith("+91") ? phoneNumber : "+91 "+phoneNumber
+        contact: phoneNumber.startsWith("+91") ? phoneNumber : "+91 " + phoneNumber
       },
       notes: {
         address: "Razorpay Corporate Office",
@@ -126,7 +129,6 @@ const CartPage = () => {
       },
     };
     var rzp1 = new window.Razorpay(options);
-  
     rzp1.on("payment.failed", function (response: any) {
       alert(response.error.code);
       alert(response.error.description);
@@ -151,7 +153,6 @@ const CartPage = () => {
         });
         message += `\n*Total: $${total.toFixed(2)}*`;
 
-        // Send order message to WhatsApp
         const response = await fetch('http://localhost:4000/send-whatsapp', {
           method: 'POST',
           headers: {
@@ -168,12 +169,12 @@ const CartPage = () => {
           setMessageStatus('Failed to send message.');
         }
 
-        // Save order data to the database
         const orderData = {
           name,
           phoneNumber,
           items: cartItems,
           total,
+          orderDate,
         };
 
         const dbResponse = await fetch('http://localhost:4000/api/order', {
@@ -186,7 +187,6 @@ const CartPage = () => {
         const dbData = await dbResponse.json();
         if (dbData.success) {
           console.log("here ", JSON.stringify(orderData, null, 2));
-
           setMessageStatus('Order saved to database successfully!');
         } else {
           setMessageStatus('Failed to save order to database.');
@@ -199,223 +199,126 @@ const CartPage = () => {
     } else {
       setMessageStatus('Please enter both name and phone number.');
     }
+    paymentHandler;
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
-      <h1 style={{
-        color: "#7A3E3E",
-        fontSize: "2.5rem",
-        marginBottom: "30px",
-        textAlign: "center"
-      }}>
-        Shopping Cart
-      </h1>
+    <div className="p-10 font-sans">
+      <h1 className="text-center text-3xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
 
       {cartItems.length === 0 ? (
-        <p style={{ textAlign: "center", fontSize: "1.2rem" }}>Your cart is empty</p>
+        <p className="text-center text-lg">Your cart is empty</p>
       ) : (
         <div>
           {cartItems.map((item) => (
-            <div key={item._id} style={{
-              display: "flex",
-              alignItems: "center",
-              padding: "20px",
-              borderBottom: "1px solid #EAC4D5",
-              gap: "20px"
-            }}>
+            <div key={item._id} className="flex items-center p-5 border-b border-[#EAC4D5] gap-5">
               <img
                 src={item.image}
                 alt={item.name}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  objectFit: "cover",
-                  borderRadius: "8px"
-                }}
+                className="w-24 h-24 object-cover rounded-lg"
               />
-              <div style={{ flex: 1 }}>
-                <h3 style={{ color: "#7A3E3E", fontSize: "1.2rem" }}>{item.name}</h3>
-                <p style={{ color: "#B56576" }}>${item.price}</p>
+              <div className="flex-1">
+                <h3 className="text-[#7A3E3E] text-xl">{item.name}</h3>
+                <p className="text-[#B56576]">${item.price}</p>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div className="flex items-center gap-3">
                 <button
                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                  style={{
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    border: "none",
-                    backgroundColor: "#F4D0D0",
-                    cursor: "pointer"
-                  }}
+                  className="px-3 py-2 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1]"
                 >
                   -
                 </button>
                 <span>{item.quantity}</span>
                 <button
                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                  style={{
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    border: "none",
-                    backgroundColor: "#F4D0D0",
-                    cursor: "pointer"
-                  }}
+                  className="px-3 py-2 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1]"
                 >
                   +
                 </button>
                 <button
                   onClick={() => removeFromCart(item._id)}
-                  style={{
-                    marginLeft: "20px",
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    border: "none",
-                    backgroundColor: "#FFC2D1",
-                    cursor: "pointer"
-                  }}
+                  className="ml-5 px-3 py-2 rounded-md bg-[#FFC2D1] hover:bg-[#F7A0B5]"
                 >
                   Remove
                 </button>
               </div>
 
-              {/* Special and Customize Fields */}
-              <div style={{ marginTop: "10px" }}>
+              <div className="mt-3 w-full">
                 <input
                   type="text"
                   placeholder="Special Instructions (optional)"
                   value={item.special || ''}
                   onChange={(e) => handleSpecialChange(item._id, e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px 12px",
-                    borderRadius: "6px",
-                    border: "2px solid #EAC4D5",
-                    marginBottom: "10px"
-                  }}
+                  className="w-full p-2 rounded-lg border-2 border-[#EAC4D5] mb-3"
                 />
                 <input
                   type="text"
                   placeholder="Customization (optional)"
                   value={item.customize || ''}
                   onChange={(e) => handleCustomizeChange(item._id, e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px 12px",
-                    borderRadius: "6px",
-                    border: "2px solid #EAC4D5"
-                  }}
+                  className="w-full p-2 rounded-lg border-2 border-[#EAC4D5]"
                 />
               </div>
             </div>
           ))}
-          <div style={{
-            marginTop: "30px",
-            padding: "20px",
-            backgroundColor: "#FFF5F7",
-            borderRadius: "10px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-          }}>
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{
-                display: "block",
-                marginBottom: "8px",
-                color: "#7A3E3E",
-                fontSize: "1.1rem"
-              }}>
-                Enter your name:
-              </label>
+          <div className="mt-8 p-5 bg-[#FFF5F7] rounded-lg shadow-md">
+            <div className="mb-5">
+              <label className="block text-[#7A3E3E] text-lg mb-2">Enter your name:</label>
               <input
                 type="text"
                 value={name}
                 onChange={handleNameChange}
                 placeholder="Enter your name"
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "6px",
-                  border: "2px solid #EAC4D5",
-                  width: "100%",
-                  maxWidth: "300px",
-                  fontSize: "1rem"
-                }}
+                className="w-full max-w-xs p-2 rounded-lg border-2 border-[#EAC4D5]"
               />
             </div>
 
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{
-                display: "block",
-                marginBottom: "8px",
-                color: "#7A3E3E",
-                fontSize: "1.1rem"
-              }}>
-                Enter your mobile number:
-              </label>
+            <div className="mb-5">
+              <label className="block text-[#7A3E3E] text-lg mb-2">Enter your mobile number:</label>
               <input
                 type="text"
                 value={phoneNumber}
                 onChange={handleInputChange}
                 placeholder="Enter phone number"
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "6px",
-                  border: "2px solid #EAC4D5",
-                  width: "100%",
-                  maxWidth: "300px",
-                  fontSize: "1rem"
-                }}
+                className="w-full max-w-xs p-2 rounded-lg border-2 border-[#EAC4D5]"
               />
             </div>
 
-            <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "20px"
-            }}>
-              <div style={{
-                fontSize: "1.5rem",
-                color: "#7A3E3E",
-                fontWeight: "bold"
-              }}>
+            {/* Date Picker */}
+            <div className="mb-5">
+              <label className="block text-[#7A3E3E] text-lg mb-2">Choose your order date:</label>
+              <input
+                title='date'
+                type="date"
+                value={orderDate}
+                onChange={handleDateChange}
+                className="w-full max-w-xs p-2 rounded-lg border-2 border-[#EAC4D5]"
+              />
+            </div>
+
+            <div className="flex justify-between items-center mt-5">
+              <div className="text-[#7A3E3E] text-xl font-bold">
                 Total: ${total.toFixed(2)}
               </div>
               <button
                 onClick={handleButtonClick}
                 disabled={!(name && phoneNumber)}
-                style={{
-                  padding: "12px 24px",
-                  borderRadius: "8px",
-                  border: "none",
-                  backgroundColor: "#7A3E3E",
-                  color: "white",
-                  fontSize: "1.1rem",
-                  cursor: "pointer",
-                  transition: "0.3s",
-                }}
+                className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
               >
-                Send Order on WhatsApp
+                Confirm Order
               </button>
-              <button
+              {/* <button
                 onClick={paymentHandler}
                 disabled={!(name && phoneNumber)}
-                style={{
-                  padding: "12px 24px",
-                  borderRadius: "8px",
-                  border: "none",
-                  backgroundColor: "#7A3E3E",
-                  color: "white",
-                  fontSize: "1.1rem",
-                  cursor: "pointer",
-                  transition: "0.3s",
-                }}
+                className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
               >
                 Pay
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
       )}
-      <p>{messageStatus}</p>
+      <p className="mt-5 text-center">{messageStatus}</p>
     </div>
   );
 };
