@@ -28,7 +28,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/slider" element={<Slider/>} />
-        <Route path="/what" element={<WhatsappPage />} />
+        {/* <Route path="/what" element={<WhatsappPage />} /> */}
         
         {/* <Route path="/edit/:id" element={<EditItemDetailsPage />} /> */}
         <Route 

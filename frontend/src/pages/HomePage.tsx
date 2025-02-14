@@ -15,6 +15,7 @@ function HomePage() {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const isNavbarVisible = useScrollDirection();
 
   useEffect(() => {
     const link = document.createElement("link");
