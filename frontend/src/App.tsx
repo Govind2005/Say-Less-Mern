@@ -42,7 +42,7 @@ function App() {
               <EditItemPage />
             </ProtectedRoute>
           } 
-        />
+        /> 
         <Route 
           path="/review" 
           element={
