@@ -356,4 +356,208 @@
 .product-card p {
   margin: 0 1rem 1rem;
   color: #666;
+}
+
+/* Unique effects for gallery items */
+.effect-1 .gallery-image-wrapper {
+  transform: perspective(800px) rotateY(0deg);
+  transition: transform 0.6s ease;
+}
+
+.effect-1:hover .gallery-image-wrapper {
+  transform: perspective(800px) rotateY(15deg);
+}
+
+.effect-2 .gallery-image-wrapper {
+  transform: scale(1) rotate(0deg);
+  transition: transform 0.5s ease;
+}
+
+.effect-2:hover .gallery-image-wrapper {
+  transform: scale(1.05) rotate(3deg);
+}
+
+.effect-3 .gallery-image-wrapper {
+  filter: grayscale(0.7);
+  transition: all 0.4s ease;
+}
+
+.effect-3:hover .gallery-image-wrapper {
+  filter: grayscale(0);
+  transform: translateY(-10px);
+}
+
+/* Enhanced overlay effects */
+.gallery-item-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(219, 112, 147, 0.8),
+    rgba(229, 161, 183, 0.6)
+  );
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item-overlay {
+  opacity: 1;
+}
+
+.view-text {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.8rem 1.5rem;
+  border: 2px solid white;
+  border-radius: 25px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.gallery-item:hover .view-text {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Modal animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.image-dialog {
+  animation: modalFadeIn 0.3s ease forwards;
+}
+
+/* Responsive grid */
+@media (max-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Horizontal Scroll Gallery */
+.scroll-gallery-container {
+  margin-top: 4rem;
+  padding: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.scroll-gallery-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(45deg, #E5A1B7, #d889a3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 15px;
+}
+
+.scroll-gallery-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #E5A1B7, transparent);
+  animation: shimmerWidth 3s infinite;
+}
+
+@keyframes shimmerWidth {
+  0%, 100% { width: 60px; opacity: 0.5; }
+  50% { width: 100px; opacity: 1; }
+}
+
+.scroll-gallery {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #E5A1B7 #f1f1f1;  /* For Firefox */
+  width: calc(100% + 40px);
+  margin-right: -20px;
+}
+
+/* Webkit scrollbar styles (Chrome, Safari, Edge) */
+.scroll-gallery::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.scroll-gallery::-webkit-scrollbar-track {
+  background: #fff5f8;
+  border-radius: 10px;
+}
+
+.scroll-gallery::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #E5A1B7, #d889a3);
+  border-radius: 10px;
+  border: 2px solid #fff5f8;
+}
+
+.scroll-gallery::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #d889a3, #c76d8b);
+}
+
+/* Add smooth transition for hover effect */
+.scroll-gallery::-webkit-scrollbar-thumb {
+  transition: background-color 0.3s ease;
+}
+
+.scroll-gallery-item {
+  flex: 0 0 300px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.scroll-gallery-item:last-child {
+  margin-right: 20px; /* Add margin to last item */
+}
+
+.scroll-gallery-item:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scroll-gallery-item {
+    flex: 0 0 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-gallery-item {
+    flex: 0 0 200px;
+  }
 } 

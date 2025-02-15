@@ -342,6 +342,7 @@ function HomePage() {
         </div>
       )}
 
+
       {/* Navigation Bar */}
       <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
         <div className="rain-container">

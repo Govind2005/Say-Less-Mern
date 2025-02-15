@@ -68,7 +68,49 @@ function Gallery() {
     return () => sr.destroy();
   }, []);
 
-  const galleryImages = [
+  useEffect(() => {
+    const scrollGallery = document.querySelector('.scroll-gallery');
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (scrollGallery) {
+        e.preventDefault();
+        const scrollAmount = e.deltaY;
+        scrollGallery.scrollLeft += scrollAmount;
+      }
+    };
+
+    if (scrollGallery) {
+      (scrollGallery as HTMLElement).addEventListener('wheel', (e: WheelEvent) => handleWheel(e), { passive: false });
+
+    }
+
+    return () => {
+      if (scrollGallery) {
+        (scrollGallery as HTMLElement).removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, []);
+
+  // Handle image click
+  const handleImageClick = (image: string) => {
+    setSelectedImage(image);
+  };
+
+  // Close modal
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
+
+  const mainGalleryImages = [
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550717/WhatsApp_Image_2025-02-04_at_14.57.19_1a28ffa7_mehv6v.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550717/WhatsApp_Image_2025-02-04_at_14.57.19_b993dbd2_a0vcmx.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550714/WhatsApp_Image_2025-02-04_at_14.57.19_6b0d6d7c_yfiq2e.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550712/WhatsApp_Image_2025-02-04_at_14.57.19_8e451678_icxejw.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550714/WhatsApp_Image_2025-02-04_at_14.57.19_791f5cf4_e3ffsz.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550715/WhatsApp_Image_2025-02-04_at_14.57.19_163e6e72_x8ufk0.jpg"
+  ];
+
+  const scrollGalleryImages = [
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/222_u7w8gn.jpg',
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/333_i0ae0e.jpg',
@@ -76,6 +118,7 @@ function Gallery() {
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/555_bsghyy.jpg',
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/666_hjsal2.jpg'
   ];
+
 
   return (
     <div className="app">
@@ -117,12 +160,14 @@ function Gallery() {
           ))}
         </div>
         <h2 className="gallery-title">Our Delicacies!</h2>
+        
+        {/* Main Grid Gallery */}
         <div className="gallery-grid">
-          {galleryImages.map((image, index) => (
+          {mainGalleryImages.map((image, index) => (
             <div 
               key={index} 
-              className="gallery-item"
-              onClick={() => setSelectedImage(image)}
+              className={`gallery-item effect-${index % 3 + 1}`}
+              onClick={() => handleImageClick(image)}
             >
               <div className="gallery-image-wrapper">
                 <img src={image} alt={`Gallery image ${index + 1}`} />
@@ -134,10 +179,31 @@ function Gallery() {
           ))}
         </div>
 
+        {/* Horizontal Scroll Gallery */}
+        <div className="scroll-gallery-container">
+          <h3 className="scroll-gallery-title">More Delights</h3>
+          <div className="scroll-gallery">
+            {scrollGalleryImages.map((image, index) => (
+              <div 
+                key={`scroll-${index}`} 
+                className="scroll-gallery-item"
+                onClick={() => handleImageClick(image)}
+              >
+                <div className="gallery-image-wrapper">
+                  <img src={image} alt={`Scrolling gallery image ${index + 1}`} />
+                  <div className="gallery-item-overlay">
+                    <span className="view-text">View</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {selectedImage && (
           <div 
             className="image-dialog-overlay" 
-            onClick={() => setSelectedImage(null)}
+            onClick={handleCloseModal}
           >
             <div className="image-dialog">
               <img src={selectedImage} alt="Selected gallery image" />
@@ -145,7 +211,7 @@ function Gallery() {
                 className="close-button" 
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedImage(null);
+                  handleCloseModal();
                 }}
               >
                 ×
