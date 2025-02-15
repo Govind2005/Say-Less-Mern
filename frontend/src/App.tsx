@@ -4,7 +4,7 @@ import CreateItem from "./pages/CreateItem";
 import MenuPage from "./pages/MenuPage";
 import MenuItems from "./pages/MenuItems";
 import CartPage from "./pages/CartPage";
-import AdminPage from './pages/AdminPage';
+import Adminpt2 from './pages/Adminpt2';
 import EditItemPage from './pages/EditItemPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import EditItemDetailsPage from "./pages/EditItem";
@@ -23,7 +23,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/menuitems" element={<MenuItems />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin" element={<Adminpt2 />} />
         <Route path="/cart" element={<CartPage />} />
      
         <Route 

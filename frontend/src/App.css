@@ -2146,7 +2146,9 @@
 /* Add this at the start of your CSS file for all buttons */
 button {
   outline: none !important; /* Removes the default focus outline */
-  user-select: none; /* Prevents text selection */
+  user-select: none;
+-webkit-user-select: none;
+ /* Prevents text selection */
 }
 
 /* Update button click effects */

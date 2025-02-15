@@ -113,15 +113,15 @@ const MenuPage = () => {
             <h1 style={{
               textAlign: "center",
               color: "#7A3E3E",
-              fontSize: "6rem",
-              fontFamily: '"Monsieur La Doulaise", cursive' ,     
+              fontSize: "2rem",
+             // fontFamily: '"Monsieur La Doulaise", cursive' ,     
               marginBottom: "20px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: "15px"
             }}>
-                ~~~ Our Delicious Creations ~~~
+                ~ OUR DELICIOUS CREATIONS ~
              </h1>
 
             {/* Items Grid */}
@@ -129,86 +129,87 @@ const MenuPage = () => {
   style={{ 
     display: "grid", 
     gridTemplateColumns: "repeat(auto-fill, minmax(400px, 2fr))", // Fewer columns
-    gridAutoRows: "10px", // Bigger row height to make images squarer
+    gridAutoRows: "600px", // Bigger row height to make images squarer
     gap: "25px", 
-    padding: "20px"
+    //padding: "20px",
+    backgroundColor: "#fff",
+    padding: "50px",
+    margin: "40px auto",
+    maxWidth: "1500px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    borderRadius: "15px"
   }}
 >
   {filteredItems.map((item) => {
-    const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
     
     return (
+    
       <div 
       key={item._id} 
       style={{
         position: "relative",
-        // borderRadius: "30px",
         overflow: "hidden",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+       // boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
         transition: "transform 0.3s ease-in-out",
-        fontFamily: '"Bodoni Moda", serif' ,
+        fontFamily: '"Bodoni Moda", serif',
         cursor: "pointer",
-        gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
+        display: "flex",
+        flexDirection: "column",
+        height: "100%" 
       }}
       onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
       onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+    >
+      <img
+        src={item.image}
+        alt={item.name}
+        style={{
+          width: "100%",
+          height: "70%", // Adjust to take only 70% height
+          objectFit: "cover",
+          transition: "opacity 0.3s ease"
+        }}
+      />
+      <div 
+        style={{
+          padding: "20px",
+          backgroundColor: "#fff6fd", 
+          fontFamily: '"Bodoni Moda", serif',
+          color: "#7A3E3E",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          height: "30%" // Remaining 30% for text and button
+        }}
       >
-        <img
-          src={item.image}
-          alt={item.name}
+        <h2 style={{   fontFamily: '"Bodoni Moda", serif',fontSize: "1.6rem", fontWeight: "bold", marginBottom: "5px" }}>
+          {item.name}
+        </h2>
+        <p style={{  fontFamily: '"Bodoni Moda", serif', fontSize: "1rem", fontWeight: "500" }}>Type: {item.type}</p>
+        <p style={{   fontFamily: '"Bodoni Moda", serif',fontSize: "1rem" }}>
+          Price: <span style={{ fontWeight: "bold" }}>${item.price}</span>
+        </p>
+        <button 
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "opacity 0.3s ease"
+            background: "transparent",
+            color: "#7A3E3E",
+            fontSize: "1rem",
+            padding: "10px 25px",
+            border: "2px solid #7A3E3E",
+            fontFamily: '"Bodoni Moda", serif',
+            borderRadius: "5px",
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            transition: "background 0.3s ease, color 0.3s ease",
+            cursor: item.available ? 'pointer' : 'not-allowed'
           }}
-          />
-        <div 
-          style={{
-            position: "absolute",
-            bottom: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
-            display: "flex",
-            flexDirection: "column",
-            fontFamily: '"Bodoni Moda", serif' ,
-            justifyContent: "flex-end",
-            padding: "15px",
-            color: "#fff"
-          }}
-          >
-          <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif' ,marginBottom: "5px" }}>
-            {item.name}
-          </h2>
-          <p style={{ fontSize: "1rem", fontFamily: '"Bodoni Moda", serif' ,fontWeight: "500" }}>Type: {item.type}</p>
-          <p style={{fontFamily: '"Bodoni Moda", serif' , fontSize: "1rem" }}>
-            Price: <span style={{ fontFamily: '"Bodoni Moda", serif' ,fontWeight: "bold"}}>${item.price}</span>
-          </p>
-          <button 
-            style={{
-              background: "transparent",
-              color: "white",
-              fontSize: "1rem",
-              padding: "10px 25px",
-              border: "2px solid white",
-              fontFamily: '"Bodoni Moda", serif' ,
-              borderRadius: "5px",
-              // cursor: "pointer",
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              transition: "background 0.3s ease, color 0.3s ease",
-              cursor: item.available ? 'pointer' : 'not-allowed'
-              
-            }}
-            onClick={() => item.available && handleAddToCart(item)}
-            disabled={!item.available}
-            >
-            {item.available ? "Add to Cart" : "Out of Stock"}
-          </button>
-        </div>
+          onClick={() => item.available && handleAddToCart(item)}
+          disabled={!item.available}
+        >
+          {item.available ? "Add to Cart" : "Out of Stock"}
+        </button>
       </div>
+    </div>
     );
   })}
 </div>

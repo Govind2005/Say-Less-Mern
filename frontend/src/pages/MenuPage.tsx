@@ -110,7 +110,7 @@ const AnimatedCircle = () => {
           width: '400px',
           height: '400px',
           borderRadius: '50%',
-          backgroundColor: 'white',
+          backgroundColor: '#ffebfc',
           color: 'white',
           display: 'flex',
           alignItems: 'center',
@@ -120,7 +120,7 @@ const AnimatedCircle = () => {
           fontFamily: '"Bodoni Moda", serif',
           zIndex: 2,
           transition: 'transform 0.2s ease-out, opacity 0.5s ease',
-          border: '10px solid pink',
+          
           opacity: circleOpacity,
           ...circleStyle
         }}
@@ -134,7 +134,7 @@ const AnimatedCircle = () => {
             position: 'relative',
             zIndex: 10
           }}>
-            <Link to="/menuitems" className='italic' style={{ fontFamily: '"Bodoni Moda", serif', color: 'pink', textDecoration: 'none' }}>EXPLORE <br>
+            <Link to="/menuitems" className='italic' style={{ fontFamily: '"Bodoni Moda", serif', color: 'black', textDecoration: 'none' }}>EXPLORE <br>
             </br>OUR MENU</Link>
           </div>
         )}
