@@ -13,7 +13,7 @@ import Gallery from "./components/Gallery";
 import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
 import OrderPage from "./pages/OrderPage";
-import Slider from "./pages/Slider";
+
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
@@ -26,7 +26,7 @@ function App() {
         <Route path="/menuitems" element={<MenuItems />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/slider" element={<Slider/>} />
+     
         <Route 
           path="/add" 
           element={

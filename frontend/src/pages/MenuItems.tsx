@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
+
 
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
@@ -66,7 +68,19 @@ const MenuPage = () => {
 
     return (
       <>
-      
+       <nav className="navbar">
+      <div className="nav-links">
+        <Link to="/admin" className="nav-link">Admin</Link>
+        <Link to="/about" className="nav-link">About</Link>
+        <div className="logo-container cursor-pointer">
+          <Link to="/">
+            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+          </Link>
+        </div>
+        <Link to="/menu" className="nav-link">Product</Link>
+        <Link to="/gallery" className="nav-link">Gallery</Link>
+      </div>
+    </nav>
         <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}
             <br></br>
