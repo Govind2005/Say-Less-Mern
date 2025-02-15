@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import AdminNavbar from "../components/AdminNavbar";
 
 const EditItemDetailsPage = () => {
     const { id } = useParams();
@@ -41,7 +42,7 @@ const EditItemDetailsPage = () => {
             if (response.ok) {
                 navigate("/edit");
             } else {
-                setError("Failed to update item");
+                setError("Failed to update the item here");
             }
         } catch (error) {
             setError("Error updating item: " + (error as Error).message);
@@ -53,7 +54,9 @@ const EditItemDetailsPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div style={{ padding: "40px", backgroundColor: "#FDE2F4" }}>
+        <>
+        <AdminNavbar/>
+        <div className="mt-32" style={{ padding: "40px", backgroundColor: "#FDE2F4" }}>
             <h1>Edit Item</h1>
             <div style={{ backgroundColor: "#FFF5F7", padding: "20px", borderRadius: "15px" }}>
                 <input
@@ -62,28 +65,28 @@ const EditItemDetailsPage = () => {
                     value={item.name}
                     onChange={(e) => setItem({ ...item, name: e.target.value })}
                     style={{ marginBottom: "15px", padding: "10px", width: "100%", borderRadius: "8px" }}
-                />
+                    />
                 <input
                     type="text"
                     placeholder="Image URL"
                     value={item.image}
                     onChange={(e) => setItem({ ...item, image: e.target.value })}
                     style={{ marginBottom: "15px", padding: "10px", width: "100%", borderRadius: "8px" }}
-                />
+                    />
                 <input
                     type="text"
                     placeholder="Type"
                     value={item.type}
                     onChange={(e) => setItem({ ...item, type: e.target.value })}
                     style={{ marginBottom: "15px", padding: "10px", width: "100%", borderRadius: "8px" }}
-                />
+                    />
                 <input
                     type="number"
                     placeholder="Price"
                     value={item.price}
                     onChange={(e) => setItem({ ...item, price: Number(e.target.value) })}
                     style={{ marginBottom: "15px", padding: "10px", width: "100%", borderRadius: "8px" }}
-                />
+                    />
                 <div>
                     <label>
                         Available
@@ -91,7 +94,7 @@ const EditItemDetailsPage = () => {
                             type="checkbox"
                             checked={item.available}
                             onChange={(e) => setItem({ ...item, available: e.target.checked })}
-                        />
+                            />
                     </label>
                 </div>
                 <button
@@ -104,11 +107,12 @@ const EditItemDetailsPage = () => {
                         borderRadius: "8px",
                         cursor: "pointer",
                     }}
-                >
+                    >
                     Save Changes
                 </button>
             </div>
         </div>
+</>
     );
 };
 

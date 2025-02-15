@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
+import AdminNavbar from "../components/AdminNavbar";
 
 const CreateItem = () => {
     const [newItem,setNewItem] = useState({
@@ -41,6 +41,9 @@ const CreateItem = () => {
 
     return (
         <>
+        <AdminNavbar/>
+        <div className="mt-32">
+            
         
     <h1 className="text-3xl font-semibold text-center mb-6">Create New Item</h1>
     
@@ -99,14 +102,8 @@ const CreateItem = () => {
             <h2 className="font-bold text-lg">Add Item</h2>
         </button>
 
-        <NavLink to={"/"}>
-            <button 
-                onClick={() => localStorage.setItem('isLoggedIn', 'false')}
-                className="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600 transition duration-300"
-            >
-                Log Out
-            </button>
-        </NavLink>
+        
+    </div>
     </div>
 </>
 

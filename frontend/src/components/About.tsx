@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import './About.css';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { useScrollDirection } from '../hooks/useScrollDirection';
+import ScrollReveal from 'scrollreveal'
+import CreateReview from './AddReview';
 
 function About() {
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
@@ -10,6 +12,68 @@ function About() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const sr = ScrollReveal({
+      origin: 'bottom',
+      distance: '60px',
+      duration: 1200,
+      delay: 300,
+      reset: false
+    });
+
+    // Hero Section with enhanced effects
+    sr.reveal('.about-hero', {
+      origin: 'top',
+      distance: '80px',
+      duration: 1500,
+      delay: 100
+    });
+
+    sr.reveal('.about-hero h1', {
+      origin: 'bottom',
+      delay: 600,
+      duration: 1000,
+      distance: '40px'
+    });
+
+    sr.reveal('.hero-decoration', {
+      delay: 800,
+      duration: 1200,
+      interval: 200
+    });
+
+    // About Content
+    sr.reveal('.about-left', {
+      origin: 'left',
+      delay: 500
+    });
+
+    sr.reveal('.about-center', {
+      delay: 600
+    });
+
+    sr.reveal('.about-right', {
+      origin: 'right',
+      delay: 500
+    });
+
+    // Chefs Section
+    sr.reveal('.chefs-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.chefs-carousel', {
+      delay: 500
+    });
+
+    // Footer
+    sr.reveal('.footer-content', {
+      delay: 300,
+      origin: 'bottom'
+    });
+
+    return () => sr.destroy();
   }, []);
 
   const nextChef = () => {
@@ -57,12 +121,15 @@ function About() {
       {/* Add Navigation Bar */}
       <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
         <div className="nav-links">
-          <Link to="/" className={location.pathname === "/" ? "active" : ""}>Home</Link>
+          <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
-          <div className="logo-container">
+          <div className="logo-container cursor-pointer">
+          <Link to="/" >
             <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+          </Link>
           </div>
-          <a href="#">Product</a>
+          
+          <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
           <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
         </div>
         <div className="rain-container">
@@ -74,6 +141,10 @@ function About() {
 
       {/* Hero Section */}
       <section className="about-hero">
+        <div className="hero-decoration">✧</div>
+        <div className="hero-decoration">❀</div>
+        <div className="hero-decoration">✧</div>
+        <div className="hero-decoration">❀</div>
         <h1>About Us</h1>
       </section>
 
@@ -92,28 +163,33 @@ function About() {
               We create Experiences! Every dessert is Handcrafted with love, 
               using 100% VEGETERIAN, EGGLESS, and Preservative-FREE Ingredients.
             </p>
-            <p className="sub-text">
-              From Rich, Fudgy Brownies to Melt-in-your-Mouth Cupcakes and 
-              Handcrafted Ice Creams, Every Bite is packed with FLAVOR, 
-              FRESHNESS, and LOVE
-            </p>
+            <ul className="features-list">
+              <li>Premium Quality Ingredients</li>
+              <li>100% Eggless Recipes</li>
+              <li>Fresh Daily Preparations</li>
+            </ul>
             <button className="learn-more light">Learn More</button>
           </div>
 
           <div className="about-center">
-            <img 
-              src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274920/about_p50wfw.jpg" 
-              alt="Featured dessert" 
-            />
+            <div className="image-container">
+              <div className="image-frame"></div>
+              <div className="flower-decoration"></div>
+              <div className="flower-decoration"></div>
+              <div className="flower-decoration"></div>
+              <div className="flower-decoration"></div>
+              <img 
+                src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274920/about_p50wfw.jpg" 
+                alt="Featured dessert" 
+              />
+            </div>
           </div>
 
           <div className="about-right">
             <h2>Our Features</h2>
             <p className="main-text">
-              We don't just bake treats—we create personalized experiences. 
-              From custom dessert hampers for special occasions to seasonal 
-              delicacies that capture the flavors of the moment, there's always 
-              something delightful to discover.
+              We don't just bake treats—we create personalized experiences 
+              that bring joy to every celebration and special moment.
             </p>
             <ul className="features-list">
               <li>Wholesome & Pure</li>
@@ -179,27 +255,26 @@ function About() {
         </div>
       </section>
 
+      <CreateReview/>
+
       {/* Footer Section */}
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
             <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="Logo" />
           </div>
-          
+
           <div className="footer-sections">
             <div className="footer-info">
-              <h3>Contact Info</h3>
-              <p>123 Bakery Street</p>
-              <p>New York, NY 10001</p>
-              <p>Tel: (555) 123-4567</p>
-              <p>Email: info@bindiscupcakery.com</p>
+              <h3>Get In Touch</h3>
+              <p>Parle Point, Surat, Gujarat</p>
+              <p>8849130189 - 9978677790</p>
             </div>
 
             <div className="footer-hours">
               <h3>Opening Hours</h3>
-              <p>Monday - Friday: 8am - 8pm</p>
-              <p>Saturday: 9am - 7pm</p>
-              <p>Sunday: 10am - 6pm</p>
+              <p>Mon – Sat, 11AM – 7PM</p>
+              <p>Sunday: Closed</p>
             </div>
 
             <div className="footer-social">
@@ -217,12 +292,20 @@ function About() {
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="footer-bottom">
-            <p>© 2024 Bindi's Cupcakery. All rights reserved.</p>
-          </div>
+        <div className="footer-bottom">
+          <p><span>© Domain</span>. All Rights Reserved. Designed by Bindi's Cupcakery</p>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      <button 
+        className="scroll-to-top" 
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        ↑
+      </button>
     </div>
   );
 }

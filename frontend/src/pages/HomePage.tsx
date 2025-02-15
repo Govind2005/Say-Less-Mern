@@ -5,6 +5,7 @@ import About from '../components/About.tsx';
 import Gallery from '../components/Gallery.tsx';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { useScrollDirection } from '../hooks/useScrollDirection';
+import ScrollReveal from 'scrollreveal';
 
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -13,8 +14,17 @@ function HomePage() {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [showPromo, setShowPromo] = useState(true);
   
   const isNavbarVisible = useScrollDirection();
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href = "https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }, []);
+
   
   const slides = [
     {
@@ -117,23 +127,53 @@ function HomePage() {
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/666_hjsal2.jpg'
   ];
 
-  const reviews = [
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275366/c1_y5cgxh.jpg',
-      name: 'Joey',
-      text: "The best eggless desserts I've ever had! Rich, creamy ice creams and perfectly baked brownies—pure indulgence without any compromise on taste! The attention to detail in presentation and the quality of ingredients used is remarkable. Every bite feels like a celebration!"
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739378349/barney-stinson_mpw5h8.jpg',
-      name: 'Barney',
-      text: "These desserts are legen... wait for it... DARY! LEGENDARY! The cakes are perfect for any occasion, and the service is absolutely incredible. Their custom hampers were a huge hit at our corporate event. The presentation was stunning and the taste was out of this world!"
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739378504/qle684dh_ppykj6.png',
-      name: 'Ross',
-      text: "Found my go-to bakery! Their attention to detail and commitment to quality is outstanding. Every bite is pure happiness! I especially love their seasonal specials and how they incorporate local flavors. The eggless options are so good that even my non-vegetarian friends can't tell the difference!"
+  const [reviews, setReviews] = useState<{ _id: string; comment: string; name: string; star: number; visible: boolean, imageUrl: string }[]>([]);
+  // Fetch reviews from the API
+  const fetchReviews = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/api/review');
+      
+      if (response.ok) {
+        const data = await response.json();
+
+        // Add random image to each review
+        const reviewsWithImages = data.data.map((review: any) => ({
+          ...review,
+          imageUrl: generateRandomImage() // Add the random image URL to each review
+        }));
+
+        setReviews(reviewsWithImages); // Set reviews with images
+      } else {
+      }
+    } catch (error) {
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchReviews(); // Fetch reviews when the component is mounted
+
+    // Set up an interval to change the current review every 5 seconds
+    const reviewTimer = setInterval(() => {
+      setCurrentReviewIndex((prevIndex) => (prevIndex + 1) % reviews.length); // Cycle through the reviews
+    }, 5000);
+
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(reviewTimer);
+  }, [reviews.length]);
+
+  const generateRandomImage = () => {
+    // Lorem Picsum with a random image based on the current time (or you can use a random number)
+    const randomId = Math.floor(Math.random() * 1000); // Generate a random number for unique image
+    return `https://picsum.photos/200/300?random=${randomId}`;
+  };
+
+  // Function to render stars 
+  const renderStars = (starCount: number) => {
+    return Array.from({ length: starCount }, (_, index) => (
+      <span key={index} className="text-yellow-500">⭐</span> // Display golden star
+    ));
+  };
+
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -189,8 +229,143 @@ function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
+
+  // Add ScrollReveal initialization
+  useEffect(() => {
+    const sr = ScrollReveal({
+      origin: 'bottom',
+      distance: '60px',
+      duration: 1200,
+      delay: 300,
+      reset: false
+    });
+
+    // Hero Section
+    sr.reveal('.hero-content', {
+      origin: 'top',
+      delay: 400
+    });
+
+    // Services Section
+    sr.reveal('.services-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.services-carousel', {
+      delay: 500
+    });
+
+    // About Section
+    sr.reveal('.about-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.about-left', {
+      origin: 'left',
+      delay: 500
+    });
+    sr.reveal('.about-center', {
+      delay: 600
+    });
+    sr.reveal('.about-right', {
+      origin: 'right',
+      delay: 500
+    });
+
+    // Gallery Section
+    sr.reveal('.gallery-title', {
+      delay: 300
+    });
+
+    // Gallery Grid - reveal items sequentially
+    document.querySelectorAll('.gallery-item').forEach((item, index) => {
+      sr.reveal(item as HTMLElement, {
+        delay: 300 + (index * 100),
+        origin: 'bottom',
+        interval: 100
+      });
+    });
+
+    // Gallery Image Dialog
+    sr.reveal('.image-dialog', {
+      origin: 'center',
+      distance: '0px',
+      duration: 800,
+      scale: 0.8,
+      opacity: 0
+    });
+
+    // Products Section
+    sr.reveal('.products-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.products-carousel', {
+      delay: 500
+    });
+
+    // Chefs Section
+    sr.reveal('.chefs-section .section-title', {
+      delay: 300
+    });
+    sr.reveal('.chefs-carousel', {
+      delay: 500
+    });
+
+    // Reviews Section
+    sr.reveal('.reviews-section h2', {
+      delay: 300
+    });
+    sr.reveal('.reviews-container', {
+      delay: 500
+    });
+
+    // Footer
+    sr.reveal('.footer-content', {
+      delay: 300,
+      origin: 'bottom'
+    });
+
+    return () => sr.destroy();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPromo(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleClosePromo = () => {
+    setShowPromo(false);
+  };
+
   return (
     <div className="app">
+      {/* Promotional Popup */}
+      {showPromo && (
+        <div className="promo-overlay" onClick={handleClosePromo}>
+          <div className="promo-popup" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="promo-close" 
+              onClick={handleClosePromo}
+            >
+              ×
+            </button>
+            <div className="promo-content">
+              <h2>Special Offer!</h2>
+              <p className="promo-highlight">Get 20% OFF on Your First Order</p>
+              <p>Use code: <span className="promo-code">WELCOME20</span></p>
+              <button 
+                className="promo-button"
+                onClick={handleClosePromo}
+              >
+                Order Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       {/* Navigation Bar */}
       <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
         <div className="rain-container">
@@ -199,12 +374,14 @@ function HomePage() {
           ))}
         </div>
         <div className="nav-links">
-          <Link to="/" className={location.pathname === "/" ? "active" : ""}>Home</Link>
+          <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
-          <div className="logo-container">
+          <div className="logo-container cursor-pointer">
+          <Link to="/" >
             <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+          </Link>
           </div>
-          <a href="#">Product</a>
+          <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
           <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
         </div>
       </nav>
@@ -246,6 +423,7 @@ function HomePage() {
 
             {/* About Section */}
             <section className="about-section">
+              <div className="about-decoration"></div>
               <div className="about-rain-container">
                 {Array.from({ length: 10 }).map((_, index) => (
                   <div key={index} className="about-raindrop" />
@@ -259,33 +437,38 @@ function HomePage() {
                     We create Experiences! Every dessert is Handcrafted with love, 
                     using 100% VEGETERIAN, EGGLESS, and Preservative-FREE Ingredients.
                   </p>
-                  <p className="sub-text">
-                    From Rich, Fudgy Brownies to Melt-in-your-Mouth Cupcakes and 
-                    Handcrafted Ice Creams, Every Bite is packed with FLAVOR, 
-                    FRESHNESS, and LOVE
-                  </p>
+                  <ul className="features-list">
+                    <li>Premium Quality Ingredients</li>
+                    <li>100% Eggless Recipes</li>
+                    <li>Fresh Daily Preparations</li>
+                  </ul>
                   <button className="learn-more light">Learn More</button>
                 </div>
 
                 <div className="about-center">
-                  <img 
-                    src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274920/about_p50wfw.jpg" 
-                    alt="Featured dessert" 
-                  />
+                  <div className="image-container">
+                    <div className="image-frame"></div>
+                    <div className="flower-decoration"></div>
+                    <div className="flower-decoration"></div>
+                    <div className="flower-decoration"></div>
+                    <div className="flower-decoration"></div>
+                    <img 
+                      src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274920/about_p50wfw.jpg" 
+                      alt="Featured dessert" 
+                    />
+                  </div>
                 </div>
 
                 <div className="about-right">
                   <h2>Our Features</h2>
                   <p className="main-text">
-                    We don't just bake treats—we create personalized experiences. 
-                    From custom dessert hampers for special occasions to seasonal 
-                    delicacies that capture the flavors of the moment, there's always 
-                    something delightful to discover.
+                    We don't just bake treats—we create personalized experiences 
+                    that bring joy to every celebration and special moment.
                   </p>
                   <ul className="features-list">
-                    <li>✓ Wholesome & Pure</li>
-                    <li>✓ Custom Hampers</li>
-                    <li>✓ Drool-Worthy Aesthetics</li>
+                    <li>Wholesome & Pure</li>
+                    <li>Custom Hampers</li>
+                    <li>Drool-Worthy Aesthetics</li>
                   </ul>
                   <button className="learn-more pink">Learn More</button>
                 </div>
@@ -322,7 +505,9 @@ function HomePage() {
                     gathering. Because the best memories are made with LOVE, 
                     LAUGHTER, AND A BOX FULL OF SWEETNESS!
                   </p>
-                  
+                  <button className="learn-more">
+                    <span>Learn More</span>
+                  </button>
                 </div>
               </div>
             </section>
@@ -369,12 +554,7 @@ function HomePage() {
 
             {/* Gallery Section */}
             <section className="gallery-section">
-              <div className="rain-container">
-                {Array.from({ length: 10 }).map((_, index) => (
-                  <div key={index} className="raindrop" />
-                ))}
-              </div>
-              <h2>Our Delicacies!</h2>
+              <h2 className="gallery-title">Our Delicacies!</h2>
               <div className="gallery-grid">
                 {galleryImages.map((image, index) => (
                   <div 
@@ -382,16 +562,30 @@ function HomePage() {
                     className="gallery-item"
                     onClick={() => setSelectedImage(image)}
                   >
-                    <img src={image} alt={`Gallery image ${index + 1}`} />
+                    <div className="gallery-image-wrapper">
+                      <img src={image} alt={`Gallery image ${index + 1}`} />
+                      <div className="gallery-item-overlay">
+                        <span className="view-text">View</span>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
 
               {selectedImage && (
-                <div className="image-dialog-overlay" onClick={() => setSelectedImage(null)}>
+                <div 
+                  className="image-dialog-overlay" 
+                  onClick={() => setSelectedImage(null)}
+                >
                   <div className="image-dialog">
                     <img src={selectedImage} alt="Selected gallery image" />
-                    <button className="close-button" onClick={() => setSelectedImage(null)}>
+                    <button 
+                      className="close-button" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImage(null);
+                      }}
+                    >
                       ×
                     </button>
                   </div>
@@ -421,22 +615,43 @@ function HomePage() {
                 <div 
                   className="products-track" 
                   style={{ 
-                    transform: `translateX(-${currentProductIndex * (28 + 3)}%)`,
+                    transform: `translateX(-${currentProductIndex * 40}%)`,
                     transition: 'transform 0.5s ease-in-out'
                   }}
                 >
                   {products.map((product, index) => (
                     <div key={index} className="product-card">
-                      <div className="product-image-container">
+                      <div className="product-image">
                         <img src={product.image} alt={product.name} />
                       </div>
                       <h3>{product.title}</h3>
                       <p>{product.name}</p>
                     </div>
                   ))}
+                  
+                  {/* Add the Season Seller card */}
+                  <div className="product-card">
+                    <div className="product-image">
+                      <img 
+                        src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739242354/samples/dessert-on-a-plate.jpg" 
+                        alt="Season Seller" 
+                      />
+                    </div>
+                    <h3>Season Seller</h3>
+                    <p>Special Dessert</p>
+                  </div>
                 </div>
               </div>
             </section>
+
+            {/* Add rain transition between products and chefs sections */}
+            <div className="section-transition">
+              <div className="rain-container">
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <div key={index} className="raindrop" />
+                ))}
+              </div>
+            </div>
 
             {/* Chefs Section */}
             <section className="chefs-section">
@@ -478,34 +693,46 @@ function HomePage() {
               </div>
             </section>
 
+            {/* Reviews Section */}
             <section className="reviews-section">
-              <h2>Clients Say About Our<br />Famous Delicacies</h2>
-              <div className="reviews-container">
-                {reviews.map((review, index) => (
-                  <div 
-                    key={index} 
-                    className={`review-card ${currentReviewIndex === index ? 'active' : ''}`}
-                  >
-                    <div className="review-content">
-                      <p className="review-text">{review.text}</p>
-                      <div className="reviewer-info">
-                        <img src={review.image} alt={review.name} className="reviewer-image" />
-                        <h4 className="reviewer-name">{review.name}</h4>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+      <h2>What Our Customers Say</h2>
+      <div className="reviews-container">
+        {reviews.map((review, index) => (
+          <div
+            key={review._id}
+            className={`review-card ${index === currentReviewIndex ? 'active' : ''}`}
+          >
+            <div className="review-content">
+              <div className="review-text">
+                {review.comment}
               </div>
-              <div className="review-pagination">
-                {reviews.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`pagination-dot ${currentReviewIndex === index ? 'active' : ''}`}
-                    onClick={() => setCurrentReviewIndex(index)}
-                  />
-                ))}
+              <div className="reviewer-info">
+                {/* Use the generated imageUrl for each review */}
+                <img
+                  alt={review.name}
+                  className="reviewer-image"
+                  src={review.imageUrl} // Use the image URL that was set when fetching reviews
+                />
+                <h3 className="reviewer-name">{review.name}</h3>
+                <div className="review-stars">
+                  {renderStars(review.star)} {/* Display stars according to the 'star' field */}
+                </div>
               </div>
-            </section>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="review-pagination">
+        {reviews.map((_, index) => (
+          <button
+            title="review"
+            key={index}
+            className={`pagination-dot ${index === currentReviewIndex ? 'active' : ''}`}
+            onClick={() => setCurrentReviewIndex(index)}
+          />
+        ))}
+      </div>
+    </section>
           </>
         } />
         <Route path="/about" element={<About />} />

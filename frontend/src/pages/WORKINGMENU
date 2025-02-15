@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const SweetCravingText = () => {
+  const [textColor, setTextColor] = useState('white');
   const [opacity, setOpacity] = useState(1);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const scrollThreshold = 500;
-      console.log(scrollThreshold)
       const fadeStart = 700;
       const fadeEnd = 900;
 
@@ -17,6 +17,7 @@ const SweetCravingText = () => {
         newOpacity = Math.max(0, 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart));
       }
 
+      setTextColor(scrollY > scrollThreshold ? 'black' : 'white');
       setOpacity(newOpacity);
     };
 
@@ -29,10 +30,10 @@ const SweetCravingText = () => {
       style={{
         position: 'fixed',
         top: '30%',
-        right: '5%',
+        right: '10%',
         color: 'pink',
         fontFamily: '"Bodoni Moda", serif',
-        fontSize: '4rem',
+        fontSize: '6rem',
         zIndex: 3,
         transition: 'color 0.5s ease, opacity 0.5s ease',
         opacity: opacity,
@@ -46,10 +47,9 @@ const SweetCravingText = () => {
 
 const AnimatedCircle = () => {
   const [circleStyle, setCircleStyle] = useState({
-    transform: 'translate(0, 0) scale(3)'
+    transform: 'translate(0, 0) scale(3)',
   });
   const [circleTextVisible, setCircleTextVisible] = useState(false);
-  const circleOpacity = 1;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +59,7 @@ const AnimatedCircle = () => {
       const scale = Math.max(4 - scrollY * 0.015, 1.5);
 
       setCircleStyle({
-        transform: `translate(${translateX}px, ${-translateY}px) scale(${scale})`
+        transform: `translate(${translateX}px, ${-translateY}px) scale(${scale})`,
       });
 
       if (scrollY > 600) {
@@ -74,7 +74,6 @@ const AnimatedCircle = () => {
   }, []);
 
   return (
-    <>
     <div
       style={{
         height: '300vh',
@@ -82,45 +81,44 @@ const AnimatedCircle = () => {
         backgroundImage: `url('/224.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'scroll'
+        backgroundAttachment: 'scroll',
       }}
-      >
-      <div
-        className="circle"
-        style={{
-          position: 'fixed',
-          bottom: '-200px',
-          left: '-350px',
-          width: '400px',
-          height: '400px',
-          borderRadius: '50%',
-          backgroundColor: 'white',
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          fontSize: '3rem',
-          fontFamily: '"Bodoni Moda", serif',
-          zIndex: 2,
-          transition: 'transform 0.2s ease-out, opacity 0.5s ease',
-          border: '10px solid pink',
-          opacity: circleOpacity,
-          ...circleStyle
-        }}
-        >
+    >
+<div
+  className="circle"
+  style={{
+    position: 'fixed',
+    bottom: '-150px',
+    left: '-350px',
+    width: '500px',
+    height: '500px',
+    borderRadius: '50%',
+    backgroundColor: 'white',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    fontSize: '3rem',
+    fontFamily: '"Bodoni Moda", serif',
+    zIndex: 2,
+    transition: 'transform 0.2s ease-out',
+    border: '10px solid pink', // Simple pink border
+    ...circleStyle,
+  }}
+>
+
         {circleTextVisible && (
-          <div style={{
-            fontFamily: '"Bodoni Moda", serif',
-            transition: 'opacity 1s ease',
-            fontSize:'2.5rem',
-            opacity: circleTextVisible ? 1 : 0,
-            position: 'relative',
-            zIndex: 10
+          <div style={{ 
+            fontFamily: '"Bodoni Moda", serif', 
+            transition: 'opacity 1s ease', 
+            opacity: circleTextVisible ? 1 : 0, 
+            position: 'relative', 
+            zIndex: 10 
           }}>
-            <Link to="/menuitems" className='italic' style={{ fontFamily: '"Bodoni Moda", serif', color: 'pink', textDecoration: 'none' }}>EXPLORE <br>
-            </br>OUR MENU</Link>
+            <a href="/menu" className='italic ' style={{  fontFamily: '"Bodoni Moda", serif', color: 'pink' }}>OUR MENU</a>
           </div>
+          
         )}
       </div>
 
@@ -128,7 +126,6 @@ const AnimatedCircle = () => {
 
       <div style={{ height: '200vh' }}></div>
     </div>
-      </>
   );
 };
 

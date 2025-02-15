@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminNavbar from "../components/AdminNavbar";
 
 const EditItemPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
@@ -59,7 +60,9 @@ const EditItemPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
+        <>
+        <AdminNavbar/>
+        <div className="mt-32" style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
             {/* Filter Bar */}
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
                 {["All", "Cake", "Cupcakes", "Pastry", "Donut", "Cookie"].map((cat) => (
@@ -176,6 +179,7 @@ const EditItemPage = () => {
                 ))}
             </div>
         </div>
+        </>
     );
 };
 
