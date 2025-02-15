@@ -57,10 +57,20 @@
     cursor: pointer;
     cursor: hand;
     -webkit-user-select: none;
+-webkit-user-select: none;
+
     -khtml-user-select: none;
+-webkit-user-select: none;
+
     -moz-user-select: none;
+-webkit-user-select: none;
+
     -ms-user-select: none;
-    user-select: none; }
+-webkit-user-select: none;
+
+    user-select: none;
+-webkit-user-select: none;
+ }
   .owl-carousel.owl-loaded {
     display: block; }
   .owl-carousel.owl-loading {
@@ -72,9 +82,17 @@
     visibility: hidden; }
   .owl-carousel.owl-drag .owl-item {
     -webkit-user-select: none;
+-webkit-user-select: none;
+
     -moz-user-select: none;
+-webkit-user-select: none;
+
     -ms-user-select: none;
-    user-select: none; }
+-webkit-user-select: none;
+
+    user-select: none;
+-webkit-user-select: none;
+ }
   .owl-carousel.owl-grab {
     cursor: move;
     cursor: grab; }
