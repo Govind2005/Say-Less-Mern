@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 
 const SweetCravingText = () => {
   const [opacity, setOpacity] = useState(1);

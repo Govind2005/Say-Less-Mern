@@ -18,7 +18,7 @@ function App() {
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
       {/* <Navbar /> */}
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<HomePage />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
