@@ -11,7 +11,7 @@ import Gallery from "./components/Gallery";
 import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
 import OrderPage from "./pages/OrderPage";
-import CartBox from "./components/CartBox";
+import CartPage from "./pages/CartPage";
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
@@ -22,7 +22,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/cart" element={<CartBox />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route 
           path="/add" 
           element={

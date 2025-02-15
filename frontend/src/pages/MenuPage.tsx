@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import CartPage from "./CartPage";
+import CartBox from "../components/CartBox";
 
 interface Item {
   _id: string;
@@ -85,16 +85,16 @@ const MenuPage = () => {
       existingCart.push(item);
     }
 
-    toast.success("Item added successfully.", {
-      style: {
-        border: "1px solid purple",
-        padding: "16px",
-        color: "pink",
-      },
-      iconTheme: {
-        primary: "pink",
-        secondary: "#FFFAEE",
-      },
+    toast.success("Added.", {
+        style: {
+            border: "1px solid purple",
+            padding: "16px",
+            color: "pink",
+            },
+            iconTheme: {
+            primary: "pink",
+            secondary: "#FFFAEE",
+            },
     });
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
@@ -107,26 +107,20 @@ const MenuPage = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
-      <CartPage cart={cart as Item[]} setCart={setCart}/>
-      {/* Filter Bar */}
-      <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
+    <div className="bg-[#FDE2F4] p-10 font-[Poppins]">
+        <CartBox cart={cart as Item[]} setCart={setCart} />
+  
+        {/* Filter Bar */}
+        <div className="flex justify-center gap-2.5 mb-7">
+
         {["All", "Cake", "Cupcakes", "Pastry", "Donut", "Cookie"].map(cat => (
-          <button
+        <button
             key={cat}
             onClick={() => setCategory(cat)}
-            style={{
-              padding: "10px 20px",
-              borderRadius: "20px",
-              border: "none",
-              backgroundColor: category === cat ? "#7A3E3E" : "#F4D0D0",
-              color: category === cat ? "white" : "#7A3E3E",
-              fontSize: "1rem",
-              cursor: "pointer",
-              transition: "0.3s",
-              fontWeight: "bold",
-            }}
-          >
+            className={`px-5 py-2 rounded-full border-none text-lg font-bold transition duration-300 cursor-pointer ${
+                category === cat ? "bg-[#7A3E3E] text-white" : "bg-[#F4D0D0] text-[#7A3E3E]"
+            }`}
+            >
             {cat}
           </button>
         ))}

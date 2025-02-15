@@ -28,7 +28,6 @@ export const getOrders = async (req, res) => {
 
 export const createOrder = async (req, res) => {
     const { name, phoneNumber, items, total } = req.body;
-    console.log("show me "+items)
 // Create an array of item references with quantities
 const orderItems = await Promise.all(
   items.map(async (cartItem) => {
@@ -49,7 +48,6 @@ const orderItems = await Promise.all(
 // Filter out any null items (in case the item wasn't found)
 const validOrderItems = orderItems.filter(orderItem => orderItem !== null);
 // Create a new order
-console.log(validOrderItems)
 const newOrder = new Order({
   name,
   phoneNumber,
