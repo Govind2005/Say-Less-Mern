@@ -1,5 +1,14 @@
 import { useState, useEffect } from "react";
-
+import CartBox from "../components/CartBox";
+interface CartItem {
+  _id: string;
+  name: string;
+  image:string;
+  quantity: number;
+  price:number;
+  special?: string;  // Optional special instructions
+  customize?: string; // Optional customization
+}
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
@@ -54,7 +63,6 @@ const MenuPage = () => {
         
         // Calculate total items
         const totalItems = existingCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-        
         // Save updated cart and total back to localStorage
         localStorage.setItem('cart', JSON.stringify(existingCart));
         localStorage.setItem('cartCount', totalItems.toString());
@@ -66,7 +74,7 @@ const MenuPage = () => {
 
     return (
       <>
-      
+        <CartBox storedCart={JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]} />
         <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}
             <br></br>

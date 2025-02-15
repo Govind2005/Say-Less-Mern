@@ -1,5 +1,5 @@
 import { useState, useEffect, SetStateAction } from 'react';
-
+import CartBox from '../components/CartBox';
 interface CartItem {
   _id: string;
   name: string;
@@ -203,6 +203,8 @@ const CartPage = () => {
   };
 
   return (
+    <>
+      <CartBox cart={cartItems} setCart={setCartItems} />
     <div className="p-10 font-sans">
       <h1 className="text-center text-3xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
 
@@ -319,7 +321,8 @@ const CartPage = () => {
         </div>
       )}
       <p className="mt-5 text-center">{messageStatus}</p>
-    </div>
+      </div>
+      </>
   );
 };
 
