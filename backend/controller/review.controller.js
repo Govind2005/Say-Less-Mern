@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 export const getReviews = async (req, res) => {
   try {
     const reviews = await Review.find({});
-    console.log("reviews found:", reviews);
     res.status(200).json({ success: true, data: reviews });
   } catch (error) {
     console.log("error: " + error.message);
@@ -16,7 +15,6 @@ export const getReview = async (req, res) => {
     const { id } = req.params;
       try {
         const reviews = await Review.findById(id);
-        console.log("items found:", reviews);
         res.status(200).json({ success: true, data: reviews });
       } catch (error) {
         console.log("error: " + error.message);

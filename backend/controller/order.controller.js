@@ -5,7 +5,6 @@ import Item from "../models/item.js";
 export const getOrders = async (req, res) => {
     try {
       const orders = await Order.find({});
-      console.log("reviews found:", orders);
       res.status(200).json({ success: true, data: orders });
     } catch (error) {
       console.log("error: " + error.message);

@@ -4,6 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 import { Cake, ShoppingCart, Box, Activity, Coffee, Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Card } from '../components/ui/card';
+import AdminNavbar from '../components/AdminNavbar';
 
 const CORRECT_USERNAME = 'user';
 const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('cake').toString(CryptoJS.enc.Base64); // Hash the correct password
@@ -69,20 +70,10 @@ const AdminPage = () => {
 {localStorage.getItem('isLoggedIn') === 'true' &&
       <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100">
       {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="container flex h-16 items-center justify-between px-6">
-          <div className="flex items-center gap-3">
-            <img className="w-32 h-16 object-cover rounded-lg shadow-sm" src="./logo.jpg" alt="Bakery Logo" />
-          </div>
-          <nav className="flex items-center gap-8 text-pink-600 font-medium">
-          <Link onClick={handleLogout} to="/" className={location.pathname === "/" ? "active" : ""}>Home</Link>
-            <div className="h-8 w-8 rounded-full bg-pink-600 text-white flex items-center justify-center shadow-md">B</div>
-          </nav>
-        </div>
-      </header>
+      <AdminNavbar/>
 
       {/* Main Content */}
-      <main className="px-6 py-10">
+      <main className="px-6 mt-16 py-10">
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-bold text-pink-700 mb-2">Welcome back, Bakery Admin!</h1>
           <div className="flex items-center justify-center gap-2 text-sm text-pink-500">
