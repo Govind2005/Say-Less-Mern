@@ -87,6 +87,11 @@ const AdminPage = () => {
               Manage Orders
             </button>
           </Link>
+          <Link to="/review">
+            <button className="w-full py-3 px-4 bg-pink-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition">
+              Look through reviews
+            </button>
+          </Link>
         </div>
 
         <footer className="text-center text-gray-500 text-sm mt-8">
