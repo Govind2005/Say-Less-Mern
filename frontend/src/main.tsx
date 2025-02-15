@@ -10,7 +10,7 @@ if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
       <App />
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="bottom-right" reverseOrder={false}/>
     </StrictMode>
   );
 } else {

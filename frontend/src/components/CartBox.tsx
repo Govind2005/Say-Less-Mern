@@ -77,7 +77,7 @@ const CartBox: React.FC = () => {
           <p className="text-3xl font-semibold mb-4 text-[#7a3e3e]">Your Cart</p>
 
           {cart.length === 0 ? (
-            <p className="pt-60 text-center text-[1rem]">Your cart is empty.</p>
+            <p className="pt-60 text-center text-[1.rem] text-gray-500">Your cart is empty.</p>
           ) : (
             <div>
               {cart.map((item) => (
