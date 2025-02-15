@@ -2912,3 +2912,23 @@ body {
     opacity: 1;
   }
 }
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Adjust scrollbar width */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #ffeac2; /* Match background */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d4a517; /* Dark Yellow for contrast */
+  border-radius: 10px;
+  border: 2px solid #ffeac2; /* Add padding effect */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #b38e0b; /* Slightly darker on hover */
+}

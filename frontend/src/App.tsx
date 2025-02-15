@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage";
 import CreateItem from "./pages/CreateItem";
 import MenuPage from "./pages/MenuPage";
 import MenuItems from "./pages/MenuItems";
-import CartPage from "./pages/CartPage";
 import AdminPage from './pages/AdminPage';
 import EditItemPage from './pages/EditItemPage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -13,6 +12,7 @@ import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
 import OrderPage from "./pages/OrderPage";
 import Slider from "./pages/Slider";
+import CartPage from "./pages/CartPage";
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}

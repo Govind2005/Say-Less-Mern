@@ -1,5 +1,16 @@
 import { useState, useEffect } from "react";
+import CartBox from "../components/CartBox";
+import toast, { Toaster } from "react-hot-toast";
 
+interface CartItem {
+  _id: string;
+  name: string;
+  image:string;
+  quantity: number;
+  price:number;
+  special?: string;  // Optional special instructions
+  customize?: string; // Optional customization
+}
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
@@ -35,38 +46,63 @@ const MenuPage = () => {
     const filteredItems = category === "All" ? items : items.filter(item => item.type === category);
 
     const handleAddToCart = (item: any) => {
-        // Get existing cart items from localStorage
-        const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
-        
-        // Check if item already exists in cart
-        const existingItemIndex = existingCart.findIndex((cartItem: any) => cartItem._id === item._id);
-        
-        if (existingItemIndex !== -1) {
-            // If item exists, increment quantity
-            existingCart[existingItemIndex].quantity += 1;
-        } else {
-            // If item doesn't exist, add it with quantity 1
-            existingCart.push({
-                ...item,
-                quantity: 1
-            });
-        }
-        
-        // Calculate total items
-        const totalItems = existingCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-        
-        // Save updated cart and total back to localStorage
-        localStorage.setItem('cart', JSON.stringify(existingCart));
-        localStorage.setItem('cartCount', totalItems.toString());
-        console.log('Added to cart:', item.name);
+      // Get existing cart items from localStorage
+      const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+      
+      // Check if item already exists in cart
+      const existingItemIndex = existingCart.findIndex((cartItem: any) => cartItem._id === item._id);
+      
+      if (existingItemIndex !== -1) {
+        // If item exists, increment quantity
+        toast.error('Item already in cart!', {
+          duration: 1000,
+          style: {
+            border: '1px solid #b35a7a',
+            padding: '16px',
+            color: '#b35a7a',
+            background: '#ffe4eb',
+          },
+          iconTheme: {
+            primary: '#b35a7a',
+            secondary: '#ffeac2',
+          }
+        });
+        // existingCart[existingItemIndex].quantity += 1;
+      } else {
+        // If item doesn't exist, add it with quantity 1
+        existingCart.push({
+          ...item,
+          quantity: 1
+        });
+        toast.success('Added to cart!', {
+          duration: 1000,
+          style: {
+            border: '1px solid #b35a7a',
+            padding: '16px',
+            color: '#b35a7a',
+            background: '#ffe4eb',
+          },
+          iconTheme: {
+            primary: '#b35a7a',
+            secondary: '#ffeac2',
+          }
+        });
+      }
+      
+      // Calculate total items
+      const totalItems = existingCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+      // Save updated cart and total back to localStorage
+      localStorage.setItem('cart', JSON.stringify(existingCart));
+      localStorage.setItem('cartCount', totalItems.toString());
+      console.log('Added to cart:', item.name);
     };
-
+    
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
     return (
       <>
-      
+        <CartBox storedCart={JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]} />
         <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}
             <br></br>
@@ -124,6 +160,7 @@ const MenuPage = () => {
     const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
     
     return (
+      <>
       <div 
       key={item._id} 
       style={{
@@ -194,7 +231,8 @@ const MenuPage = () => {
             {item.available ? "Add to Cart" : "Out of Stock"}
           </button>
         </div>
-      </div>
+        </div>
+        </>
     );
   })}
 </div>
