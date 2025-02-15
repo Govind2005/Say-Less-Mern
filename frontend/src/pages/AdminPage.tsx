@@ -1,169 +1,132 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CryptoJS from 'crypto-js';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 const CORRECT_USERNAME = 'user';
-const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('cake').toString(CryptoJS.enc.Base64); // Hash the correct password
+const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('cake').toString(CryptoJS.enc.Base64);
 
 const AdminPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const storedLoginStatus = localStorage.getItem('isLoggedIn');
-        if (storedLoginStatus === 'true') {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-    // Login handler
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = (e) => {
         e.preventDefault();
-
-        // Hash the entered password and compare it to the stored hash
         const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
-
         if (username === CORRECT_USERNAME && hashedPassword === CORRECT_PASSWORD_HASH) {
             localStorage.setItem('isLoggedIn', 'true');
-            setIsLoggedIn(true);
-            navigate('/admindb'); // Redirect to the new page after login
+            navigate('/admindb');
         } else {
             setError('Invalid username or password');
         }
     };
 
-    // Logout handler
-    const handleLogout = () => {
-        localStorage.setItem('isLoggedIn', 'false');
-        setIsLoggedIn(false);
-        setUsername(''); // Clear the username input
-        setPassword(''); // Clear the password input
-    };
-
-    if (isLoggedIn) {
-        return (
-            <div className="container">
-                <h2 className="text-3xl font-semibold text-center mb-6">You are logged in!</h2>
-                <button
-                    type="button"
-                    className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300 ease-in-out transform hover:scale-105"
-                    onClick={handleLogout}
-                >
-                    Logout
-                </button>
-            </div>
-        );
-    }
-
     return (
-        <div className="container">
-            <form onSubmit={handleLogin} className="max-w-sm mx-auto p-6 bg-pink-50 rounded-lg shadow-lg mt-32">
-                <h2 className="text-3xl font-semibold text-center mb-6">Login</h2>
+        <div style={{
+            width: '100%',
+            minHeight: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundImage: "url('226.jpg')",
+            backgroundSize: 'cover',
+            fontFamily: "'Roboto', sans-serif"
+        }}>
+            <div style={{
+                width: '1000px',
+                height: '500px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                background: '#FFF',
+                boxShadow: '0 0 10px rgba(0, 0, 0, .1)',
+                overflow: 'hidden',
+                position: 'relative',
+                border: '10px solid #FFF',
+                borderRadius: '10px'
+            }}>
+                <div style={{
+                    width: '50%',
+                    height: '100%',
+                     justifyContent: 'flex-start',
+                     backgroundPosition: '-50px 0',
 
-                <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Username"
-                    className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-                />
+                    backgroundImage: "url(./hello.gif)",
+                    backgroundSize: 'cover',
+                    borderTopLeftRadius: '5px',
+                    borderBottomLeftRadius: '5px',
+                    position: 'relative'
+                }}>
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        zIndex: 2,
+                        
+                      }}></div>
+                </div>
+                <form onSubmit={handleLogin} style={{
+                    minWidth: '250px',
+                    width: '50%',
+                    height: '100%',
+                    padding: '30px 20px'
+                }}>
+                    <h2 style={{
+                        fontSize: '40px',
+                        // fontFamily:'inherit',
+                        textTransform: 'capitalize',
+                        marginBottom: '60px',
+                        textAlign: 'center'
+                    }}>Login Here</h2>
 
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    className="w-full p-3 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-                />
-
-                <button
-                    type="submit"
-                    className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300 ease-in-out transform hover:scale-105"
-                >
-                    Login
-                </button>
-
-                {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
-            </form>
-        </div>
-    );
-};
-
-export default AdminPage;
-import CryptoJS from 'crypto-js';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-
-const CORRECT_USERNAME = 'user';
-const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('cake').toString(CryptoJS.enc.Base64); // Hash the correct password
-
-const AdminPage = () => {
-    console.log('Rendering AdminPage'); // Debugging message to track the render flow
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
-
-    // Login handler
-    const handleLogin = (e: React.FormEvent) => {
-      e.preventDefault();
-  
-      // Hash the entered password and compare it to the stored hash
-      const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
-      console.log(hashedPassword);
-  
-      if (username === CORRECT_USERNAME && hashedPassword === CORRECT_PASSWORD_HASH) {
-          localStorage.setItem('isLoggedIn', 'true');
-          navigate('/admindb'); // Redirect to the new page after login
-      } else {
-          setError('Invalid username or password');
-      }
-  };
-  
-    // Logout handler
-    const handleLogout = () => {
-        localStorage.setItem('isLoggedIn', 'false');
-        setUsername(''); // Clear the username input
-        setPassword(''); // Clear the password input
-    };
-
-    // Check if user is logged in
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
-    return (
-        <div className="container">
-          
-                <form onSubmit={handleLogin} className="max-w-sm mx-auto p-6 bg-pink-50 rounded-lg shadow-lg mt-32">
-                    <h2 className="text-3xl font-semibold text-center mb-6">Login</h2>
-
+                    <label htmlFor="email" style={{ fontSize: '16px', display: 'block', margin: '10px 0', textTransform: 'capitalize' }}>Username:</label>
                     <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Username"
-                        className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                        placeholder="Enter username"
+                        style={{ fontSize: '16px', display: 'block', width: '90%', border: 'none', borderBottom: '1px solid #000', marginBottom: '20px' }}
                     />
 
+                    <label htmlFor="password" style={{ fontSize: '16px', display: 'block', margin: '10px 0', textTransform: 'capitalize' }}>Password:</label>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Password"
-                        className="w-full p-3 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                        placeholder="Enter password"
+                        style={{ fontSize: '16px', display: 'block', width: '90%', border: 'none', borderBottom: '1px solid #000', marginBottom: '20px' }}
                     />
 
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300 ease-in-out transform hover:scale-105"
-                    >
-                        Login
-                    </button>
+                    <button type="submit" style={{
+                        width: '130px',
+                        height: '30px',
+                        textTransform: 'capitalize',
+                        borderRadius: '50px',
+                        border: 'none',
+                        background: 'black',
+                        color: '#FFF',
+                        display: 'block',
+                        cursor: 'pointer',
+                        margin: '50px auto'
+                    }}>Login</button>
 
-                    {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
+                    {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+
+                    <span style={{
+                        fontSize: '14px',
+                        color: 'rgb(117, 117, 117)',
+                        textTransform: 'capitalize',
+                        position: 'absolute',
+                        bottom: '20px',
+                        right: '20px',
+                        cursor: 'pointer'
+                    }}>Don't have an account?</span>
                 </form>
-            
+            </div>
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import { Cake, ShoppingCart, Box, Activity, Coffee, Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Card } from "../components/ui/card";
 import { NavLink, useNavigate } from 'react-router-dom';
+import { link } from "fs";
 
 export default function BakeryDashboard() {
   const navigate = useNavigate(); // For redirection
@@ -28,8 +29,7 @@ export default function BakeryDashboard() {
               Logout
             </button>
 
-            <div className="h-8 w-8 rounded-full bg-pink-600 text-white flex items-center justify-center shadow-md">B</div>
-          </nav>
+           </nav>
         </div>
       </header>
 
@@ -48,7 +48,7 @@ export default function BakeryDashboard() {
           <h2 className="text-3xl font-serif text-pink-700 text-center mb-8">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[ 
-              { icon: Cake, bg: 'bg-pink-200', text: 'text-pink-600', title: 'Add New Pastry', desc: 'Add a new item to the menu' },
+              { icon: Cake, bg: 'bg-pink-200', text: 'text-pink-600', title: 'Add New Pastry', desc: 'Add a new item to the menu' , link:'/edit'},
               { icon: ShoppingCart, bg: 'bg-green-200', text: 'text-green-600', title: 'Orders', desc: 'View current orders' },
               { icon: Box, bg: 'bg-purple-200', text: 'text-purple-600', title: 'Inventory', desc: 'Check available items' },
               { icon: Activity, bg: 'bg-yellow-200', text: 'text-yellow-600', title: 'Sales Report', desc: 'View sales statistics' }
