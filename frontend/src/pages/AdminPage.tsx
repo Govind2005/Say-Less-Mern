@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CryptoJS from 'crypto-js';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link,  useNavigate } from 'react-router-dom';
 
 import { Cake, ShoppingCart, Box, Activity, Coffee, Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Card } from '../components/ui/card';
@@ -30,11 +30,7 @@ const AdminPage = () => {
         }
     };
 
-    const handleLogout = () => {
-      localStorage.setItem('isLoggedIn', 'false');
-      setUsername(''); // Clear the username input
-      setPassword(''); // Clear the password input
-  };
+  
 
     return (
       <>
@@ -132,14 +128,6 @@ const AdminPage = () => {
           </Card>
         </section>
 
-        {/* Listed Bakery Items */}
-        <NavLink to={"/admin"}>
-        <button 
-        onClick={handleLogout}
-        className="w-full py-3 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition">
-            Logout
-          </button>
-          </NavLink>
       </main>
     </div>}
               </>

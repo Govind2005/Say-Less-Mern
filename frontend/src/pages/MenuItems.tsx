@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CartBox from "../components/CartBox";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 interface CartItem {
   _id: string;

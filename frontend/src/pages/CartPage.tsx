@@ -106,7 +106,7 @@ const CartPage = () => {
           ...response,
         };
 
-        const validateRes = await fetch("http://localhost:5000/payment/verify-payment", {
+        const validateRes = await fetch("http://localhost:4000/payment/verify-payment", {
           method: "POST",
           body: JSON.stringify(body),
           headers: {
@@ -152,13 +152,13 @@ const CartPage = () => {
           if (item.customize) message += `Customize: ${item.customize}\n`;
         });
         message += `\n*Total: $${total.toFixed(2)}*`;
-
+        const ownerNumber = '+919119682899';
         const response = await fetch('http://localhost:4000/send-whatsapp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ phoneNumber, message }),
+          body: JSON.stringify({ ownerNumber, message }),
         });
 
         const data = await response.json();
@@ -303,7 +303,10 @@ const CartPage = () => {
                 Total: ${total.toFixed(2)}
               </div>
               <button
-                onClick={handleButtonClick}
+                onClick={(e)=>{
+                  handleButtonClick();
+                  paymentHandler(e)}
+                }
                 disabled={!(name && phoneNumber)}
                 className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
               >
