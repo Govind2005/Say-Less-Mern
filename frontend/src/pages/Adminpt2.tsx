@@ -1,7 +1,16 @@
 import { Cake, ShoppingCart, Box, Activity, Coffee, Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Card } from "../components/ui/card";
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function BakeryDashboard() {
+  const navigate = useNavigate(); // For redirection
+
+  // Handle Logout functionality
+  const handleLogout = () => {
+    localStorage.setItem('isLoggedIn', 'false'); // Mark user as logged out
+    navigate('/admin'); // Redirect to the login page after logging out
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100">
       {/* Header */}
@@ -11,10 +20,14 @@ export default function BakeryDashboard() {
             <img className="w-32 h-16 object-cover rounded-lg shadow-sm" src="./logo.jpg" alt="Bakery Logo" />
           </div>
           <nav className="flex items-center gap-8 text-pink-600 font-medium">
-            <a href="#" className="hover:text-pink-800 transition">Home</a>
-            <a href="#" className="hover:text-pink-800 transition">Menu</a>
-            <a href="#" className="hover:text-pink-800 transition">About Us</a>
-            <a href="#" className="hover:text-pink-800 transition">Dashboard</a>
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout} // Trigger logout function
+              className="w-full py-3 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+            >
+              Logout
+            </button>
+
             <div className="h-8 w-8 rounded-full bg-pink-600 text-white flex items-center justify-center shadow-md">B</div>
           </nav>
         </div>
@@ -34,7 +47,7 @@ export default function BakeryDashboard() {
         <section className="mb-12">
           <h2 className="text-3xl font-serif text-pink-700 text-center mb-8">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
+            {[ 
               { icon: Cake, bg: 'bg-pink-200', text: 'text-pink-600', title: 'Add New Pastry', desc: 'Add a new item to the menu' },
               { icon: ShoppingCart, bg: 'bg-green-200', text: 'text-green-600', title: 'Orders', desc: 'View current orders' },
               { icon: Box, bg: 'bg-purple-200', text: 'text-purple-600', title: 'Inventory', desc: 'Check available items' },
