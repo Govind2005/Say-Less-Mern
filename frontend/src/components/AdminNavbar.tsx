@@ -16,7 +16,7 @@ const AdminNavbar = () => {
           <Link to="/add" className={location.pathname === "/about" ? "active" : ""}>Add Item</Link>
           <div className="logo-container cursor-pointer">
           <Link to="/admin" >
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
           </Link>
           </div>
           <Link to="/edit" className={location.pathname === "/menu" ? "active" : ""}>Edit Item</Link>

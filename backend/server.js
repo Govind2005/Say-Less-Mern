@@ -135,7 +135,6 @@ app.post("/payment/create-order", async (req, res) => {
         const options = {
             amount: amount * 100, // Convert amount to paise
             currency,
-            receipt,
             notes,
         };
 
@@ -146,7 +145,6 @@ app.post("/payment/create-order", async (req, res) => {
             order_id: order.id,
             amount: order.amount,
             currency: order.currency,
-            receipt: order.receipt,
             status: "created",
         });
         writeData(orders);

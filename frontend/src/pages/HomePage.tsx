@@ -378,7 +378,7 @@ function HomePage() {
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
           <div className="logo-container cursor-pointer">
           <Link to="/" >
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
           </Link>
           </div>
           <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
@@ -742,7 +742,7 @@ function HomePage() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="Bindi's Cupcakery" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Bindi's Cupcakery" />
           </div>
           
           <div className="footer-sections">

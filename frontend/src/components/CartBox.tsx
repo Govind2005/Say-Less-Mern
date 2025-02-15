@@ -3,6 +3,8 @@ import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { motion } from "framer-motion";
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 interface CartItem {
   _id: string;
@@ -17,13 +19,13 @@ interface CartItem {
 const CartBox: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  
   useEffect(() => {
     // Function to update state when localStorage changes
       const storedCart = JSON.parse(localStorage.getItem("cart") || "[]") as CartItem[];
       setCart(storedCart);
   }, [cart]);
-
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const toggleCart = (): void => setIsOpen(!isOpen);
 
   const updateCartCount = (items: CartItem[]) => {
@@ -79,6 +81,7 @@ const CartBox: React.FC = () => {
           {cart.length === 0 ? (
             <p className="pt-60 text-center text-[1.rem] text-gray-500">Your cart is empty.</p>
           ) : (
+              <>
             <div>
               {cart.map((item) => (
                 <div
@@ -124,7 +127,12 @@ const CartBox: React.FC = () => {
                   </div>
                 </div>  
               ))}
-            </div>
+                </div>
+                <div>
+                  Total Price: {total}
+                  <Link to="/cart">Checkout</Link>
+                </div>
+              </>
           )}
         </motion.div>
       )}

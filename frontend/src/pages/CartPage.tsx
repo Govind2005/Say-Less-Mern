@@ -1,5 +1,9 @@
 import { useState, useEffect, SetStateAction } from 'react';
-import CartBox from '../components/CartBox';
+// import CartBox from '../components/CartBox';
+import { FiMinus, FiPlus } from "react-icons/fi";
+import { motion } from "framer-motion";
+import { FaTrashAlt } from "react-icons/fa";
+
 interface CartItem {
   _id: string;
   name: string;
@@ -54,13 +58,13 @@ const CartPage = () => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-  const handleCustomizeChange = (itemId: string, value: string) => {
-    const updatedCart = cartItems.map(item =>
-      item._id === itemId ? { ...item, customize: value } : item
-    );
-    setCartItems(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-  };
+  // const handleCustomizeChange = (itemId: string, value: string) => {
+  //   const updatedCart = cartItems.map(item =>
+  //     item._id === itemId ? { ...item, customize: value } : item
+  //   );
+  //   setCartItems(updatedCart);
+  //   localStorage.setItem('cart', JSON.stringify(updatedCart));
+  // };
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -83,7 +87,6 @@ const CartPage = () => {
       body: JSON.stringify({
         amount: total,
         currency: "INR",
-        receipt: '123123123',
         notes: {}
       }),
       headers: {
@@ -91,10 +94,11 @@ const CartPage = () => {
       },
     });
     const order = await response.json();
+    console.log(import.meta.env.VITE_RAZORPAY_KEY)
     console.log(order);
 
-    var options = {
-      key: 'rzp_test_mZGFuX4QG8UG7y',
+    let options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY,
       amount: total,
       currency: "INR",
       name: "Bindi Cupcake",
@@ -117,7 +121,7 @@ const CartPage = () => {
         console.log(jsonRes);
       },
       prefill: {
-        name: "Web Dev Matrix",
+        name: name,
         email: "webdevmatrix@example.com",
         contact: phoneNumber.startsWith("+91") ? phoneNumber : "+91 " + phoneNumber
       },
@@ -147,11 +151,11 @@ const CartPage = () => {
       try {
         let message = "🎂 *New Order:*\n\n";
         cartItems.forEach(item => {
-          message += `*${item.name}* x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+          message += `*${item.name}* x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}\n`;
           if (item.special) message += `Special: ${item.special}\n`;
           if (item.customize) message += `Customize: ${item.customize}\n`;
         });
-        message += `\n*Total: $${total.toFixed(2)}*`;
+        message += `\n*Total: ₹${total.toFixed(2)}*`;
 
         const response = await fetch('http://localhost:4000/send-whatsapp', {
           method: 'POST',
@@ -204,9 +208,9 @@ const CartPage = () => {
 
   return (
     <>
-      <CartBox cart={cartItems} setCart={setCartItems} />
+      {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
     <div className="p-10 font-sans">
-      <h1 className="text-center text-3xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
+      <h1 className="text-center text-5xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
 
       {cartItems.length === 0 ? (
         <p className="text-center text-lg">Your cart is empty</p>
@@ -217,49 +221,49 @@ const CartPage = () => {
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-24 h-24 object-cover rounded-lg"
+                className="w-35 h-35 object-cover rounded-full border-3 border-[#B56576]"
               />
-              <div className="flex-1">
-                <h3 className="text-[#7A3E3E] text-xl">{item.name}</h3>
-                <p className="text-[#B56576]">${item.price}</p>
+              <div className=" grow">
+                <h3 className="text-[#7A3E3E] text-2xl">{item.name}</h3>
+                <p className="text-[#B56576] text-lg">₹{item.price}</p>
               </div>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                  className="px-3 py-2 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1]"
+                  className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
-                  -
+                  <FiMinus />
                 </button>
-                <span>{item.quantity}</span>
+                <span className='px-2'>{item.quantity}</span>
                 <button
                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                  className="px-3 py-2 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1]"
+                  className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
-                  +
+                  <FiPlus />
                 </button>
                 <button
                   onClick={() => removeFromCart(item._id)}
-                  className="ml-5 px-3 py-2 rounded-md bg-[#FFC2D1] hover:bg-[#F7A0B5]"
+                  className="ml-3 mr-3 px-3 py-2 text-2xl"
                 >
-                  Remove
+                  <motion.div
+                        initial={{ rotate: 0 }}
+                        whileHover={{ rotate: -15 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <FaTrashAlt className="text-gray-600 transition-transform duration-200" />
+                      </motion.div>
                 </button>
               </div>
 
-              <div className="mt-3 w-full">
-                <input
-                  type="text"
+              <div>
+                <textarea
+                  rows={3}
+                  cols={40}
                   placeholder="Special Instructions (optional)"
                   value={item.special || ''}
                   onChange={(e) => handleSpecialChange(item._id, e.target.value)}
-                  className="w-full p-2 rounded-lg border-2 border-[#EAC4D5] mb-3"
-                />
-                <input
-                  type="text"
-                  placeholder="Customization (optional)"
-                  value={item.customize || ''}
-                  onChange={(e) => handleCustomizeChange(item._id, e.target.value)}
-                  className="w-full p-2 rounded-lg border-2 border-[#EAC4D5]"
-                />
+                  className="p-2 rounded-lg border-2 border-[#EAC4D5] focus:ring-2 focus:ring-[#B56576] outline-none focus:ring-offset-0"
+                ></textarea>
               </div>
             </div>
           ))}
@@ -300,22 +304,15 @@ const CartPage = () => {
 
             <div className="flex justify-between items-center mt-5">
               <div className="text-[#7A3E3E] text-xl font-bold">
-                Total: ${total.toFixed(2)}
+                Total: ₹{total.toFixed(2)}
               </div>
               <button
-                onClick={handleButtonClick}
+                    onClick={async (e) => { await paymentHandler(e); handleButtonClick() }}
                 disabled={!(name && phoneNumber)}
                 className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
               >
                 Confirm Order
               </button>
-              {/* <button
-                onClick={paymentHandler}
-                disabled={!(name && phoneNumber)}
-                className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
-              >
-                Pay
-              </button> */}
             </div>
           </div>
         </div>
