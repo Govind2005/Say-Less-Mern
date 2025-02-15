@@ -9,6 +9,25 @@ function Gallery() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const isNavbarVisible = useScrollDirection();
 
+  // Define gallery images array
+  const mainGalleryImages = [
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550717/WhatsApp_Image_2025-02-04_at_14.57.19_1a28ffa7_mehv6v.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550717/WhatsApp_Image_2025-02-04_at_14.57.19_b993dbd2_a0vcmx.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550714/WhatsApp_Image_2025-02-04_at_14.57.19_6b0d6d7c_yfiq2e.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550712/WhatsApp_Image_2025-02-04_at_14.57.19_8e451678_icxejw.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550714/WhatsApp_Image_2025-02-04_at_14.57.19_791f5cf4_e3ffsz.jpg",
+    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550715/WhatsApp_Image_2025-02-04_at_14.57.19_163e6e72_x8ufk0.jpg"
+  ];
+
+  const scrollGalleryImages = [
+    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
+    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/222_u7w8gn.jpg',
+    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/333_i0ae0e.jpg',
+    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274474/444_oapcps.jpg',
+    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/555_bsghyy.jpg',
+    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/666_hjsal2.jpg'
+  ];
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -49,8 +68,6 @@ function Gallery() {
     });
 
     // Gallery Grid - reveal items sequentially
-    
-    
     document.querySelectorAll('.gallery-item').forEach((item, index) => {
       sr.reveal(item as HTMLElement, {
         delay: 300 + (index * 100),
@@ -82,6 +99,8 @@ function Gallery() {
     if (scrollGallery) {
       (scrollGallery as HTMLElement).addEventListener('wheel', (e: WheelEvent) => handleWheel(e), { passive: false });
 
+      
+
     }
 
     return () => {
@@ -101,34 +120,85 @@ function Gallery() {
     setSelectedImage(null);
   };
 
-  const mainGalleryImages = [
-    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550717/WhatsApp_Image_2025-02-04_at_14.57.19_1a28ffa7_mehv6v.jpg",
-    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550717/WhatsApp_Image_2025-02-04_at_14.57.19_b993dbd2_a0vcmx.jpg",
-    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550714/WhatsApp_Image_2025-02-04_at_14.57.19_6b0d6d7c_yfiq2e.jpg",
-    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550712/WhatsApp_Image_2025-02-04_at_14.57.19_8e451678_icxejw.jpg",
-    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550714/WhatsApp_Image_2025-02-04_at_14.57.19_791f5cf4_e3ffsz.jpg",
-    "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550715/WhatsApp_Image_2025-02-04_at_14.57.19_163e6e72_x8ufk0.jpg"
-  ];
+  useEffect(() => {
+    const sr = ScrollReveal({
+      origin: 'left',
+      distance: '60px',
+      duration: 1200,
+      delay: 200
+    });
 
-  const scrollGalleryImages = [
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/222_u7w8gn.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/333_i0ae0e.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274474/444_oapcps.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/555_bsghyy.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/666_hjsal2.jpg'
-  ];
+    // Reveal banner rows sequentially
+    document.querySelectorAll('.banner-row').forEach((row, index) => {
+      sr.reveal(row as HTMLElement, {
+        delay: 300 + (index * 200),
+        distance: index % 2 === 0 ? '60px' : '-60px',
+        origin: index % 2 === 0 ? 'left' : 'right'
+      });
+    });
 
+    return () => sr.destroy();
+  }, []);
+
+  useEffect(() => {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target as HTMLElement;
+          const ratio = entry.intersectionRatio;
+          
+          if (ratio > 0.7) { // Adjust this threshold as needed
+            element.classList.add('revealed');
+          } else {
+            element.classList.remove('revealed');
+          }
+        }
+      });
+    };
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: [0, 0.7, 1] // Multiple thresholds for smoother transition
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    document.querySelectorAll('.gallery-item-reveal').forEach(item => {
+      observer.observe(item);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const items = document.querySelectorAll('.gallery-item-reveal');
+      const windowHeight = window.innerHeight;
+      const triggerBottom = windowHeight * 0.8;
+
+      items.forEach((item) => {
+        const element = item as HTMLElement;
+        const elementTop = element.getBoundingClientRect().top;
+        
+        if (elementTop < triggerBottom) {
+          element.classList.add('visible');
+        } else {
+          element.classList.remove('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="app">
       {/* Navigation Bar */}
       <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
-        </div>
         <div className="nav-links">
           <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
@@ -137,9 +207,14 @@ function Gallery() {
             <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
           </Link>
           </div>
-
+          
           <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
           <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
+        </div>
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
         </div>
       </nav>
 
@@ -161,40 +236,31 @@ function Gallery() {
         </div>
         <h2 className="gallery-title">Our Delicacies!</h2>
         
-        {/* Main Grid Gallery */}
-        <div className="gallery-grid">
-          {mainGalleryImages.map((image, index) => (
-            <div 
-              key={index} 
-              className={`gallery-item effect-${index % 3 + 1}`}
-              onClick={() => handleImageClick(image)}
-            >
-              <div className="gallery-image-wrapper">
+        <div className="scroll-container">
+          <div className="gallery-container">
+            {scrollGalleryImages.map((image, index) => (
+              <div 
+                key={index} 
+                className="gallery-item-reveal"
+                onClick={() => handleImageClick(image)}
+              >
                 <img src={image} alt={`Gallery image ${index + 1}`} />
-                <div className="gallery-item-overlay">
-                  <span className="view-text">View</span>
-                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Horizontal Scroll Gallery */}
+        {/* Horizontal Scroll Gallery with main gallery images */}
         <div className="scroll-gallery-container">
           <h3 className="scroll-gallery-title">More Delights</h3>
           <div className="scroll-gallery">
-            {scrollGalleryImages.map((image, index) => (
+            {mainGalleryImages.map((image, index) => (
               <div 
                 key={`scroll-${index}`} 
                 className="scroll-gallery-item"
                 onClick={() => handleImageClick(image)}
               >
-                <div className="gallery-image-wrapper">
-                  <img src={image} alt={`Scrolling gallery image ${index + 1}`} />
-                  <div className="gallery-item-overlay">
-                    <span className="view-text">View</span>
-                  </div>
-                </div>
+                <img src={image} alt={`Scrolling gallery image ${index + 1}`} />
               </div>
             ))}
           </div>
