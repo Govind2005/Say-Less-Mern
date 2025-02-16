@@ -4,6 +4,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
 
+
 interface CartItem {
   _id: string;
   name: string;

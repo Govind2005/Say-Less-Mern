@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import CartBox from "../components/CartBox";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { FaSearch } from "react-icons/fa";
 
-interface CartItem {
-  _id: string;
-  name: string;
-  image:string;
-  quantity: number;
-  price:number;
-  special?: string;  // Optional special instructions
-  customize?: string; // Optional customization
-}
+// interface CartItem {
+//   _id: string;
+//   name: string;
+//   image:string;
+//   quantity: number;
+//   price:number;
+//   special?: string;  // Optional special instructions
+//   customize?: string; // Optional customization
+// }
 const MenuPage = () => {
     const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean }[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [category, setCategory] = useState("All");
-
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+  
     useEffect(() => {
         fetchItems();
         const link = document.createElement("link");
@@ -41,10 +45,19 @@ const MenuPage = () => {
             setLoading(false);
         }
     };
-
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedSearch(searchTerm);
+      }, 500);
+      return () => clearTimeout(handler); // Cleanup on unmount or new input
+  }, [searchTerm]);
     // Filtered Items based on category selection
-    const filteredItems = category === "All" ? items : items.filter(item => item.type === category);
-
+    // const filteredItems = category === "All" ? items : items.filter(item => item.type === category);
+    const filteredItems = items.filter(
+      (item) =>
+        (category === "All" || item.type.toLowerCase() === category.toLowerCase()) &&
+        (debouncedSearch === "" || item.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
+    );
     const handleAddToCart = (item: any) => {
       // Get existing cart items from localStorage
       const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -102,140 +115,132 @@ const MenuPage = () => {
 
     return (
       <>
-        <CartBox storedCart={JSON.parse(localStorage.getItem('cart') || '[]') as CartItem[]} />
+        <CartBox />
         <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}
             <br></br>
-<br></br>
-<br></br>
-<br></br>
+            <br></br>
+            <br></br>
+            <br></br>
             
-            <div style={{ fontFamily: '"Bodoni Moda", serif' , display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
-                {["All", "Cake", "Truffle Balls", "Brownie & Brownie Tub", "Donut", "Cookie"].map((cat) => (
-                  <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  style={{
-                    padding: "10px 20px",
-                            borderRadius: "20px",
-                            border: "none",
-                            backgroundColor: category === cat ? "#7A3E3E" : "#F4D0D0",
-                            color: category === cat ? "white" : "#7A3E3E",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                            transition: "0.3s",
-                            fontWeight: "bold"
-                          }}
-                          >
-                        {cat}
-                    </button>
-                ))}
-            </div>
+            <div className="flex justify-center gap-2 mb-8 font-bodoni">
+      {["All", "Cake", "Truffle Balls", "Brownie & Brownie Tub", "Donut", "Cookie"].map((cat) => (
+        <button
+          key={cat}
+          onClick={() => setCategory(cat)}
+          className={`px-5 py-2 rounded-2xl border-none text-base font-bold transition duration-300 cursor-pointer ${
+            category === cat ? "bg-[#7A3E3E] text-white" : "bg-[#F4D0D0] text-[#7A3E3E]"
+          }`}
+        >
+          {cat}
+        </button>
+      ))}
+
+      {isSearching ? (
+        // Search Bar (Replaces the search button)
+        <div className="flex items-center gap-2 border border-gray-300 rounded-2xl bg-white shadow-md">
+          <input
+            type="text"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 outline-none w-48 sm:w-64"
+          />
+          <button onClick={() => setIsSearching(false)} className="text-gray-500 hover:text-gray-700 px-2 transition">
+            ✖
+          </button>
+        </div>
+      ) : (
+        // Search Button
+        <button
+          onClick={() => setIsSearching(true)}
+          className="px-4 py-2 rounded-2xl border-none text-base font-bold transition duration-300 cursor-pointer bg-[#F4D0D0] text-[#7A3E3E]"
+        >
+          <FaSearch />
+        </button>
+      )}
+    </div>
            {/* Fancy Heading with SVG Lines */}
-            <h1 style={{
-              textAlign: "center",
-              color: "#7A3E3E",
+            <h1 className="text-center text-[#7A3E3E] font-monsieur mb-5 flex items-center justify-center gap-4" style={{
               fontSize: "6rem",
-              fontFamily: '"Monsieur La Doulaise", cursive' ,     
-              marginBottom: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "15px"
+              fontFamily: '"Monsieur La Doulaise", cursive'
             }}>
                 ~~~ Our Delicious Creations ~~~
              </h1>
 
             {/* Items Grid */}
             <div 
-  style={{ 
-    display: "grid", 
-    gridTemplateColumns: "repeat(auto-fill, minmax(400px, 2fr))", // Fewer columns
-    gridAutoRows: "10px", // Bigger row height to make images squarer
-    gap: "25px", 
-    padding: "20px"
-  }}
->
-  {filteredItems.map((item) => {
-    const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
-    
-    return (
-      <>
-      <div 
-      key={item._id} 
-      style={{
-        position: "relative",
-        // borderRadius: "30px",
-        overflow: "hidden",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-        transition: "transform 0.3s ease-in-out",
-        fontFamily: '"Bodoni Moda", serif' ,
-        cursor: "pointer",
-        gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
-      }}
-      onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
-      onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
-      >
-        <img
-          src={item.image}
-          alt={item.name}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "opacity 0.3s ease"
-          }}
-          />
-        <div 
-          style={{
-            position: "absolute",
-            bottom: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
-            display: "flex",
-            flexDirection: "column",
-            fontFamily: '"Bodoni Moda", serif' ,
-            justifyContent: "flex-end",
-            padding: "15px",
-            color: "#fff"
-          }}
-          >
-          <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif' ,marginBottom: "5px" }}>
-            {item.name}
-          </h2>
-          <p style={{ fontSize: "1rem", fontFamily: '"Bodoni Moda", serif' ,fontWeight: "500" }}>Type: {item.type}</p>
-          <p style={{fontFamily: '"Bodoni Moda", serif' , fontSize: "1rem" }}>
-            Price: <span style={{ fontFamily: '"Bodoni Moda", serif' ,fontWeight: "bold"}}>${item.price}</span>
-          </p>
-          <button 
-            style={{
-              background: "transparent",
-              color: "white",
-              fontSize: "1rem",
-              padding: "10px 25px",
-              border: "2px solid white",
-              fontFamily: '"Bodoni Moda", serif' ,
-              borderRadius: "5px",
-              // cursor: "pointer",
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              transition: "background 0.3s ease, color 0.3s ease",
-              cursor: item.available ? 'pointer' : 'not-allowed'
-              
-            }}
-            onClick={() => item.available && handleAddToCart(item)}
-            disabled={!item.available}
+              style={{ 
+                display: "grid", 
+                gridTemplateColumns: "repeat(auto-fill, minmax(400px, 2fr))", // Fewer columns
+                gridAutoRows: "10px", // Bigger row height to make images squarer
+                gap: "25px", 
+                padding: "20px"
+              }}
             >
-            {item.available ? "Add to Cart" : "Out of Stock"}
-          </button>
-        </div>
-        </div>
-        </>
-    );
-  })}
-</div>
+              {filteredItems.map((item) => {
+                const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
+                
+                return (
+                  <>
+                  <div 
+                  key={item._id} 
+                  style={{
+                    position: "relative",
+                    // borderRadius: "30px",
+                    overflow: "hidden",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                    transition: "transform 0.3s ease-in-out",
+                    fontFamily: '"Bodoni Moda", serif' ,
+                    cursor: "pointer",
+                    gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
+                  onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover transition-opacity duration-300 ease-in-out"
+
+                      />
+                    <div 
+                      className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-4 text-white font-bodoni"
+                      >
+                      <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif' ,marginBottom: "5px" }}>
+                        {item.name}
+                      </h2>
+                      <p style={{ fontSize: "1rem", fontFamily: '"Bodoni Moda", serif' ,fontWeight: "500" }}>Type: {item.type}</p>
+                      <p className="text-base font-bodoni">
+                        Price: <span style={{ fontFamily: '"Bodoni Moda", serif' ,fontWeight: "bold"}}>${item.price}</span>
+                      </p>
+                      <button 
+                        style={{
+                          background: "transparent",
+                          color: "white",
+                          fontSize: "1rem",
+                          padding: "10px 25px",
+                          border: "2px solid white",
+                          fontFamily: '"Bodoni Moda", serif' ,
+                          borderRadius: "5px",
+                          // cursor: "pointer",
+                          fontWeight: "bold",
+                          textTransform: "uppercase",
+                          transition: "background 0.3s ease, color 0.3s ease",
+                          cursor: item.available ? 'pointer' : 'not-allowed'
+                          
+                        }}
+                        onClick={() => item.available && handleAddToCart(item)}
+                        disabled={!item.available}
+                        >
+                        {item.available ? "Add to Cart" : "Out of Stock"}
+                      </button>
+                    </div>
+                    </div>
+                    </>
+                );
+              })}
+            </div>
 
         </div>
   </>

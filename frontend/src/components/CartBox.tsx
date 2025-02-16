@@ -3,7 +3,6 @@ import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { motion } from "framer-motion";
-import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
 
 interface CartItem {
