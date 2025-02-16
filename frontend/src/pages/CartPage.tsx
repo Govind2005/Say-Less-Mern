@@ -13,6 +13,8 @@ interface CartItem {
   customize?: string; // Optional customization
 }
 
+
+
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -57,13 +59,15 @@ const CartPage = () => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-  const handleCustomizeChange = (itemId: string, value: string) => {
-    const updatedCart = cartItems.map(item =>
-      item._id === itemId ? { ...item, customize: value } : item
-    );
-    setCartItems(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-  };
+  // Uncomment this for customization
+
+  // const handleCustomizeChange = (itemId: string, value: string) => {
+  //   const updatedCart = cartItems.map(item =>
+  //     item._id === itemId ? { ...item, customize: value } : item
+  //   );
+  //   setCartItems(updatedCart);
+  //   localStorage.setItem('cart', JSON.stringify(updatedCart));
+  // };
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -228,6 +232,7 @@ const CartPage = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
+                title='quanitty'
                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
@@ -235,12 +240,14 @@ const CartPage = () => {
                 </button>
                 <span className='px-2'>{item.quantity}</span>
                 <button
+                title='quanitity'
                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
                   <FiPlus />
                 </button>
                 <button
+                title='remove'
                   onClick={() => removeFromCart(item._id)}
                   className="ml-3 mr-3 px-3 py-2 text-2xl"
                 >

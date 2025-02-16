@@ -1,25 +1,25 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useScrollDirection } from '../hooks/useScrollDirection';
 import { Home, PlusCircle, Edit, MessageCircle, ShoppingBag, LogOut } from 'lucide-react';
 
-
 const AdminNavbar = () => {
     const isNavbarVisible = useScrollDirection();
+    
     const handleLogout = () => {
         localStorage.setItem('isLoggedIn', 'false');
         window.location.reload();
     };
 
-
     const navLinks = [
-      { to: "/admin", text: "Home", icon: Home },
-      { to: "/add", text: "Add Item", icon: PlusCircle },
-      { to: "/edit", text: "Edit Item", icon: Edit },
-      { to: "/review", text: "Reviews", icon: MessageCircle },
-      { to: "/order", text: "Orders", icon: ShoppingBag },
-  ];
-  return (
-    <nav 
+        { to: "/admin", text: "Home", icon: Home },
+        { to: "/add", text: "Add Item", icon: PlusCircle },
+        { to: "/edit", text: "Edit Item", icon: Edit },
+        { to: "/review", text: "Reviews", icon: MessageCircle },
+        { to: "/order", text: "Orders", icon: ShoppingBag },
+    ];
+
+    return (
+        <nav 
             className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
                 !isNavbarVisible ? '-translate-y-full' : 'translate-y-0'
             }`}
@@ -31,7 +31,7 @@ const AdminNavbar = () => {
                         <div className="flex-shrink-0">
                             <Link to="/admin" className="flex items-center">
                                 <img 
-                                    src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                                    src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" 
                                     alt="logo" 
                                     className="h-12 w-auto rounded-lg"
                                 />
@@ -93,20 +93,18 @@ const AdminNavbar = () => {
                                 {link.text}
                             </Link>
                         ))}
-                        <NavLink to={"/admin"}>
                         <button
                             onClick={handleLogout}
                             className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg"
-                            >
+                        >
                             <LogOut className="h-4 w-4" />
                             Logout
                         </button>
-                          </NavLink>
                     </div>
                 </div>
             </div>
         </nav>
-  )
-}
+    );
+};
 
-export default AdminNavbar
+export default AdminNavbar;

@@ -137,8 +137,11 @@ function HomePage() {
       if (response.ok) {
         const data = await response.json();
 
+          // Filter out reviews that are not visible
+          const visibleReviews = data.data.filter((review: any) => review.visible); 
+
         // Add random image to each review
-        const reviewsWithImages = data.data.map((review: any) => ({
+        const reviewsWithImages = visibleReviews.map((review: any) => ({
           ...review,
           imageUrl: generateRandomImage() // Add the random image URL to each review
         }));
@@ -738,9 +741,10 @@ function HomePage() {
                   src={review.imageUrl} // Use the image URL that was set when fetching reviews
                 />
                 <h3 className="reviewer-name">{review.name}</h3>
-                <div className="review-stars">
+                <div className="review-stars flex justify-start gap-1 overflow-hidden">
                   {renderStars(review.star)} {/* Display stars according to the 'star' field */}
                 </div>
+
               </div>
             </div>
           </div>
