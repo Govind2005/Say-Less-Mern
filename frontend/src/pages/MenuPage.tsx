@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-// import CartBox from '../components/CartBox';
+import Navbar from '../components/Navbar';
 
 const SweetCravingText = () => {
   const [opacity, setOpacity] = useState(1);
@@ -25,7 +25,8 @@ const SweetCravingText = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return (
+  return (<>
+    
     <div
       style={{
         position: 'fixed',
@@ -33,7 +34,7 @@ const SweetCravingText = () => {
         right: '5%',
         color: 'pink',
         fontFamily: '"Bodoni Moda", serif',
-        fontSize: '4rem',
+        fontSize: '4rem', 
         zIndex: 3,
         transition: 'color 0.5s ease, opacity 0.5s ease',
         opacity: opacity,
@@ -41,7 +42,8 @@ const SweetCravingText = () => {
     >
       CRAVING SOMETHING SWEET? <br />
       WE'VE GOT YOU.
-    </div>
+    </div> 
+    </>
   );
 };
 
@@ -51,7 +53,7 @@ const AnimatedCircle = () => {
   });
   const [circleTextVisible, setCircleTextVisible] = useState(false);
   const circleOpacity = 1;
-
+ 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -76,7 +78,19 @@ const AnimatedCircle = () => {
 
   return (
     <>
-      {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
+     <nav className="navbar">
+      <div className="nav-links">
+        <Link to="/admin" className="nav-link">Admin</Link>
+        <Link to="/about" className="nav-link">About</Link>
+        <div className="logo-container cursor-pointer">
+          <Link to="/">
+            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+          </Link>
+        </div>
+        <Link to="/menu" className="nav-link">Product</Link>
+        <Link to="/gallery" className="nav-link">Gallery</Link>
+      </div>
+    </nav>
     <div
       style={{
         height: '300vh',

@@ -11,7 +11,7 @@ import Gallery from "./components/Gallery";
 import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
 import OrderPage from "./pages/OrderPage";
-import Slider from "./pages/Slider";
+// import Slider from "./pages/Slider";
 import CartPage from "./pages/CartPage";
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
         <Route path="/menuitems" element={<MenuItems />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/slider" element={<Slider/>} />
+        {/* <Route path="/slider" element={<Slider/>} /> */}
         <Route 
           path="/add" 
           element={
@@ -41,7 +41,7 @@ function App() {
               <EditItemPage />
             </ProtectedRoute>
           } 
-        />
+        /> 
         <Route 
           path="/review" 
           element={
