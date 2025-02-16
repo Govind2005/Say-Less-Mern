@@ -67,7 +67,7 @@ const MenuPage = () => {
     return (
       <>
       
-        <div  style={{backgroundImage:'url(https://t4.ftcdn.net/jpg/05/39/17/85/360_F_539178578_w55vj3yqFvMcAkzxe5eq7M7iNnvTjS2q.jpg)',  padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
+        <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}
             <br></br>
 <br></br>
