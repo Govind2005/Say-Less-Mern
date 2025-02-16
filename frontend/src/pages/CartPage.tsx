@@ -3,6 +3,7 @@ import { useState, useEffect, SetStateAction } from 'react';
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
+import { Link } from 'react-router';
 interface CartItem {
   _id: string;
   name: string;
@@ -12,6 +13,8 @@ interface CartItem {
   special?: string;  // Optional special instructions
   customize?: string; // Optional customization
 }
+
+
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -56,6 +59,8 @@ const CartPage = () => {
     setCartItems(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
+
+  // Uncomment this for customization
 
   // const handleCustomizeChange = (itemId: string, value: string) => {
   //   const updatedCart = cartItems.map(item =>
@@ -205,9 +210,34 @@ const CartPage = () => {
     paymentHandler;
   };
 
+  const handleChange = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // 1000 milliseconds = 1 second
+  };
+  
+
   return (
     <>
-      {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
+    <nav >
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
+        </div>
+        <div className="nav-links">
+          <Link  to="/admin" onClick={handleChange} >Admin</Link>
+          <Link to="/about" onClick={handleChange} >About</Link>
+          <div className="logo-container cursor-pointer">
+          <Link to="/" >
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
+          </Link>
+          </div>
+          <Link to="/menu" onClick={handleChange}>Product</Link>
+          <Link to="/gallery" onClick={handleChange}>Gallery</Link>
+        </div>
+      </nav>
+      <CartBox cart={cartItems} setCart={setCartItems} />
     <div className="p-10 font-sans">
       <h1 className="text-center text-5xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
 
@@ -228,6 +258,7 @@ const CartPage = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
+                title='quanitty'
                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
@@ -235,12 +266,14 @@ const CartPage = () => {
                 </button>
                 <span className='px-2'>{item.quantity}</span>
                 <button
+                title='quanitity'
                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
                   <FiPlus />
                 </button>
                 <button
+                title='remove'
                   onClick={() => removeFromCart(item._id)}
                   className="ml-3 mr-3 px-3 py-2 text-2xl"
                 >

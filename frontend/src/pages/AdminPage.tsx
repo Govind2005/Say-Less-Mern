@@ -124,7 +124,7 @@ const AdminPage = () => {
                         bottom: '20px',
                         right: '20px',
                         cursor: 'pointer'
-                    }}>Don't have an account?</span>
+                    }}></span>
                 </form>
             </div>
         </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { Link } from 'react-router-dom';
 // import Navbar from '../components/Navbar';
+
 
 const SweetCravingText = () => {
   const [opacity, setOpacity] = useState(1);
@@ -115,20 +117,25 @@ const AnimatedCircle = () => {
 
   return (
     <>
-      {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
-     <nav className="navbar">
-      <div className="nav-links">
-        <Link to="/admin" className="nav-link">Admin</Link>
-        <Link to="/about" className="nav-link">About</Link>
-        <div className="logo-container cursor-pointer">
-          <Link to="/">
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
-          </Link>
+    <nav >
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
         </div>
-        <Link to="/menu" className="nav-link">Product</Link>
-        <Link to="/gallery" className="nav-link">Gallery</Link>
-      </div>
-    </nav>
+        <div className="nav-links">
+          <Link to="/admin" >Admin</Link>
+          <Link to="/about" >About</Link>
+          <div className="logo-container cursor-pointer">
+          <Link to="/" >
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
+          </Link>
+          </div>
+          <Link to="/menu" >Product</Link>
+          <Link to="/gallery" >Gallery</Link>
+        </div>
+      </nav>
+      {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
     <div
       style={{
         height: '300vh',

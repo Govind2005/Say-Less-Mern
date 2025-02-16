@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import CartBox from "../components/CartBox";
 import toast from "react-hot-toast";
+import { Link } from "react-router";
 import { FaSearch } from "react-icons/fa";
 
 // interface CartItem {
@@ -88,8 +89,32 @@ const MenuPage = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
+    const handleChange = () => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 100); // 
+    };
+
     return (
       <>
+      <nav >
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
+        </div>
+        <div className="nav-links">
+          <Link to="/admin" onClick={handleChange} >Admin</Link>
+          <Link to="/about" onClick={handleChange}>About</Link>
+          <div className="logo-container cursor-pointer">
+          <Link to="/" onClick={handleChange} >
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
+          </Link>
+          </div>
+          <Link to="/menu" onClick={handleChange} >Product</Link>
+          <Link to="/gallery" onClick={handleChange}>Gallery</Link>
+        </div>
+      </nav>
         <CartBox />
         <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             {/* Filter Bar */}

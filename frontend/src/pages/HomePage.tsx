@@ -137,8 +137,11 @@ function HomePage() {
       if (response.ok) {
         const data = await response.json();
 
+          // Filter out reviews that are not visible
+          const visibleReviews = data.data.filter((review: any) => review.visible); 
+
         // Add random image to each review
-        const reviewsWithImages = data.data.map((review: any) => ({
+        const reviewsWithImages = visibleReviews.map((review: any) => ({
           ...review,
           imageUrl: generateRandomImage() // Add the random image URL to each review
         }));
@@ -718,45 +721,51 @@ function HomePage() {
             </section>
 
             {/* Reviews Section */}
-            <section className="reviews-section">
-      <h2>What Our Customers Say</h2>
-      <div className="reviews-container">
-        {reviews.map((review, index) => (
-          <div
-            key={review._id}
-            className={`review-card ${index === currentReviewIndex ? 'active' : ''}`}
-          >
-            <div className="review-content">
-              <div className="review-text">
-                {review.comment}
-              </div>
-              <div className="reviewer-info">
-                {/* Use the generated imageUrl for each review */}
-                <img
-                  alt={review.name}
-                  className="reviewer-image"
-                  src={review.imageUrl} // Use the image URL that was set when fetching reviews
-                />
-                <h3 className="reviewer-name">{review.name}</h3>
-                <div className="review-stars">
-                  {renderStars(review.star)} {/* Display stars according to the 'star' field */}
+            <section className="reviews-section bg-gradient-to-br from-pink-50 to-pink-100 py-16">
+              <div className="max-w-4xl mx-auto px-6">
+                <h2 className="text-3xl font-bold text-center text-pink-700 mb-12">What Our Customers Say</h2>
+                
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                  {reviews.map((review, index) => (
+                    <div
+                      key={review._id}
+                      className={`review-slide ${index === currentReviewIndex ? 'block' : 'hidden'}`}
+                    >
+                      <div className="max-w-2xl mx-auto text-center">
+                        <p className="text-gray-600 italic text-lg leading-relaxed mb-8">
+                          "{review.comment}"
+                        </p>
+                        
+                        <div className="mt-8">
+                          <img
+                            alt={review.name}
+                            className="w-16 h-16 rounded-full object-cover border-2 border-pink-200 mx-auto mb-4"
+                            src={review.imageUrl}
+                          />
+                          <h3 className="text-xl font-semibold text-gray-800 mb-2">{review.name}</h3>
+                          <div className="flex justify-center gap-1">
+                            {renderStars(review.star)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex justify-center gap-2 mt-8">
+                  {reviews.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-all duration-300
+                        ${index === currentReviewIndex 
+                          ? 'bg-pink-500 w-4' 
+                          : 'bg-pink-200 hover:bg-pink-300'}`}
+                      onClick={() => setCurrentReviewIndex(index)}
+                    />
+                  ))}
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="review-pagination">
-        {reviews.map((_, index) => (
-          <button
-            title="review"
-            key={index}
-            className={`pagination-dot ${index === currentReviewIndex ? 'active' : ''}`}
-            onClick={() => setCurrentReviewIndex(index)}
-          />
-        ))}
-      </div>
-    </section>
+            </section>
           </>
         } />
         <Route path="/about" element={<About />} />
