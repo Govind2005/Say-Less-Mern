@@ -31,7 +31,7 @@ const AdminNavbar = () => {
                         <div className="flex-shrink-0">
                             <Link to="/admin" className="flex items-center">
                                 <img 
-                                    src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" 
+                                    src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
                                     alt="logo" 
                                     className="h-12 w-auto rounded-lg"
                                 />

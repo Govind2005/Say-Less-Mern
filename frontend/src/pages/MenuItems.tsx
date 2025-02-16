@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import CartBox from "../components/CartBox";
 import toast from "react-hot-toast";
 import { Link } from "react-router";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 // interface CartItem {
 //   _id: string;
@@ -18,10 +18,12 @@ const MenuPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState("All");
-    const [searchTerm, setSearchTerm] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [isSearching, setIsSearching] = useState(false);
-    const [specialHampers, setSpecialHampers] = useState("All"); // State for special hampers filter
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [specialHampers, setSpecialHampers] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // Number of items per page// State for special hampers filter
 
   useEffect(() => {
     fetchItems();
@@ -105,14 +107,25 @@ const MenuPage = () => {
       console.log('Added to cart:', item.name);
     };
   
+    const handleChange = () => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    };
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+    const nextPage = () => {
+      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+    
+    const prevPage = () => {
+      if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-
-  const handleChange = () => {
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
-  };
 
   return (
     <>
@@ -136,65 +149,7 @@ const MenuPage = () => {
       </nav>
         <CartBox />
         <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
-            {/* Filter Bar */}           
-          <div style={{ fontFamily: '"Bodoni Moda", serif' , display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
-                {["All", "Cake", "Truffle Balls", "Brownie & Brownie Tub", "Donut", "Cookie"].map((cat) => (
-                  <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`px-5 py-2 rounded-2xl border-none text-base font-bold transition duration-300 cursor-pointer ${
-                    category === cat ? "bg-[#7A3E3E] text-white" : "bg-[#F4D0D0] text-[#7A3E3E]"
-                  }`}                          >
-                        {cat}
-                    </button>
-                ))}
-          {isSearching ? (
-        // Search Bar (Replaces the search button)
-        <div className="flex items-center gap-2 border border-gray-300 rounded-2xl bg-white shadow-md">
-          <input
-            type="text"
-            placeholder="Search items..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="p-2 outline-none w-48 sm:w-64"
-          />
-          <button onClick={() => setIsSearching(false)} className="text-gray-500 hover:text-gray-700 px-2 transition">
-            ✖
-          </button>
-        </div>
-      ) : (
-        // Search Button
-        <button
-          onClick={() => setIsSearching(true)}
-          className="px-4 py-2 rounded-2xl border-none text-base font-bold transition duration-300 cursor-pointer bg-[#F4D0D0] text-[#7A3E3E]"
-        >
-          <FaSearch />
-        </button>
-      )}
-        </div>
-        {/* Special Hampers Dropdown */}
-        <div style={{ textAlign: "center", marginBottom: "30px" }}>
-          <select 
-            value={specialHampers} 
-            onChange={(e) => setSpecialHampers(e.target.value)} 
-            style={{
-              padding: "10px 20px",
-              fontSize: "1rem",
-              borderRadius: "20px",
-              border: "1px solid #7A3E3E",
-              backgroundColor: "#F4D0D0",
-              fontWeight: "bold",
-              color: "#7A3E3E",
-              cursor: "pointer"
-            }}
-          >
-            <option value="All">All Hampers</option>
-            <option value="Birthday">Birthday</option>
-            <option value="Anniversary">Anniversary</option>
-            <option value="Holi">Holi</option>
-            <option value="Rakshabandhan">Rakshabandhan</option>
-          </select>
-        </div>
+            
            {/* Fancy Heading with SVG Lines */}
             <h1 style={{
               textAlign: "center",
@@ -209,101 +164,199 @@ const MenuPage = () => {
             }}>
                 ~~~ Our Delicious Creations ~~~
              </h1>
+            {/* Filter & Hamper Bar (Same Row) */}  
+<div className="flex justify-between items-center mb-8 px-4">
+  
+  {/* Filter Bar (Left) */}
+  <div className="flex gap-3 flex-wrap">
+    {["All", "Cake", "Truffle Balls", "Brownie & Brownie Tub", "Donut", "Cookie"].map((cat) => (
+      <button
+        key={cat}
+        onClick={() => setCategory(cat)}
+        className={`px-5 py-2 rounded-2xl text-base font-bold transition duration-300 cursor-pointer ${
+          category === cat ? "bg-[#7A3E3E] text-white" : "bg-[#F4D0D0] text-[#7A3E3E]"
+        }`}
+      >
+        {cat}
+      </button>
+    ))}
+
+    {/* Search Bar */}
+    {isSearching ? (
+      <div className="flex items-center gap-2 rounded-2xl bg-[#FDF7F7] border-3 border-[#7A3E3E]">
+        <input
+          type="text"
+          placeholder="Search items..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="p-1 outline-none w-48 sm:w-64"
+        />
+        <button onClick={() => setIsSearching(false)} className="text-gray-500 hover:text-gray-700 px-2 transition">
+          ✖
+        </button>
+      </div>
+    ) : (
+      <button
+        onClick={() => setIsSearching(true)}
+        className="px-4 py-2 rounded-2xl text-base font-bold transition duration-300 cursor-pointer bg-[#F4D0D0] text-[#7A3E3E]"
+      >
+        <FaSearch />
+      </button>
+    )}
+  </div>
+
+  {/* Hamper Dropdown (Right) */}
+  <select
+    value={specialHampers}
+    onChange={(e) => setSpecialHampers(e.target.value)}
+    className="px-6 py-3 rounded-2xl text-base font-bold transition duration-300 cursor-pointer bg-[#F8E6E6] text-[#7A3E3E] border border-[#7A3E3E] shadow-md outline-none focus:ring-2 focus:ring-[#7A3E3E] hover:bg-[#F4D0D0]"
+  >
+    <option value="All" className="bg-[#ffeac2]">All Hampers</option>
+    <option value="Birthday" className="bg-[#ffeac2]">Birthday</option>
+    <option value="Anniversary" className="bg-[#ffeac2]">Anniversary</option>
+    <option value="Holi" className="bg-[#ffeac2]">Holi</option>
+    <option value="Rakshabandhan" className="bg-[#ffeac2]">Rakshabandhan</option>
+  </select>
+
+</div>
 
             {/* Items Grid */}
             <div 
-  style={{ 
-    display: "grid", 
-    gridTemplateColumns: "repeat(auto-fill, minmax(400px, 2fr))", // Fewer columns
-    gridAutoRows: "10px", // Bigger row height to make images squarer
-    gap: "25px", 
-    padding: "20px"
-  }}
->
-  {filteredItems.map((item) => {
-    const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
-    
-      return (
-        <>
-        <div 
-        key={item._id} 
-        style={{
-          position: "relative",
-          // borderRadius: "30px",
-          overflow: "hidden",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-          transition: "transform 0.3s ease-in-out",
-          fontFamily: '"Bodoni Moda", serif' ,
-          cursor: "pointer",
-          gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
-        }}
-        onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
-        onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+              style={{ 
+                display: "grid", 
+                gridTemplateColumns: "repeat(auto-fill, minmax(400px, 2fr))", // Fewer columns
+                gridAutoRows: "10px", // Bigger row height to make images squarer
+                gap: "25px", 
+                padding: "20px"
+              }}
         >
-        <img
-          src={item.image}
-          alt={item.name}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "opacity 0.3s ease"
-          }}
-          />
-        <div 
-          style={{
-            position: "absolute",
-            bottom: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
-            display: "flex",
-            flexDirection: "column",
-            fontFamily: '"Bodoni Moda", serif' ,
-            justifyContent: "flex-end",
-            padding: "15px",
-            color: "#fff"
-          }}
-          >
-          <h2 style={{ color:"white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif' ,marginBottom: "5px" }}>
-            {item.name}
-          </h2>
-          <p style={{ fontSize: "1rem", fontFamily: '"Bodoni Moda", serif' ,fontWeight: "500" }}>Type: {item.type}</p>
-          <p style={{fontFamily: '"Bodoni Moda", serif' , fontSize: "1rem" }}>
-            Price: <span style={{ fontFamily: '"Bodoni Moda", serif' ,fontWeight: "bold"}}>${item.price}</span>
-          </p>
-          <button 
-            style={{
-              background: "transparent",
-              color: "white",
-              fontSize: "1rem",
-              padding: "10px 25px",
-              border: "2px solid white",
-              fontFamily: '"Bodoni Moda", serif' ,
-              borderRadius: "5px",
-              // cursor: "pointer",
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              transition: "background 0.3s ease, color 0.3s ease",
-              cursor: item.available ? 'pointer' : 'not-allowed'
+          {currentItems.length > 0 ? (
+            currentItems.map((item) => {
+              const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
               
-            }}
-            onClick={() => item.available && handleAddToCart(item)}
-            disabled={!item.available}
-            >
-            {item.available ? "Add to Cart" : "Out of Stock"}
-          </button>
+              return (
+                <>
+                  <div
+                    key={item._id}
+                    style={{
+                      position: "relative",
+                      // borderRadius: "30px",
+                      overflow: "hidden",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                      transition: "transform 0.3s ease-in-out",
+                      fontFamily: '"Bodoni Moda", serif',
+                      cursor: "pointer",
+                      gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
+                    onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transition: "opacity 0.3s ease"
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "0",
+                        left: "0",
+                        width: "100%",
+                        height: "100%",
+                        background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
+                        display: "flex",
+                        flexDirection: "column",
+                        fontFamily: '"Bodoni Moda", serif',
+                        justifyContent: "flex-end",
+                        padding: "15px",
+                        color: "#fff"
+                      }}
+                    >
+                      <h2 style={{ color: "white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif', marginBottom: "5px" }}>
+                        {item.name}
+                      </h2>
+                      <p style={{ fontSize: "1rem", fontFamily: '"Bodoni Moda", serif', fontWeight: "500" }}>Type: {item.type}</p>
+                      <p style={{ fontFamily: '"Bodoni Moda", serif', fontSize: "1rem" }}>
+                        Price: <span style={{ fontFamily: '"Bodoni Moda", serif', fontWeight: "bold" }}>${item.price}</span>
+                      </p>
+                      <button
+                        style={{
+                          background: "transparent",
+                          color: "white",
+                          fontSize: "1rem",
+                          padding: "10px 25px",
+                          border: "2px solid white",
+                          fontFamily: '"Bodoni Moda", serif',
+                          borderRadius: "5px",
+                          // cursor: "pointer",
+                          fontWeight: "bold",
+                          textTransform: "uppercase",
+                          transition: "background 0.3s ease, color 0.3s ease",
+                          cursor: item.available ? 'pointer' : 'not-allowed'
+                        
+                        }}
+                        onClick={() => item.available && handleAddToCart(item)}
+                        disabled={!item.available}
+                      >
+                        {item.available ? "Add to Cart" : "Out of Stock"}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              );
+            })):(
+              <p style={{ textAlign: "center", fontSize: "1.2rem", color: "#7A3E3E" }}>No items found</p>
+            )}
         </div>
-        </div>
-        </>
-    );
-  })}
-</div>
+        {totalPages > 1 && (
+  <div className="flex justify-center items-center mt-6 gap-2">
+    {/* Previous Button */}
+    <button
+      onClick={prevPage}
+      disabled={currentPage === 1}
+      className={`px-3 py-3 rounded-md transition ${
+        currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-[#ffeac2] hover:bg-[#ffdb91] text-[#7A3E3E]"
+      }`}
+    >
+      <FaArrowLeft/>
+    </button>
 
-        </div>
-  </>
-    );
+    {/* Page Numbers */}
+    {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+      <button
+        key={page}
+        onClick={() => setCurrentPage(page)}
+        className={`px-4 py-2 rounded-full transition font-semibold ${
+          currentPage === page
+            ? "bg-[#b35a7a] text-white"
+            : "bg-[#ffeac2] text-[#7A3E3E] hover:bg-[#ffdb91]"
+        }`}
+      >
+        {page}
+      </button>
+    ))}
+
+    {/* Next Button */}
+    <button
+      onClick={nextPage}
+      disabled={currentPage === totalPages}
+      className={`px-3 py-3 rounded-md transition ${
+        currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-[#ffeac2] hover:bg-[#ffdb91] text-[#7A3E3E]"
+      }`}
+    >
+      <FaArrowRight />
+    </button>
+  </div>
+)}
+
+      </div>
+    </>
+  );
 };
 
 export default MenuPage;

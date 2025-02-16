@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ const AdminPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = (e:any) => {
         e.preventDefault();
         const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Base64);
         if (username === CORRECT_USERNAME && hashedPassword === CORRECT_PASSWORD_HASH) {

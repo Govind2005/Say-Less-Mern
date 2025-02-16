@@ -125,7 +125,7 @@ function About() {
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
           <div className="logo-container cursor-pointer">
           <Link to="/" >
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
           </Link>
           </div>
           
@@ -261,7 +261,7 @@ function About() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="Logo" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Logo" />
           </div>
 
           <div className="footer-sections">

@@ -135,7 +135,7 @@ const AnimatedCircle = () => {
           <Link to="/about" className="nav-link">About</Link>
           <div className="logo-container cursor-pointer">
             <Link to="/">
-              <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
+              <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
             </Link>
           </div>
           <Link to="/menu" className="nav-link">Product</Link>
