@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+// import CartBox from '../components/CartBox';
 
 const SweetCravingText = () => {
   const [opacity, setOpacity] = useState(1);
@@ -78,6 +78,7 @@ const AnimatedCircle = () => {
 
   return (
     <>
+      {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
      <nav className="navbar">
       <div className="nav-links">
         <Link to="/admin" className="nav-link">Admin</Link>

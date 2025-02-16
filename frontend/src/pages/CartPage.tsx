@@ -1,5 +1,5 @@
 import { useState, useEffect, SetStateAction } from 'react';
-
+import CartBox from '../components/CartBox';
 interface CartItem {
   _id: string;
   name: string;
@@ -83,7 +83,6 @@ const CartPage = () => {
       body: JSON.stringify({
         amount: total,
         currency: "INR",
-        receipt: '123123123',
         notes: {}
       }),
       headers: {
@@ -91,10 +90,11 @@ const CartPage = () => {
       },
     });
     const order = await response.json();
+    console.log(import.meta.env.VITE_RAZORPAY_KEY)
     console.log(order);
 
-    var options = {
-      key: 'rzp_test_mZGFuX4QG8UG7y',
+    let options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY,
       amount: total,
       currency: "INR",
       name: "Bindi Cupcake",
@@ -117,7 +117,7 @@ const CartPage = () => {
         console.log(jsonRes);
       },
       prefill: {
-        name: "Web Dev Matrix",
+        name: name,
         email: "webdevmatrix@example.com",
         contact: phoneNumber.startsWith("+91") ? phoneNumber : "+91 " + phoneNumber
       },
@@ -203,6 +203,8 @@ const CartPage = () => {
   };
 
   return (
+    <>
+      <CartBox cart={cartItems} setCart={setCartItems} />
     <div className="p-10 font-sans">
       <h1 className="text-center text-3xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
 
@@ -301,26 +303,20 @@ const CartPage = () => {
                 Total: ${total.toFixed(2)}
               </div>
               <button
-                onClick={handleButtonClick}
+                    onClick={async (e) => { await paymentHandler(e); handleButtonClick() }}
                 disabled={!(name && phoneNumber)}
                 className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
               >
                 Confirm Order
               </button>
-              {/* <button
-                onClick={paymentHandler}
-                disabled={!(name && phoneNumber)}
-                className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
-              >
-                Pay
-              </button> */}
             </div>
           </div>
         </div>
       )}
       <p className="mt-5 text-center">{messageStatus}</p>
-    </div>
+      </div>
+      </>
   );
 };
 
-export default CartPage;
+export default CartPage;

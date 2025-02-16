@@ -1,5 +1,5 @@
 import { Cake, ShoppingCart, Box, Activity, Coffee, Mail, Phone, MapPin, Clock } from "lucide-react";
-import { Card } from "../components/ui/card";
+import { Card } from "../components/ui/card1";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { link } from "fs";
 

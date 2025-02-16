@@ -127,23 +127,53 @@ function HomePage() {
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/666_hjsal2.jpg'
   ];
 
-  const reviews = [
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275366/c1_y5cgxh.jpg',
-      name: 'Joey',
-      text: "The best eggless desserts I've ever had! Rich, creamy ice creams and perfectly baked brownies—pure indulgence without any compromise on taste! The attention to detail in presentation and the quality of ingredients used is remarkable. Every bite feels like a celebration!"
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739378349/barney-stinson_mpw5h8.jpg',
-      name: 'Barney',
-      text: "These desserts are legen... wait for it... DARY! LEGENDARY! The cakes are perfect for any occasion, and the service is absolutely incredible. Their custom hampers were a huge hit at our corporate event. The presentation was stunning and the taste was out of this world!"
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739378504/qle684dh_ppykj6.png',
-      name: 'Ross',
-      text: "Found my go-to bakery! Their attention to detail and commitment to quality is outstanding. Every bite is pure happiness! I especially love their seasonal specials and how they incorporate local flavors. The eggless options are so good that even my non-vegetarian friends can't tell the difference!"
+  const [reviews, setReviews] = useState<{ _id: string; comment: string; name: string; star: number; visible: boolean, imageUrl: string }[]>([]);
+  // Fetch reviews from the API
+  const fetchReviews = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/api/review');
+      
+      if (response.ok) {
+        const data = await response.json();
+
+        // Add random image to each review
+        const reviewsWithImages = data.data.map((review: any) => ({
+          ...review,
+          imageUrl: generateRandomImage() // Add the random image URL to each review
+        }));
+
+        setReviews(reviewsWithImages); // Set reviews with images
+      } else {
+      }
+    } catch (error) {
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchReviews(); // Fetch reviews when the component is mounted
+
+    // Set up an interval to change the current review every 5 seconds
+    const reviewTimer = setInterval(() => {
+      setCurrentReviewIndex((prevIndex) => (prevIndex + 1) % reviews.length); // Cycle through the reviews
+    }, 5000);
+
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(reviewTimer);
+  }, [reviews.length]);
+
+  const generateRandomImage = () => {
+    // Lorem Picsum with a random image based on the current time (or you can use a random number)
+    const randomId = Math.floor(Math.random() * 1000); // Generate a random number for unique image
+    return `https://picsum.photos/200/300?random=${randomId}`;
+  };
+
+  // Function to render stars 
+  const renderStars = (starCount: number) => {
+    return Array.from({ length: starCount }, (_, index) => (
+      <span key={index} className="text-yellow-500">⭐</span> // Display golden star
+    ));
+  };
+
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -199,13 +229,6 @@ function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const reviewTimer = setInterval(() => {
-      setCurrentReviewIndex((prev) => (prev + 1) % reviews.length);
-    }, 5000); // Change review every 5 seconds
-
-    return () => clearInterval(reviewTimer);
-  }, []);
 
   // Add ScrollReveal initialization
   useEffect(() => {
@@ -672,39 +695,44 @@ function HomePage() {
 
             {/* Reviews Section */}
             <section className="reviews-section">
-              <h2>What Our Customers Say</h2>
-              <div className="reviews-container">
-                {reviews.map((review, index) => (
-                  <div 
-                    key={index} 
-                    className={`review-card ${index === currentReviewIndex ? 'active' : ''}`}
-                  >
-                    <div className="review-content">
-                      <div className="review-text">
-                        {review.text}
-                      </div>
-                      <div className="reviewer-info">
-                        <img 
-                          src={review.image} 
-                          alt={review.name} 
-                          className="reviewer-image"
-                        />
-                        <h3 className="reviewer-name">{review.name}</h3>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+      <h2>What Our Customers Say</h2>
+      <div className="reviews-container">
+        {reviews.map((review, index) => (
+          <div
+            key={review._id}
+            className={`review-card ${index === currentReviewIndex ? 'active' : ''}`}
+          >
+            <div className="review-content">
+              <div className="review-text">
+                {review.comment}
               </div>
-              <div className="review-pagination">
-                {reviews.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`pagination-dot ${index === currentReviewIndex ? 'active' : ''}`}
-                    onClick={() => setCurrentReviewIndex(index)}
-                  />
-                ))}
+              <div className="reviewer-info">
+                {/* Use the generated imageUrl for each review */}
+                <img
+                  alt={review.name}
+                  className="reviewer-image"
+                  src={review.imageUrl} // Use the image URL that was set when fetching reviews
+                />
+                <h3 className="reviewer-name">{review.name}</h3>
+                <div className="review-stars">
+                  {renderStars(review.star)} {/* Display stars according to the 'star' field */}
+                </div>
               </div>
-            </section>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="review-pagination">
+        {reviews.map((_, index) => (
+          <button
+            title="review"
+            key={index}
+            className={`pagination-dot ${index === currentReviewIndex ? 'active' : ''}`}
+            onClick={() => setCurrentReviewIndex(index)}
+          />
+        ))}
+      </div>
+    </section>
           </>
         } />
         <Route path="/about" element={<About />} />

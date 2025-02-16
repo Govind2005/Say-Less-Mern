@@ -4,6 +4,7 @@ import './About.css';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { useScrollDirection } from '../hooks/useScrollDirection';
 import ScrollReveal from 'scrollreveal'
+import CreateReview from './AddReview';
 
 function About() {
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
@@ -253,6 +254,8 @@ function About() {
           </div>
         </div>
       </section>
+
+      <CreateReview/>
 
       {/* Footer Section */}
       <footer className="footer">

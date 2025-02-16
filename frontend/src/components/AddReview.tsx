@@ -5,6 +5,7 @@ const CreateReview = () => {
         name:"",
         comment:"",
         star:0,
+        visible:false
     });
     const handleAddReview = async () => {
         try {
@@ -24,6 +25,7 @@ const CreateReview = () => {
                     name: "",
                     comment: "",
                     star: 0,
+                    visible:false
                 });
                 // You might want to add a success message or redirect here
             } else {
