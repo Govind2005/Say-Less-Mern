@@ -72,26 +72,26 @@ app.post("/send-whatsapp", (req,res)=>{
 
     //Below is the whatsapp backend. Please don't use this, since we're on trial version and have limited messages 
     
-    // const num = req.body.phoneNumber;
-    // console.log(num)
-    // if (!num) {
-    //     return res.status(400).json({ message: "Phone number is required", success: false });
-    // }
-    // const formattedNumber = `whatsapp:${num}`;  // Prefix the number with 'whatsapp:'
+    const num = req.body.ownerNumber;
+    console.log(num)
+    if (!num) {
+        return res.status(400).json({ message: "Phone number is required", success: false });
+    }
+    const formattedNumber = `whatsapp:${num}`;  // Prefix the number with 'whatsapp:'
 
-    // client.messages
-    //     .create({
-    //         body: req.body.message,
-    //         from: 'whatsapp:+14155238886', // This is Twilio's WhatsApp sandbox number
-    //         to: formattedNumber
-    //     })
-    //     .then((message) => {
-    //         res.json({ message: `Message sent successfully: ${message.sid}`, success: true });
-    //     })
-    //     .catch((error) => {
-    //         console.error(error);
-    //         res.status(500).json({ message: "Failed to send message", success: false });
-    //     });
+    client.messages
+        .create({
+            body: req.body.message,
+            from: 'whatsapp:+14155238886', // This is Twilio's WhatsApp sandbox number
+            to: formattedNumber
+        })
+        .then((message) => {
+            res.json({ message: `Message sent successfully: ${message.sid}`, success: true });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ message: "Failed to send message", success: false });
+        });
 })
 
 app.get("/",(req,res)=>{

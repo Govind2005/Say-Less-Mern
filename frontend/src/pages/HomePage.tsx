@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import '../App.css';
 import About from '../components/About.tsx';
 import Gallery from '../components/Gallery.tsx';
@@ -17,6 +17,7 @@ function HomePage() {
   const [showPromo, setShowPromo] = useState(true);
   
   const isNavbarVisible = useScrollDirection();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -577,17 +578,40 @@ function HomePage() {
                   className="image-dialog-overlay" 
                   onClick={() => setSelectedImage(null)}
                 >
-                  <div className="image-dialog">
-                    <img src={selectedImage} alt="Selected gallery image" />
-                    <button 
-                      className="close-button" 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedImage(null);
-                      }}
-                    >
-                      ×
-                    </button>
+                  <div className="image-dialog" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex flex-col md:flex-row gap-8 items-center p-6 bg-pink-300/80 backdrop-blur-sm rounded-2xl">
+                      <img 
+                        src={selectedImage} 
+                        alt="Selected gallery image" 
+                        className="max-w-md rounded-lg shadow-lg"
+                      />
+                      <div className="flex flex-col items-center gap-4">
+                        <h3 className="text-2xl font-semibold text-white">Delicious Treat</h3>
+                        <p className="text-white text-center font-medium">
+                          Indulge in our handcrafted delicacies made with love and premium ingredients.
+                        </p>
+                        <button 
+                          onClick={() => {
+                            setSelectedImage(null);
+                            navigate('/menuitems');
+                          }}
+                          className="px-6 py-3 bg-white/20 text-white rounded-full
+                            hover:bg-white/30 transform hover:scale-105 transition-all duration-300
+                            border border-white/50 shadow-lg flex items-center gap-2 font-medium"
+                        >
+                          <span>Order Now</span>
+                          <span>→</span>
+                        </button>
+                      </div>
+                      <button 
+                        className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center
+                          bg-white/20 rounded-full text-white hover:bg-white/30
+                          transition-colors duration-300 border border-white/50"
+                        onClick={() => setSelectedImage(null)}
+                      >
+                        ×
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}

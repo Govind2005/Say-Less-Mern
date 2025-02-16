@@ -3,6 +3,9 @@ import HomePage from "./pages/HomePage";
 import CreateItem from "./pages/CreateItem";
 import MenuPage from "./pages/MenuPage";
 import MenuItems from "./pages/MenuItems";
+import CartPage from "./pages/CartPage";
+
+import Adminpt2 from './pages/Adminpt2';
 import AdminPage from './pages/AdminPage';
 import EditItemPage from './pages/EditItemPage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -11,21 +14,20 @@ import Gallery from "./components/Gallery";
 import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
 import OrderPage from "./pages/OrderPage";
-// import Slider from "./pages/Slider";
-import CartPage from "./pages/CartPage";
+
 function App() {
   return (
     <BrowserRouter> {/* Wrap everything with BrowserRouter */}
       {/* <Navbar /> */}
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<HomePage />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/about" element={<About />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/menuitems" element={<MenuItems />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/cart" element={<CartPage />} />
-        {/* <Route path="/slider" element={<Slider/>} /> */}
+     
         <Route 
           path="/add" 
           element={
@@ -34,12 +36,20 @@ function App() {
             </ProtectedRoute>
           } 
         />
+                <Route 
+          path="/admindb" 
+          element={
+            <ProtectedRoute>
+              <Adminpt2 />
+            </ProtectedRoute>
+          } 
+        />
         <Route 
           path="/edit" 
           element={
-            <ProtectedRoute>
-              <EditItemPage />
-            </ProtectedRoute>
+             <ProtectedRoute>
+            <EditItemPage /> 
+             </ProtectedRoute>
           } 
         /> 
         <Route 

@@ -3,8 +3,6 @@ import { useState, useEffect, SetStateAction } from 'react';
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
-
-
 interface CartItem {
   _id: string;
   name: string;
@@ -111,7 +109,7 @@ const CartPage = () => {
           ...response,
         };
 
-        const validateRes = await fetch("http://localhost:5000/payment/verify-payment", {
+        const validateRes = await fetch("http://localhost:4000/payment/verify-payment", {
           method: "POST",
           body: JSON.stringify(body),
           headers: {
@@ -163,7 +161,7 @@ const CartPage = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ phoneNumber, message }),
+          body: JSON.stringify({ ownerNumber, message }),
         });
 
         const data = await response.json();
@@ -324,4 +322,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default CartPage;
