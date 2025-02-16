@@ -4,6 +4,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
 import { Link } from 'react-router';
+
 interface CartItem {
   _id: string;
   name: string;
@@ -13,8 +14,6 @@ interface CartItem {
   special?: string;  // Optional special instructions
   customize?: string; // Optional customization
 }
-
-
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -60,7 +59,7 @@ const CartPage = () => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-  // Uncomment this for customization
+  // Customization
 
   // const handleCustomizeChange = (itemId: string, value: string) => {
   //   const updatedCart = cartItems.map(item =>
@@ -114,7 +113,7 @@ const CartPage = () => {
           ...response,
         };
 
-        const validateRes = await fetch("http://localhost:4000/payment/verify-payment", {
+        const validateRes = await fetch("http://localhost:5000/payment/verify-payment", {
           method: "POST",
           body: JSON.stringify(body),
           headers: {
@@ -159,14 +158,16 @@ const CartPage = () => {
           if (item.special) message += `Special: ${item.special}\n`;
           if (item.customize) message += `Customize: ${item.customize}\n`;
         });
-        message += `\n*Total: ₹${total.toFixed(2)}*`;
+        message += "name: " + name;
+        message += "\n " + phoneNumber;
+        message += `\n*Total: $${total.toFixed(2)}*`;
 
         const response = await fetch('http://localhost:4000/send-whatsapp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ownerNumber, message }),
+          body: JSON.stringify({ phoneNumber, message }),
         });
 
         const data = await response.json();
@@ -237,7 +238,7 @@ const CartPage = () => {
           <Link to="/gallery" onClick={handleChange}>Gallery</Link>
         </div>
       </nav>
-      <CartBox cart={cartItems} setCart={setCartItems} />
+      {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
     <div className="p-10 font-sans">
       <h1 className="text-center text-5xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
 
@@ -252,13 +253,12 @@ const CartPage = () => {
                 alt={item.name}
                 className="w-35 h-35 object-cover rounded-full border-3 border-[#B56576]"
               />
-              <div className=" grow">
+              <div className="grow">
                 <h3 className="text-[#7A3E3E] text-2xl">{item.name}</h3>
-                <p className="text-[#B56576] text-lg">₹{item.price}</p>
+                <p className="text-[#B56576] text-lg">${item.price}</p>
               </div>
               <div className="flex items-center gap-3">
                 <button
-                title='quanitty'
                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
@@ -266,7 +266,6 @@ const CartPage = () => {
                 </button>
                 <span className='px-2'>{item.quantity}</span>
                 <button
-                title='quanitity'
                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
@@ -336,15 +335,16 @@ const CartPage = () => {
 
             <div className="flex justify-between items-center mt-5">
               <div className="text-[#7A3E3E] text-xl font-bold">
-                Total: ₹{total.toFixed(2)}
+                Total: ${total.toFixed(2)}
               </div>
               <button
-                    onClick={async (e) => { await paymentHandler(e); handleButtonClick() }}
+                onClick={async(e) => {handleButtonClick(); paymentHandler(e)}}
                 disabled={!(name && phoneNumber)}
                 className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
               >
                 Confirm Order
               </button>
+              
             </div>
           </div>
         </div>

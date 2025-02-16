@@ -72,7 +72,8 @@ app.post("/send-whatsapp", (req,res)=>{
 
     //Below is the whatsapp backend. Please don't use this, since we're on trial version and have limited messages 
     
-    const num = req.body.ownerNumber;
+    // const num = req.body.phoneNumber;
+    const num = '+919119682899';
     console.log(num)
     if (!num) {
         return res.status(400).json({ message: "Phone number is required", success: false });
