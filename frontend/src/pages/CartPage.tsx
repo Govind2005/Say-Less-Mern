@@ -3,6 +3,7 @@ import CartBox from '../components/CartBox';
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
+import { Link } from 'react-router';
 interface CartItem {
   _id: string;
   name: string;
@@ -209,8 +210,33 @@ const CartPage = () => {
     paymentHandler;
   };
 
+  const handleChange = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // 1000 milliseconds = 1 second
+  };
+  
+
   return (
     <>
+    <nav >
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
+        </div>
+        <div className="nav-links">
+          <Link  to="/admin" onClick={handleChange} >Admin</Link>
+          <Link to="/about" onClick={handleChange} >About</Link>
+          <div className="logo-container cursor-pointer">
+          <Link to="/" >
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
+          </Link>
+          </div>
+          <Link to="/menu" onClick={handleChange}>Product</Link>
+          <Link to="/gallery" onClick={handleChange}>Gallery</Link>
+        </div>
+      </nav>
       <CartBox cart={cartItems} setCart={setCartItems} />
     <div className="p-10 font-sans">
       <h1 className="text-center text-3xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>

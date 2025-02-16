@@ -3,6 +3,7 @@ import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { motion } from "framer-motion";
+import { Link } from 'react-router';
 
 interface CartItem {
   _id: string;
@@ -53,8 +54,14 @@ const CartBox: React.FC = () => {
     });
   };
 
+  const handleCheckout = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 100)
+  }
+
   return (
-    <div className='relative z-10'>
+    <div className='relative z-10 '>
       <button onClick={toggleCart} className="fixed top-4 right-4 bg-pink-500 text-white p-2 rounded-full">
         <FaShoppingCart size={24} />
       </button>
@@ -126,6 +133,17 @@ const CartBox: React.FC = () => {
               ))}
             </div>
           )}
+          {/* Checkout Button */}
+          <div className="flex justify-center mt-6">
+            <Link to={'/cart'}>
+            <button
+              onClick={handleCheckout}
+              className="px-6 py-3 cursor-pointer bg-pink-500 text-white rounded-lg font-semibold text-lg hover:bg-pink-600 transition duration-300"
+              >
+              Checkout
+            </button>
+              </Link>
+          </div>
         </motion.div>
       )}
     </div>

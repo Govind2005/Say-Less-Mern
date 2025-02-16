@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router';
 // import CartBox from '../components/CartBox';
+
 
 const SweetCravingText = () => {
   const [opacity, setOpacity] = useState(1);
+
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,6 +79,24 @@ const AnimatedCircle = () => {
 
   return (
     <>
+    <nav >
+        <div className="rain-container">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="raindrop" />
+          ))}
+        </div>
+        <div className="nav-links">
+          <Link to="/admin" >Admin</Link>
+          <Link to="/about" >About</Link>
+          <div className="logo-container cursor-pointer">
+          <Link to="/" >
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
+          </Link>
+          </div>
+          <Link to="/menu" >Product</Link>
+          <Link to="/gallery" >Gallery</Link>
+        </div>
+      </nav>
       {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
     <div
       style={{
