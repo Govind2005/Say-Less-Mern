@@ -31,7 +31,7 @@ function App() {
         <Route 
           path="/add" 
           element={
-            <ProtectedRoute>
+           <ProtectedRoute>
               <CreateItem />
             </ProtectedRoute>
           } 
@@ -49,7 +49,7 @@ function App() {
           element={
              <ProtectedRoute>
             <EditItemPage /> 
-             </ProtectedRoute>
+            </ProtectedRoute>
           } 
         /> 
         <Route 

@@ -12,7 +12,7 @@ const AdminNavbar = () => {
 
 
     const navLinks = [
-      { to: "/admin", text: "Home", icon: Home },
+      { to: "/admindb", text: "Home", icon: Home },
       { to: "/add", text: "Add Item", icon: PlusCircle },
       { to: "/edit", text: "Edit Item", icon: Edit },
       { to: "/review", text: "Reviews", icon: MessageCircle },

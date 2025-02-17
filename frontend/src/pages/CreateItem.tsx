@@ -2,13 +2,16 @@ import { useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
 
 const CreateItem = () => {
-    const [newItem,setNewItem] = useState({
-        name:"",
-        type:"",
-        image:"",
-        price:0,
-        available:""
+    const [newItem, setNewItem] = useState({
+        name: "",
+        type: "",
+        image: "",
+        price: 0,
+        available: ""
     });
+
+    const [message, setMessage] = useState({ text: "", type: "" });
+
     const handleAddItem = async () => {
         try {
             const response = await fetch('http://localhost:4000/api/item', {
@@ -21,8 +24,7 @@ const CreateItem = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Item created successfully:', data);
-                // Reset form after successful creation
+                setMessage({ text: "Item added successfully!", type: "success" });
                 setNewItem({
                     name: "",
                     type: "",
@@ -30,83 +32,84 @@ const CreateItem = () => {
                     price: 0,
                     available: ""
                 });
-                // You might want to add a success message or redirect here
             } else {
-                console.error('Failed to create item');
+                setMessage({ text: "Failed to add item. Please try again.", type: "error" });
             }
         } catch (error) {
-            console.error('Error creating item:', error);
+            setMessage({ text: "Error adding item. Please check your connection.", type: "error" });
         }
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewItem(prev => ({
+            ...prev,
+            [name]: name === 'price' ? Number(value) : value
+        }));
+    };
+
     return (
-        <>
-        <AdminNavbar/>
-        <div className="mt-32">
-            
-        
-    <h1 className="text-3xl font-semibold text-center mb-6">Create New Item</h1>
-    
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <input 
-            type="text"
-            placeholder="Name"
-            name="name"
-            value={newItem.name}
-            onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+        <div className="min-h-screen">
+            <AdminNavbar />
+            <div className="flex min-h-screen">
+                {/* Left half with background image */}
+                <div 
+                    className="hidden md:block w-1/2 bg-cover bg-center relative"
+                    style={{
+                        backgroundImage: "url('/bakery.jpg')",
+                    }}
+                >
+                    <div className="absolute inset-0 bg-brown-800/20" />
+                </div>
+                
+                {/* Right half with form */}
+                <div className="w-full md:w-1/2 bg-[#FFF5EE]">
+                    <div className="max-w-md mx-auto px-4 pt-24 pb-12"> <br></br> <br></br> <br></br> <br></br> 
+                        <h1 className="text-3xl md:text-4xl font-serif text-center mb-8 text-[#8B7355]">
+                            Add New Bakery Item
+                        </h1>
 
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <input 
-            type="text"
-            placeholder="Type"
-            name="type"
-            value={newItem.type}
-            onChange={(e) => setNewItem({ ...newItem, type: e.target.value })}
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <input 
-            type="text"
-            placeholder="Image Link"
-            name="image"
-            value={newItem.image}
-            onChange={(e) => setNewItem({ ...newItem, image: e.target.value })}
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <input 
-            type="number"
-            placeholder="Price"
-            name="price"
-            value={newItem.price}
-            onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })}
+                        {message.text && (
+                            <div className={`mb-4 p-3 rounded-lg text-center ${
+                                message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                            }`}>
+                                {message.text}
+                            </div>
+                        )}
 
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <input 
-            type="text"
-            placeholder="true/false"
-            name="available"
-            value={newItem.available}
-            onChange={(e) => setNewItem({ ...newItem, available: e.target.value })}
-            className="w-full p-3 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <button 
-            onClick={handleAddItem}
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300 mb-4"
-        >
-            <h2 className="font-bold text-lg">Add Item</h2>
-        </button>
+                        <div className="bg-white rounded-2xl shadow-lg border border-[#FFE4E1] p-6 md:p-8">
+                            <div className="space-y-5">
+                                {[
+                                    { name: "name", type: "text", placeholder: "Item Name" },
+                                    { name: "type", type: "text", placeholder: "Category (e.g., Pastry, Bread, Cake)" },
+                                    { name: "image", type: "text", placeholder: "Image URL" },
+                                    { name: "price", type: "number", placeholder: "Price" },
+                                    { name: "available", type: "text", placeholder: "Available (true/false)" }
+                                ].map((field) => (
+                                    <input 
+                                        key={field.name}
+                                        type={field.type}
+                                        name={field.name}
+                                        placeholder={field.placeholder}
+                                        value={newItem[field.name]}
+                                        onChange={handleInputChange}
+                                        className="w-full p-3 border border-[#FFE4E1] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFB7B2] bg-white placeholder-[#C4A484] transition-all duration-200"
+                                    />
+                                ))}
+                                
+                                <button 
+                                    onClick={handleAddItem}
+                                    className="w-full bg-gradient-to-r from-[#C4A484] to-[#8B7355] text-white p-4 rounded-lg hover:from-[#8B7355] hover:to-[#C4A484] transition duration-300 shadow-md font-serif text-lg"
+                                >
+                                    Add to Bakery Menu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
-        
-    </div>
-    </div>
-</>
-
-    )
-}
 export default CreateItem;

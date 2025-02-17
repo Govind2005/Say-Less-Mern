@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
 
-
 const CORRECT_USERNAME = 'user';
 const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('cake').toString(CryptoJS.enc.Base64);
 
@@ -32,14 +31,17 @@ const AdminPage = () => {
             alignItems: 'center',
             backgroundImage: "url('226.jpg')",
             backgroundSize: 'cover',
-            fontFamily: "'Roboto', sans-serif"
+            backgroundPosition: 'center',
+            fontFamily: "'Roboto', sans-serif",
+            padding: '15px'
         }}>
             <div style={{
-                width: '1000px',
-                height: '500px',
+                width: '100%',
+                maxWidth: '1000px',
                 display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
                 justifyContent: 'center',
-                alignItems: 'center',
                 background: '#FFF',
                 boxShadow: '0 0 10px rgba(0, 0, 0, .1)',
                 overflow: 'hidden',
@@ -48,16 +50,20 @@ const AdminPage = () => {
                 borderRadius: '10px'
             }}>
                 <div style={{
-                    width: '50%',
-                    height: '100%',
-                     justifyContent: 'flex-start',
-                     backgroundPosition: '-50px 0',
-
+                    width: '100%',
+                    minHeight: '250px',
+                    maxWidth: '500px',
+                    flex: '1 1 300px',
                     backgroundImage: "url(./hello.gif)",
                     backgroundSize: 'cover',
-                    borderTopLeftRadius: '5px',
-                    borderBottomLeftRadius: '5px',
-                    position: 'relative'
+                    backgroundPosition: 'center',
+                    borderRadius: '5px 5px 0 0',
+                    position: 'relative',
+                    display: 'block',
+                    '@media (min-width: 768px)': {
+                        borderRadius: '5px 0 0 5px',
+                        minHeight: '500px'
+                    }
                 }}>
                     <div style={{
                         position: 'absolute',
@@ -65,65 +71,96 @@ const AdminPage = () => {
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        zIndex: 2,
-                        
-                      }}></div>
+                        zIndex: 2
+                    }}></div>
                 </div>
                 <form onSubmit={handleLogin} style={{
-                    minWidth: '250px',
-                    width: '50%',
-                    height: '100%',
-                    padding: '30px 20px'
+                    width: '100%',
+                    maxWidth: '500px',
+                    flex: '1 1 300px',
+                    minHeight: '500px',
+                    padding: '30px 20px',
+                    display: 'flex',
+                    flexDirection: 'column'
                 }}>
                     <h2 style={{
-                        fontSize: '40px',
-                        // fontFamily:'inherit',
+                        fontSize: 'clamp(28px, 5vw, 40px)',
                         textTransform: 'capitalize',
-                        marginBottom: '60px',
+                        marginBottom: 'clamp(30px, 5vh, 60px)',
                         textAlign: 'center'
                     }}>Login Here</h2>
 
-                    <label htmlFor="email" style={{ fontSize: '16px', display: 'block', margin: '10px 0', textTransform: 'capitalize' }}>Username:</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Enter username"
-                        style={{ fontSize: '16px', display: 'block', width: '90%', border: 'none', borderBottom: '1px solid #000', marginBottom: '20px' }}
-                    />
+                    <div style={{ flexGrow: 1 }}>
+                        <label htmlFor="email" style={{ 
+                            fontSize: 'clamp(14px, 2vw, 16px)', 
+                            display: 'block', 
+                            margin: '10px 0', 
+                            textTransform: 'capitalize' 
+                        }}>Username:</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Enter username"
+                            style={{ 
+                                fontSize: 'clamp(14px, 2vw, 16px)', 
+                                display: 'block', 
+                                width: '100%', 
+                                maxWidth: '350px',
+                                border: 'none', 
+                                borderBottom: '1px solid #000', 
+                                marginBottom: '20px',
+                                padding: '5px 0' 
+                            }}
+                        />
 
-                    <label htmlFor="password" style={{ fontSize: '16px', display: 'block', margin: '10px 0', textTransform: 'capitalize' }}>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter password"
-                        style={{ fontSize: '16px', display: 'block', width: '90%', border: 'none', borderBottom: '1px solid #000', marginBottom: '20px' }}
-                    />
+                        <label htmlFor="password" style={{ 
+                            fontSize: 'clamp(14px, 2vw, 16px)', 
+                            display: 'block', 
+                            margin: '10px 0', 
+                            textTransform: 'capitalize' 
+                        }}>Password:</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter password"
+                            style={{ 
+                                fontSize: 'clamp(14px, 2vw, 16px)', 
+                                display: 'block', 
+                                width: '100%', 
+                                maxWidth: '350px',
+                                border: 'none', 
+                                borderBottom: '1px solid #000', 
+                                marginBottom: '20px',
+                                padding: '5px 0' 
+                            }}
+                        />
 
-                    <button type="submit" style={{
-                        width: '130px',
-                        height: '30px',
-                        textTransform: 'capitalize',
-                        borderRadius: '50px',
-                        border: 'none',
-                        background: 'black',
-                        color: '#FFF',
-                        display: 'block',
-                        cursor: 'pointer',
-                        margin: '50px auto'
-                    }}>Login</button>
+                        <button type="submit" style={{
+                            width: 'clamp(110px, 30%, 130px)',
+                            height: 'clamp(28px, 5vh, 30px)',
+                            textTransform: 'capitalize',
+                            borderRadius: '50px',
+                            border: 'none',
+                            background: 'black',
+                            color: '#FFF',
+                            display: 'block',
+                            cursor: 'pointer',
+                            margin: 'clamp(25px, 5vh, 50px) auto'
+                        }}>Login</button>
 
-                    {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+                        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+                    </div>
 
                     <span style={{
-                        fontSize: '14px',
+                        fontSize: 'clamp(12px, 1.5vw, 14px)',
                         color: 'rgb(117, 117, 117)',
                         textTransform: 'capitalize',
-                        position: 'absolute',
-                        bottom: '20px',
-                        right: '20px',
-                        cursor: 'pointer'
+                        textAlign: 'right',
+                        marginTop: 'auto',
+                        cursor: 'pointer',
+                        alignSelf: 'flex-end'
                     }}>Don't have an account?</span>
                 </form>
             </div>
