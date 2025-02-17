@@ -60,14 +60,9 @@ app.use("/api/item",ItemRoutes);
 app.use("/api/review",ReviewRoutes);
 app.use("/api/order",OrderRoutes);
 
-app.post("/send-whatsapp", async(req,res)=>{
-    // return res.json({ message: 'Message sent successfully:', success: true });
-    console.log(req.body);
+app.post("/send-whatsapp", (req,res)=>{
 
-    //Below is the whatsapp backend. Please don't use this, since we're on trial version and have limited messages 
-    
-    // const num = req.body.phoneNumber;
-    const num = '+918487969445';
+    const num = '+919119682899';
     console.log(num)
     if (!num) {
         return res.status(400).json({ message: "Phone number is required", success: false });
@@ -75,7 +70,7 @@ app.post("/send-whatsapp", async(req,res)=>{
     const formattedNumber = `whatsapp:${num}`;  // Prefix the number with 'whatsapp:'
 
     try {
-        const response_D = await client.messages.create({
+        const response_D = client.messages.create({
                 body: req.body.message,
                 from: 'whatsapp:+14155238886', // This is Twilio's WhatsApp sandbox number
                 to: formattedNumber
@@ -244,3 +239,10 @@ app.post("/verify-otp", (req, res) => {
     otpStore.delete(phone); // Remove OTP after successful verification
     return res.json({ message: "OTP verified successfully" });
 });
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+  
+  export default cloudinary;
