@@ -6,30 +6,25 @@ import ReviewRoutes from "./routes/review.route.js";
 import OrderRoutes from "./routes/order.route.js";
 import cors from "cors";
 import twilio from "twilio";
-
 import bodyParser from "body-parser";
 import path from "path";
 import Razorpay from "razorpay";
 import fs from "fs";
+import { v2 as cloudinary } from 'cloudinary';
+import { fileURLToPath } from "url";
 
 const validateWebhookSignature = Razorpay.validateWebhookSignature;
 export { validateWebhookSignature };
-// const { validateWebhookSignature } = require("razorpay/dist/utils/razorpay-utils");
 
 const app = express();
-
-
-import { fileURLToPath } from "url";
-
 
 // Get the current file directory using import.meta.url
 const __filename = new URL('', import.meta.url).pathname;
 const __dirname = path.dirname(__filename);
 
-console.log(__dirname);
+// console.log(__dirname);
 
-
-// app.use(cors());
+app.use(cors());
 // this will allow all origins
 
 app.use(cors({
@@ -38,7 +33,6 @@ app.use(cors({
     allowedHeaders:['Content-Type']
 }))
 
-
 dotenv.config();
 
 const accountSid = process.env.TWILIO_SID;  // Replace with your Twilio Account SID
@@ -46,7 +40,7 @@ const authToken = process.env.TWILIO_TOKEN; // Replace with your Twilio Auth Tok
 
 const MONG_URI = process.env.MONG_URI || 200; 
 const PORT = process.env.PORT || 4000;
-const PAYMENT_PORT = process.env.PAYMENT_PORT || 5000;
+// const PAYMENT_PORT = process.env.PAYMENT_PORT || 5000;
 
 const client = new twilio(accountSid, authToken);
 
@@ -66,41 +60,41 @@ app.use("/api/item",ItemRoutes);
 app.use("/api/review",ReviewRoutes);
 app.use("/api/order",OrderRoutes);
 
-app.post("/send-whatsapp", (req,res)=>{
-    res.json({ message: 'Message sent successfully:', success: true });
+app.post("/send-whatsapp", async(req,res)=>{
+    // return res.json({ message: 'Message sent successfully:', success: true });
     console.log(req.body);
 
     //Below is the whatsapp backend. Please don't use this, since we're on trial version and have limited messages 
     
     // const num = req.body.phoneNumber;
-    const num = '+919119682899';
+    const num = '+918487969445';
     console.log(num)
     if (!num) {
         return res.status(400).json({ message: "Phone number is required", success: false });
     }
     const formattedNumber = `whatsapp:${num}`;  // Prefix the number with 'whatsapp:'
 
-    client.messages
-        .create({
-            body: req.body.message,
-            from: 'whatsapp:+14155238886', // This is Twilio's WhatsApp sandbox number
-            to: formattedNumber
+    try {
+        const response_D = await client.messages.create({
+                body: req.body.message,
+                from: 'whatsapp:+14155238886', // This is Twilio's WhatsApp sandbox number
+                to: formattedNumber
         })
-        .then((message) => {
-            res.json({ message: `Message sent successfully: ${message.sid}`, success: true });
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).json({ message: "Failed to send message", success: false });
-        });
+        return res.status(200).json({message: "Whatsapp Create successfully"})
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({error: err})
+    }
+    
+    
 })
 
 app.get("/",(req,res)=>{
-    res.json("hello");
+    return res.json("hello");
 })
 
 app.post("/",(req,res)=> {
-    res.send("post it is");
+    return res.send("post it is");
 })
 
 app.use(bodyParser.json());
@@ -178,18 +172,75 @@ app.post("/payment/verify-payment", (req, res) => {
                 order.payment_id = razorpay_payment_id;
                 writeData(orders);
             }
-            res.status(200).json({ status: "ok" });
             console.log("Payment verification successful");
+            return res.status(200).json({ status: "ok" });
         } else {
-            res.status(400).json({ status: "verification_failed" });
             console.log("Payment verification failed");
+            return res.status(400).json({ status: "verification_failed" });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ status: "error", message: "Error verifying payment" });
+        return res.status(500).json({ status: "error", message: "Error verifying payment" });
     }
 });
 
-app.listen(5000, () => {
-    console.log("Server running on http://localhost:" + 5000);
+const otpStore = new Map(); // Temporary in-memory store for OTPs
+// Sending OTP
+app.post("/send-otp", async (req, res) => {
+    // const { phone } = req.body;
+    console.log('niggersss');
+    const phone  = "+918487969445";
+    if (!phone) {
+        console.log(phone);
+      return res.status(400).json({ message: "Phone number is required" });
+    }
+  
+    // Generate a 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    console.log(phone,'nigger');
+    // Store OTP with expiration (e.g., 5 minutes)
+    
+    otpStore.set(phone, { otp, expiresAt: Date.now() + 5 * 60 * 1000 });
+  
+    try {
+      await client.messages.create({
+        body: `Your OTP is: ${otp}`,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: phone, // Use user-provided phone number
+      });
+      console.log(otp);
+      return res.json({ success:true,message: "OTP sent successfully" });
+    } catch (error) {
+      console.error("Twilio Error:", error);
+      return res.status(500).json({ message: "Error sending OTP", error });
+    }
+  });
+
+// Verify OTP
+app.post("/verify-otp", (req, res) => {
+    // const { phone, otp } = req.body;
+    const { otp } = req.body;
+    const phone = "+918487969445";
+    console.log(otp);
+    if (!phone || !otp) {
+      return res.status(400).json({ message: "Phone and OTP are required" });
+    }
+    console.log('nigger2',phone);
+    const storedOtp = otpStore.get(phone);
+  
+    if (!storedOtp) {
+      return res.status(400).json({ message: "OTP expired or not found" });
+    }
+  
+    if (Date.now() > storedOtp.expiresAt) {
+      otpStore.delete(phone);
+      return res.status(400).json({ message: "OTP expired" });
+    }
+  
+    if (parseInt(otp) !== storedOtp.otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+  
+    otpStore.delete(phone); // Remove OTP after successful verification
+    return res.json({ message: "OTP verified successfully" });
 });

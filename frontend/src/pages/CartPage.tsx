@@ -1,9 +1,13 @@
-import { useState, useEffect, SetStateAction } from 'react';
+import { useState, useEffect, useRef} from 'react';
 // import CartBox from '../components/CartBox';
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
 import { Link } from 'react-router';
+import axios from "axios";
+import { MdCancel } from "react-icons/md"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface CartItem {
   _id: string;
@@ -15,12 +19,15 @@ interface CartItem {
   customize?: string; // Optional customization
 }
 
-const CartPage = () => {
+const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
   const [messageStatus, setMessageStatus] = useState('');
   const [orderDate, setOrderDate] = useState<string>(new Date().toISOString().split('T')[0]); // Set default date to today
+  const [otp, setOtp] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Load cart items from localStorage when component mounts
@@ -71,13 +78,6 @@ const CartPage = () => {
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleInputChange = (e: { target: { value: SetStateAction<string> } }) => {
-    setPhoneNumber(e.target.value);
-  };
-
-  const handleNameChange = (e: { target: { value: SetStateAction<string> } }) => {
-    setName(e.target.value);
-  };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrderDate(e.target.value);
@@ -85,7 +85,7 @@ const CartPage = () => {
 
   const paymentHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const response = await fetch("http://localhost:5000/payment/create-order", {
+    const response = await fetch("http://localhost:4000/payment/create-order", {
       method: "POST",
       body: JSON.stringify({
         amount: total,
@@ -106,14 +106,14 @@ const CartPage = () => {
       currency: "INR",
       name: "Bindi Cupcake",
       description: "Test Transaction",
-      image: "https://example.com/your_logo",
+      image: "https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png",
       order_id: order.id,
       handler: async function (response: Response) {
         const body = {
           ...response,
         };
 
-        const validateRes = await fetch("http://localhost:5000/payment/verify-payment", {
+        const validateRes = await fetch("http://localhost:4000/payment/verify-payment", {
           method: "POST",
           body: JSON.stringify(body),
           headers: {
@@ -160,7 +160,7 @@ const CartPage = () => {
         });
         message += "name: " + name;
         message += "\n " + phoneNumber;
-        message += `\n*Total: $${total.toFixed(2)}*`;
+        message += `\n*Total: ₹${total.toFixed(2)}*`;
 
         const response = await fetch('http://localhost:4000/send-whatsapp', {
           method: 'POST',
@@ -205,10 +205,21 @@ const CartPage = () => {
         console.error(error);
         setMessageStatus('Error occurred while sending message.');
       }
-    } else {
+    } else if (!phoneNumber) {
+        toast.error("Please enter a valid phone number.");
+        return;
+      } else {
       setMessageStatus('Please enter both name and phone number.');
+      }
+    
+      try {
+        await sendOtp(); // Send OTP when button is clicked
+        toast.success("OTP sent successfully!");
+      } catch (error) {
+        toast.error("Failed to send OTP. Please try again.");
     }
     paymentHandler;
+    
   };
 
   const handleChange = () => {
@@ -216,8 +227,72 @@ const CartPage = () => {
       window.location.reload();
     }, 100); // 1000 milliseconds = 1 second
   };
-  
 
+  // Function to send OTP
+  const sendOtp = async () => {
+    if (!phoneNumber) {
+      toast.error("Please enter a valid phone number.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      // Simulating API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch("http://localhost:4000/send-otp", { method: "POST" });
+      console.log(response);
+      setIsOtpSent(true);
+      toast.success("Whatsapp OTP sent successfully!");
+    } catch (error) {
+      toast.error("Failed to send OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const closeModal = () => {
+    setIsOtpSent(false); // Close the modal
+  };
+  // Function to verify OTP
+  const verifyOtp = async () => {
+    if (!otp) {
+      toast.error("Please enter the OTP.");
+      return;
+    }
+  
+    try {
+      setLoading(true);
+  
+      // Call backend API for OTP verification
+      const response = await fetch("http://localhost:4000/verify-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phoneNumber, // Make sure phone is available in state
+          otp,   // OTP entered by the user
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        toast.success("OTP verified successfully!");
+        setIsOtpSent(false); // Close OTP modal on success
+        closeModal(); // Close modal if needed
+      } else {
+        toast.error(data.message || "Invalid OTP. Please try again.");
+      }
+    } catch (error) {
+      console.error("OTP Verification Error:", error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
   return (
     <>
     <nav >
@@ -238,6 +313,7 @@ const CartPage = () => {
           <Link to="/gallery" onClick={handleChange}>Gallery</Link>
         </div>
       </nav>
+      <ToastContainer position="top-center" autoClose={3000} />
       {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
     <div className="p-10 font-sans">
       <h1 className="text-center text-5xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
@@ -255,7 +331,7 @@ const CartPage = () => {
               />
               <div className="grow">
                 <h3 className="text-[#7A3E3E] text-2xl">{item.name}</h3>
-                <p className="text-[#B56576] text-lg">${item.price}</p>
+                <p className="text-[#B56576] text-lg">₹{item.price}</p>
               </div>
               <div className="flex items-center gap-3">
                 <button
@@ -304,7 +380,7 @@ const CartPage = () => {
               <input
                 type="text"
                 value={name}
-                onChange={handleNameChange}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
                 className="w-full max-w-xs p-2 rounded-lg border-2 border-[#EAC4D5]"
               />
@@ -315,7 +391,7 @@ const CartPage = () => {
               <input
                 type="text"
                 value={phoneNumber}
-                onChange={handleInputChange}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter phone number"
                 className="w-full max-w-xs p-2 rounded-lg border-2 border-[#EAC4D5]"
               />
@@ -335,18 +411,50 @@ const CartPage = () => {
 
             <div className="flex justify-between items-center mt-5">
               <div className="text-[#7A3E3E] text-xl font-bold">
-                Total: ${total.toFixed(2)}
-              </div>
+                Total: ₹{total.toFixed(2)}
+                </div>
               <button
-                onClick={async(e) => {handleButtonClick(); paymentHandler(e)}}
                 disabled={!(name && phoneNumber)}
+                    onClick={async (e) => { sendOtp() }}
                 className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
               >
                 Confirm Order
               </button>
               
             </div>
+              </div>
+              <div>
+      {isOtpSent && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)]">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+            >
+              <MdCancel />
+            </button>
+            <label className="block text-gray-700 font-bold mb-2">Enter OTP:</label>
+            <input
+              type="text"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              placeholder="Enter OTP"
+              className="w-full p-2 border rounded mb-4"
+            />
+            <button
+              onClick={verifyOtp}
+              disabled={loading}
+              className={`px-4 py-2 rounded w-full ${
+                loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 text-white'
+              }`}
+            >
+              {loading ? 'Verifying...' : 'Verify OTP'}
+            </button>
           </div>
+        </div>
+      )}
+    </div>
+
         </div>
       )}
       <p className="mt-5 text-center">{messageStatus}</p>

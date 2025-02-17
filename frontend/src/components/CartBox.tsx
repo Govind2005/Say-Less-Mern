@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaTrashAlt } from "react-icons/fa";
-import { FaBagShopping } from "react-icons/fa6";
+import { FaBagShopping, FaArrowRightFromBracket } from "react-icons/fa6";
 import { FiMinus, FiPlus } from "react-icons/fi";
-import { IoClose } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { Link } from 'react-router';
 
@@ -82,9 +81,9 @@ const CartBox: React.FC = () => {
         >
           <button 
             onClick={toggleCart} 
-            className="absolute top-5 right-3 text-xl text-white rounded-full bg-[#d4a517] hover:bg-[#b38e0b] transition cursor-pointer"
+            className="absolute top-5 right-3 text-xl text-[#7a3e3e] rounded-full transition hover:text-2xl transition duration:200 cursor-pointer"
           >
-            <IoClose />
+            <FaArrowRightFromBracket />
           </button>
 
           <p className="text-3xl font-semibold mb-4 text-[#7a3e3e]">Your Cart</p>
@@ -141,7 +140,6 @@ const CartBox: React.FC = () => {
                 </div>
                 <div>
                   Total Price: {total}
-                  <Link to="/cart">Checkout</Link>
                 </div>
               </>
           )}
@@ -150,7 +148,7 @@ const CartBox: React.FC = () => {
             <Link to={'/cart'}>
             <button
               onClick={handleCheckout}
-              className="px-6 py-3 cursor-pointer bg-pink-500 text-white rounded-lg font-semibold text-lg hover:bg-pink-600 transition duration-300"
+              className="px-6 py-3 cursor-pointer bg-[#7A3E3E] text-white rounded-lg font-semibold text-lg hover:bg-[#5E2D2D] transition duration-300"
               >
               Checkout
             </button>
