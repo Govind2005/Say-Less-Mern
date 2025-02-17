@@ -159,7 +159,7 @@ const CartPage = () => {
           if (item.customize) message += `Customize: ${item.customize}\n`;
         });
         message += "name: " + name;
-        message += "\n " + phoneNumber;
+        message += "\nnuber: " + phoneNumber;
         message += `\n*Total: $${total.toFixed(2)}*`;
 
         const response = await fetch('http://localhost:4000/send-whatsapp', {

@@ -67,12 +67,7 @@ app.use("/api/review",ReviewRoutes);
 app.use("/api/order",OrderRoutes);
 
 app.post("/send-whatsapp", (req,res)=>{
-    res.json({ message: 'Message sent successfully:', success: true });
-    console.log(req.body);
 
-    //Below is the whatsapp backend. Please don't use this, since we're on trial version and have limited messages 
-    
-    // const num = req.body.phoneNumber;
     const num = '+919119682899';
     console.log(num)
     if (!num) {
