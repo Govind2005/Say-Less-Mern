@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 const scrollGalleryImages = [
   'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
   'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/222_u7w8gn.jpg',
@@ -58,7 +57,7 @@ const CurtainGallery = () => {
           return (
             <div
               key={index}
-              className="absolute top-0 w-full h-full bg-cover bg-center"
+              className="absolute top-0 w-full h-full rounded-b-3xl bg-cover bg-center"
               style={{
                 backgroundImage: `url(${image})`,
                 transform: `translateY(-${movePercent}%)`,

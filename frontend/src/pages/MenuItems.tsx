@@ -22,7 +22,7 @@ const MenuPage = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [specialHampers, setSpecialHampers] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Number of items per page// State for special hampers filter
+  const itemsPerPage = 20; // Number of items per page// State for special hampers filter
 
   useEffect(() => {
     fetchItems();
