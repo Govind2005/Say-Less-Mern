@@ -183,16 +183,15 @@ const otpStore = new Map(); // Temporary in-memory store for OTPs
 // Sending OTP
 app.post("/send-otp", async (req, res) => {
     // const { phone } = req.body;
-    console.log('niggersss');
-    const phone  = "+918487969445";
+    const phone  = "+91XXXXXXXXXX";
     if (!phone) {
         console.log(phone);
       return res.status(400).json({ message: "Phone number is required" });
     }
   
     // Generate a 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    console.log(phone,'nigger');
+    // const otp = Math.floor(100000 + Math.random() * 900000);
+    const otp = 456789;
     // Store OTP with expiration (e.g., 5 minutes)
     
     otpStore.set(phone, { otp, expiresAt: Date.now() + 5 * 60 * 1000 });
@@ -215,7 +214,7 @@ app.post("/send-otp", async (req, res) => {
 app.post("/verify-otp", (req, res) => {
     // const { phone, otp } = req.body;
     const { otp } = req.body;
-    const phone = "+918487969445";
+    const phone = "+91XXXXXXXXXX";
     console.log(otp);
     if (!phone || !otp) {
       return res.status(400).json({ message: "Phone and OTP are required" });
@@ -239,10 +238,3 @@ app.post("/verify-otp", (req, res) => {
     otpStore.delete(phone); // Remove OTP after successful verification
     return res.json({ message: "OTP verified successfully" });
 });
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
-  
-  export default cloudinary;

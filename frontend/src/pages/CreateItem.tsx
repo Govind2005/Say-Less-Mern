@@ -1,5 +1,20 @@
 import { useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
+// import cloudinary from '..\Say-Less-Mern\backend\server.js'; // Import the configured Cloudinary
+
+// // Define the return type for the uploadImage function
+// const uploadImage = async (filePath: string): Promise<string | undefined> => {
+//   try {
+//     const result = await cloudinary.uploader.upload(filePath, {
+//       folder: "bakery-shop", // Optional folder in Cloudinary
+//     });
+//     console.log(result);
+//     return result.secure_url; // Return the image URL
+//   } catch (error) {
+//     console.error("Cloudinary Upload Error:", error);
+//   }
+// };
+
 
 const CreateItem = () => {
     const [newItem,setNewItem] = useState({
