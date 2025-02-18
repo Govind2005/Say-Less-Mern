@@ -57,26 +57,8 @@ const HeroSection = () => {
     overflow: 'hidden',
     borderRadius: '50%',
     zIndex: 30,
-    // transition: 'all 0.3s ease-out'
   };
 
-  const finalTextPosition: React.CSSProperties = {
-    position: 'absolute',
-    top: '150vh',
-    left: '16px',
-    opacity: 1,
-    transform: 'translateY(0)',
-    zIndex: 50,
-  };
-
-  const finalButtonPosition: React.CSSProperties = {
-    position: 'absolute',
-    top: '175vh',
-    right: '16px',
-    opacity: 1,
-    transform: 'translateY(0)',
-    zIndex: 50,
-  };
 
   // Add scroll to top function
   const scrollToTop = () => {

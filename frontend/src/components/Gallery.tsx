@@ -4,6 +4,7 @@ import './Gallery.css';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { useScrollDirection } from '../hooks/useScrollDirection';
 import ScrollReveal from 'scrollreveal';
+import CurtainGallery from './CurtainGallery';
 
 function Gallery() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -19,14 +20,7 @@ function Gallery() {
     "https://res.cloudinary.com/duqllfqxd/image/upload/v1739550715/WhatsApp_Image_2025-02-04_at_14.57.19_163e6e72_x8ufk0.jpg"
   ];
 
-  const scrollGalleryImages = [
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/222_u7w8gn.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/333_i0ae0e.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274474/444_oapcps.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/555_bsghyy.jpg',
-    'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274480/666_hjsal2.jpg'
-  ];
+  
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -228,27 +222,8 @@ function Gallery() {
       </section>
 
       {/* Gallery Section */}
-      <section className="gallery-section">
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
-        </div>
-        <h2 className="gallery-title">Our Delicacies!</h2>
-        
-        <div className="scroll-container">
-          <div className="gallery-container">
-            {scrollGalleryImages.map((image, index) => (
-              <div 
-                key={index} 
-                className="gallery-item-reveal"
-                onClick={() => handleImageClick(image)}
-              >
-                <img src={image} alt={`Gallery image ${index + 1}`} />
-              </div>
-            ))}
-          </div>
-        </div>
+      <section>
+      <CurtainGallery/>
 
         {/* Horizontal Scroll Gallery with main gallery images */}
         <div className="scroll-gallery-container">
