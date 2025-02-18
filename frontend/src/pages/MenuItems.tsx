@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import CartBox from "../components/CartBox";
 import toast from "react-hot-toast";
-import { Link } from "react-router";
 import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 // interface CartItem {
@@ -107,11 +106,7 @@ const MenuPage = () => {
       console.log('Added to cart:', item.name);
     };
   
-    const handleChange = () => {
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-    };
+  
     const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -129,26 +124,41 @@ const MenuPage = () => {
 
   return (
     <>
-      <nav>
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
-        </div>
-        <div className="nav-links">
-          <Link to="/admin" onClick={handleChange}>Admin</Link>
-          <Link to="/about" onClick={handleChange}>About</Link>
-          <div className="logo-container cursor-pointer">
-            <Link to="/" onClick={handleChange}>
-              <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
-            </Link>
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 w-full z-40 bg-pink-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <a href="/">
+              <img 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                alt="Bindi's" 
+                className="h-6 sm:h-8 object-contain cursor-pointer" 
+              />
+            </a>
           </div>
-          <Link to="/menu" onClick={handleChange}>Product</Link>
-          <Link to="/gallery" onClick={handleChange}>Gallery</Link>
+          {/* Mobile menu button */}
+          <button className="md:hidden p-2 text-pink-100 hover:text-pink-200">
+            <span className="sr-only">Open menu</span>
+            ☰
+          </button>
+          {/* Desktop menu */}
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex gap-6 text-white text-lg">
+              <a href="/menu" className="hover:text-pink-200 transition-colors">Menu</a>
+              <a href="/gallery" className="hover:text-pink-200 transition-colors">Gallery</a>
+              <a href="/about" className="hover:text-pink-200 transition-colors">About Us</a>
+              <a href="/admin" className="hover:text-pink-200 transition-colors">Admin</a>
+            </div>
+          </div>
         </div>
       </nav>
+
+      {/* CartBox with higher z-index */}
+      <div className="relative z-50">
         <CartBox />
-        <div style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
+      </div>
+
+      <div className="mt-16" style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             
            {/* Fancy Heading with SVG Lines */}
             <h1 style={{

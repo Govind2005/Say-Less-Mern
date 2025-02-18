@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -40,47 +42,38 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const baseVideoSize = 1000;
-  const videoSize = baseVideoSize - (scrollPosition * 400);
-  const videoTranslateX = -35 + (scrollPosition * 135);
-  const videoTranslateY = 40 - (scrollPosition * 40);
+  const baseVideoSize = window.innerWidth < 768 ? 300 : 1000; // Smaller base size for mobile
+  const videoSize = baseVideoSize - (scrollPosition * (window.innerWidth < 768 ? 100 : 400));
+  const videoTranslateX = window.innerWidth < 768 
+    ? -25 + (scrollPosition * 125) 
+    : -35 + (scrollPosition * 135);
+  const videoTranslateY = window.innerWidth < 768
+    ? 20 - (scrollPosition * 20)
+    : 40 - (scrollPosition * 40);
 
-  // Calculate final positions
+  // Adjust final video position for mobile
   const finalVideoPosition: React.CSSProperties = {
     position: 'absolute',
-    width: `${baseVideoSize - 400}px`,
-    height: `${baseVideoSize - 400}px`,
-    transform: 'translate(100%, 0%)',
-    left: '0%',
+    width: `${window.innerWidth < 768 ? baseVideoSize - 100 : baseVideoSize - 400}px`,
+    height: `${window.innerWidth < 768 ? baseVideoSize - 100 : baseVideoSize - 400}px`,
+    transform: window.innerWidth < 768 ? 'translate(50%, 0%)' : 'translate(100%, 0%)',
+    left: window.innerWidth < 768 ? '25%' : '0%',
     top: '150vh',
-    marginTop: `-${(baseVideoSize - 400)/2}px`,
+    marginTop: `-${(window.innerWidth < 768 ? baseVideoSize - 100 : baseVideoSize - 400)/2}px`,
     overflow: 'hidden',
     borderRadius: '50%',
     zIndex: 30,
-    // transition: 'all 0.3s ease-out'
   };
 
-  const finalTextPosition: React.CSSProperties = {
-    position: 'absolute',
-    top: '150vh',
-    left: '16px',
-    opacity: 1,
-    transform: 'translateY(0)',
-    zIndex: 50,
-  };
-
-  const finalButtonPosition: React.CSSProperties = {
-    position: 'absolute',
-    top: '175vh',
-    right: '16px',
-    opacity: 1,
-    transform: 'translateY(0)',
-    zIndex: 50,
-  };
 
   // Add scroll to top function
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Add navigation handler
+  const handleOrderClick = () => {
+    navigate('/menu');
   };
 
   return (
@@ -92,23 +85,26 @@ const HeroSection = () => {
       <section className="h-screen relative">
         {/* Navigation Bar */}
         <nav className="fixed top-0 w-full z-50 bg-pink-700">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             <div className="flex items-center">
-              <a 
-                href="/" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToTop();
-                }}
-              >
+              <a href="/" onClick={(e) => {
+                e.preventDefault();
+                scrollToTop();
+              }}>
                 <img 
                   src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
                   alt="Bindi's" 
-                  className="h-8 object-contain cursor-pointer" 
+                  className="h-6 sm:h-8 object-contain cursor-pointer" 
                 />
               </a>
             </div>
-            <div className="flex items-center gap-8">
+            {/* Mobile menu button */}
+            <button className="md:hidden p-2 text-pink-100 hover:text-pink-200">
+              <span className="sr-only">Open menu</span>
+              ☰
+            </button>
+            {/* Desktop menu */}
+            <div className="hidden md:flex items-center gap-8">
               <div className="flex gap-6 text-white text-lg">
                 <a href="/menu" className="hover:text-pink-200 transition-colors">Menu</a>
                 <a href="/gallery" className="hover:text-pink-200 transition-colors">Gallery</a>
@@ -146,27 +142,27 @@ const HeroSection = () => {
           </video>
         </div>
 
-        {/* Center Text - moved to higher z-index */}
+        {/* Center Text */}
         <div className="absolute inset-0 flex items-center justify-center z-40">
-          <div className="text-center">
-            <h1 className="text-[20vw] font-bold text-pink-100/90 leading-none tracking-tighter">
+          <div className="text-center px-4">
+            <h1 className="text-[15vw] md:text-[20vw] font-bold text-pink-100/90 leading-none tracking-tighter">
               BINDI'S
             </h1>
-            <h2 className="text-[10vw] font-bold text-pink-100/60 leading-none tracking-tighter -mt-8">
+            <h2 className="text-[8vw] md:text-[10vw] font-bold text-pink-100/60 leading-none tracking-tighter -mt-4 md:-mt-8">
               CUPCAKERY
             </h2>
           </div>
         </div>
 
-        {/* Right Side Text - moved to higher z-index and lower position */}
-        <div className="absolute right-12 bottom-32 text-right z-40">
-          <h2 className="text-3xl font-bold text-pink-100 italic mb-2">
+        {/* Right Side Text */}
+        <div className="absolute right-4 sm:right-12 bottom-16 sm:bottom-32 text-right z-40">
+          <h2 className="text-xl sm:text-3xl font-bold text-pink-100 italic mb-2">
             No. 1 Bakery
           </h2>
-          <h2 className="text-3xl font-bold text-pink-100 italic mb-2">
+          <h2 className="text-xl sm:text-3xl font-bold text-pink-100 italic mb-2">
             in Surat
           </h2>
-          <p className="text-pink-100 text-lg mt-4">
+          <p className="text-pink-100 text-sm sm:text-lg mt-4 max-w-[250px] sm:max-w-none">
             Flavours that have convinced more than 8 million
           </p>
         </div>
@@ -194,28 +190,29 @@ const HeroSection = () => {
             visibility: scrollPosition > 0.5 ? 'visible' : 'hidden',
             transition: 'all 0.8s ease-out'
           }}
+          className="px-4 sm:px-0"
         >
-          <div className="space-y-8">
-            <h3 className="text-6xl font-bold text-pink-100 mb-12">
+          <div className="space-y-4 sm:space-y-8">
+            <h3 className="text-4xl sm:text-6xl font-bold text-pink-100 mb-6 sm:mb-12">
               Our Promises
             </h3>
-            <div className="space-y-8">
-              <div className="space-y-2">
-                <p className="text-4xl font-bold text-pink-100">✦ 100% Handmade</p>
-                <p className="text-xl text-pink-100/80 pl-6">
-                  Every item crafted with love and care by our expert bakers
+            <div className="space-y-4 sm:space-y-8">
+              <div className="space-y-1 sm:space-y-2">
+                <p className="text-2xl sm:text-4xl font-bold text-pink-100">✦ 100% Handmade</p>
+                <p className="text-base sm:text-xl text-pink-100/80 pl-6">
+                  Every item crafted with love and care
                 </p>
               </div>
-              <div className="space-y-2">
-                <p className="text-4xl font-bold text-pink-100">✦ Pure Vegetarian</p>
-                <p className="text-xl text-pink-100/80 pl-6">
-                  Committed to serving 100% vegetarian delights for everyone
+              <div className="space-y-1 sm:space-y-2">
+                <p className="text-2xl sm:text-4xl font-bold text-pink-100">✦ Pure Vegetarian</p>
+                <p className="text-base sm:text-xl text-pink-100/80 pl-6">
+                  100% vegetarian delights for everyone
                 </p>
               </div>
-              <div className="space-y-2">
-                <p className="text-4xl font-bold text-pink-100">✦ No Preservatives</p>
-                <p className="text-xl text-pink-100/80 pl-6">
-                  Fresh, natural ingredients for the authentic taste you deserve
+              <div className="space-y-1 sm:space-y-2">
+                <p className="text-2xl sm:text-4xl font-bold text-pink-100">✦ No Preservatives</p>
+                <p className="text-base sm:text-xl text-pink-100/80 pl-6">
+                  Fresh, natural ingredients only
                 </p>
               </div>
             </div>
@@ -242,8 +239,12 @@ const HeroSection = () => {
             visibility: scrollPosition > 0.5 ? 'visible' : 'hidden',
             transition: 'all 0.8s ease-out'
           }}
+          className="px-4 sm:px-0"
         >
-          <button className="px-10 py-5 bg-pink-100 text-pink-600 rounded-full text-2xl font-bold hover:bg-pink-200 transition-colors">
+          <button 
+            onClick={handleOrderClick}
+            className="px-6 sm:px-10 py-3 sm:py-5 bg-pink-100 text-pink-600 rounded-full text-xl sm:text-2xl font-bold hover:bg-pink-200 transition-colors cursor-pointer"
+          >
             Order Now
           </button>
         </div>

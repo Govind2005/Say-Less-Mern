@@ -1,25 +1,24 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import '../App.css';
 import About from '../components/About.tsx';
 import Gallery from '../components/Gallery.tsx';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
-import { useScrollDirection } from '../hooks/useScrollDirection';
+
 import ScrollReveal from 'scrollreveal';
 import HeroSection from '../components/HeroSection.tsx';
 import HamperSection from '../components/HamperSection.tsx';
 import Services from '../components/Services.tsx';
 
 function HomePage() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+ 
   
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [currentProductIndex, setCurrentProductIndex] = useState(0);
-  const [currentChefIndex, setCurrentChefIndex] = useState(0);
+
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-  const [showPromo, setShowPromo] = useState(true);
   
-  const isNavbarVisible = useScrollDirection();
+  
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,97 +29,9 @@ function HomePage() {
   }, []);
 
   
-  const slides = [
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274843/testbg_c1xggo.jpg',
-      tagline: 'BAKED WITH LOVE',
-      heading: 'Melt-in-Your-Mouth\nMagic!'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274842/donuts_4_f92ywv.jpg',
-      tagline: '100% EGGLESS, 100% DELICIOUS',
-      heading: 'From Our Kitchen\nto Your Heart!'
-    }
-  ];
-
-  const services = [
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275127/Cupcakee_bqaymf.jpg',
-      title: 'Eggless Delight',
-      description: 'Indulge in rich, moist treats—100% Eggless and delicious for pure guilt-free indulgence!'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275046/Brownie_5_ujeowd.jpg',
-      title: 'Variety Assured',
-      description: 'From Fudgy Brownies to Creamy Ice Creams, discover flavors for every craving!'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275046/Brownie_2_gzgbwa.jpg',
-      title: 'Handcrafted Love',
-      description: 'Every treat is made in small batches with precision and finest ingredients for homemade goodness!'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275047/Brownie_Tub_3_m11kmr.jpg',
-      title: 'Quality Maintain',
-      description: 'Using only the finest ingredients, ensuring 100% eggless and preservative-free desserts.'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739242354/cld-sample-4.jpg',
-      title: 'Custom Orders',
-      description: 'Personalized desserts for your special occasions, making your sweet dreams come true!'
-    }
-  ];
-
-  const products = [
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
-      title: 'Top Seller',
-      name: 'Blueberry Cupcake'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/222_u7w8gn.jpg',
-      title: 'Top Favorite',
-      name: 'Chocolate Donut'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/333_i0ae0e.jpg',
-      title: 'Most Loved',
-      name: 'Raspberry Cupcake'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274474/444_oapcps.jpg',
-      title: 'Trending Now',
-      name: 'Chocolate Cupcake'
-    }
-  ];
-
-  const chefs = [
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275287/team-1_bpvjqy.jpg',
-      name: 'Chef Michael',
-      designation: 'Head Chef'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275288/team-2_huu62r.jpg',
-      name: 'Chef Sarah',
-      designation: 'Pastry Specialist'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275289/team-3_jgve0k.jpg',
-      name: 'Chef David',
-      designation: 'Dessert Expert'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275291/team-4_t0vkqw.jpg',
-      name: 'Chef John',
-      designation: 'Cake Artist'
-    },
-    {
-      image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739379645/chef_gvqsdc.jpg',
-      name: 'Chef Patrick',
-      designation: 'Pastry Chef'
-    }
-  ];
+  
+  
+  
 
   const galleryImages = [
     'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
@@ -179,36 +90,8 @@ function HomePage() {
   };
 
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  };
-
-  const nextService = () => {
-    setCurrentServiceIndex((prev) => 
-      prev === services.length - 3 ? 0 : prev + 1
-    );
-  };
-
-  const prevService = () => {
-    setCurrentServiceIndex((prev) => 
-      prev === 0 ? services.length - 3 : prev - 1
-    );
-  };
-
   // Auto-advance slides every 5 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 5000); // 5000ms = 5 seconds
-
-    // Cleanup timer on component unmount
-    return () => clearInterval(timer);
-  }, []);
-
+  
 
   // Add ScrollReveal initialization
   useEffect(() => {
@@ -306,17 +189,7 @@ function HomePage() {
     return () => sr.destroy();
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPromo(true);
-    }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleClosePromo = () => {
-    setShowPromo(false);
-  };
 
   // Update the useEffect hook with faster scroll speed
   useEffect(() => {
@@ -390,68 +263,27 @@ function HomePage() {
 
   return (
     <div className="app">
-      {/* Promotional Popup */}
-      {/* {showPromo && (
-        <div className="promo-overlay" onClick={handleClosePromo}>
-          <div className="promo-popup" onClick={(e) => e.stopPropagation()}>
-            <button 
-              className="promo-close" 
-              onClick={handleClosePromo}
-            >
-              ×
-            </button>
-            <div className="promo-content">
-              <h2>Special Offer!</h2>
-              <p className="promo-highlight">Get 20% OFF on Your First Order</p>
-              <p>Use code: <span className="promo-code">WELCOME20</span></p>
-              <button 
-                className="promo-button"
-                onClick={handleClosePromo}
-              >
-                Order Now
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
-
-
-      {/* Navigation Bar */}
-      {/* <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
-        </div>
-        <div className="nav-links">
-          <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
-          <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
-          <div className="logo-container cursor-pointer">
-          <Link to="/" >
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
-          </Link>
-          </div>
-          <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
-          <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
-        </div>
-      </nav> */}
       
       <Routes>
         <Route path="/" element={
           <>
-            <HeroSection/>
+            {/* Hero Section - lowest z-index */}
+            <div className="relative" style={{ zIndex: 0 }}>
+              <HeroSection/>
+            </div>
 
-            {/* Custom Hampers Section */}
-            <HamperSection/>
+            {/* Gallery Section - higher z-index */}
+            <section className="gallery-section relative" 
+              style={{ 
+                background: "rgb(259, 0, 117)",
+                zIndex: 1,
+                position: 'relative'
+              }}>
+              <h2 className="text-center text-[90px] font-bold text-pink-200 tracking-wide my-8">
+Our Delicacies!
+</h2>
 
-            {/* Services Section */}
-            <Services/>
 
-            {/* Chefs */}
-
-            {/* Gallery Section */}
-            <section className="gallery-section">
-              <h2 className="gallery-title">Our Delicacies!</h2>
               <div className="gallery-grid">
                 {galleryImages.map((image, index) => (
                   <div 
@@ -475,7 +307,7 @@ function HomePage() {
                   onClick={() => setSelectedImage(null)}
                 >
                   <div className="image-dialog" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex flex-col md:flex-row gap-8 items-center p-6 bg-pink-300/80 backdrop-blur-sm rounded-2xl">
+                    <div className="flex flex-col md:flex-row gap-8 items-center p-6 bg-pink-700/80 backdrop-blur-sm rounded-2xl">
                       <img 
                         src={selectedImage} 
                         alt="Selected gallery image" 
@@ -489,7 +321,7 @@ function HomePage() {
                         <button 
                           onClick={() => {
                             setSelectedImage(null);
-                            navigate('/menuitems');
+                            navigate('/menu');
                           }}
                           className="px-6 py-3 bg-white/20 text-white rounded-full
                             hover:bg-white/30 transform hover:scale-105 transition-all duration-300
@@ -513,61 +345,30 @@ function HomePage() {
               )}
             </section>
 
-        
-
-            {/* Add rain transition between products and chefs sections */}
-            <div className="section-transition">
-              <div className="rain-container">
-                {Array.from({ length: 10 }).map((_, index) => (
-                  <div key={index} className="raindrop" />
-                ))}
-              </div>
+            {/* Hamper Section - higher z-index */}
+            <div className="relative" style={{ zIndex: 1 }}>
+              <HamperSection/>
             </div>
 
-            {/* Chefs Section */}
-            {/* <section className="chefs-section">
-              <div className="section-header">
-                <h1 className="section-title">
-                  Experienced & Most
-                  <br />
-                  Famous Chefs
-                </h1>
-              </div>
+            {/* Services Section - higher z-index */}
+            <div className="relative" style={{ zIndex: 1 }}>
+              <Services/>
+            </div>
 
-              <div className="chefs-carousel relative overflow-x-auto hide-scrollbar">
-                <div 
-                  className="chefs-track inline-flex gap-6 px-4"
-                  style={{ 
-                    minWidth: 'min-content',
-                    scrollBehavior: 'smooth'
-                  }}
-                >
-                  {chefs.map((chef, index) => (
-                    <div key={index} className="chef-card">
-                      <div className="relative rounded-2xl overflow-hidden mb-4 border-2 border-pink-300">
-                        <img 
-                          src={chef.image} 
-                          alt={chef.name} 
-                          className="w-full h-[240px] object-cover"
-                        />
-                      </div>
-                      
-                      <div className="text-center px-3">
-                        <h3 className="text-lg font-serif text-gray-800 mb-1">{chef.name}</h3>
-                        <p className="text-xs font-medium text-pink-600">{chef.designation}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section> */}
 
-            {/* Reviews Section */}
-            <section className="reviews-section bg-gradient-to-br from-pink-50 to-pink-100 py-16">
+            
+
+        
+
+            
+
+            {/* Reviews Section - higher z-index */}
+            <section className="reviews-section relative bg-gradient-to-br from-pink-500 to-pink-100 py-300" 
+              style={{ zIndex: 1 }}>
               <div className="max-w-4xl mx-auto px-6">
                 <h2 className="text-3xl font-bold text-center text-pink-700 mb-12">What Our Customers Say</h2>
                 
-                <div className="bg-white rounded-2xl shadow-lg p-8">
+                <div className="bg-pink-200 rounded-2xl shadow-lg p-8">
                   {reviews.map((review, index) => (
                     <div
                       key={review._id}
@@ -614,10 +415,15 @@ function HomePage() {
         <Route path="/gallery" element={<Gallery />} />
       </Routes>
 
-      <footer className="footer">
+      {/* Footer - highest z-index */}
+      <footer className="footer relative" 
+        style={{
+          background:"rgb(259, 70, 117)",
+          zIndex: 1
+        }}>
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="Bindi's Cupcakery" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Bindi's Cupcakery" />
           </div>
           
           <div className="footer-sections">
@@ -627,7 +433,7 @@ function HomePage() {
               <p>8849130189 - 9978677790</p>
             </div>
             
-            <div className="footer-hours">
+            <div className="footer-hours" >
               <h3>Opening Hours</h3>
               <p>Mon – Sat, 11AM – 7PM</p>
               <p>Sunday: Closed</p>
@@ -655,9 +461,10 @@ function HomePage() {
         </div>
       </footer>
 
-      {/* Scroll to top button */}
+      {/* Scroll to top button - highest z-index */}
       <button 
         className="scroll-to-top"
+        style={{ zIndex: 2 }}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
         ↑

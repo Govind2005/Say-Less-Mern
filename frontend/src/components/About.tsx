@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import './About.css';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
-import { useScrollDirection } from '../hooks/useScrollDirection';
 import ScrollReveal from 'scrollreveal'
 import CreateReview from './AddReview';
 
 function About() {
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
-  const isNavbarVisible = useScrollDirection();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -76,29 +73,6 @@ function About() {
     return () => sr.destroy();
   }, []);
 
-  // Add this useEffect hook for chefs carousel scrolling
-  useEffect(() => {
-    const chefsCarousel = document.querySelector('.about-chefs-carousel');
-    
-    if (chefsCarousel) {
-      const handleWheel = (e: WheelEvent) => {
-        e.preventDefault();
-        const scrollAmount = e.deltaY * 1.5;
-        
-        chefsCarousel.scrollBy({
-          left: scrollAmount,
-          behavior: 'smooth'
-        });
-      };
-
-      chefsCarousel.addEventListener('wheel', handleWheel as EventListener);
-      
-      return () => {
-        chefsCarousel.removeEventListener('wheel', handleWheel as EventListener);
-      };
-    }
-  }, []);
-
   const nextChef = () => {
     setCurrentChefIndex((prev) => 
       prev === chefs.length - 3 ? 0 : prev + 1
@@ -142,23 +116,32 @@ function About() {
   return (
     <div className="app">
       {/* Add Navigation Bar */}
-      <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
-        <div className="nav-links">
-          <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
-          <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
-          <div className="logo-container cursor-pointer">
-          <Link to="/" >
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
-          </Link>
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 w-full z-40 bg-pink-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <a href="/" >
+              <img 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                alt="Bindi's" 
+                className="h-6 sm:h-8 object-contain cursor-pointer" 
+              />
+            </a>
           </div>
-          
-          <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
-          <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
-        </div>
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
+          {/* Mobile menu button */}
+          <button className="md:hidden p-2 text-pink-100 hover:text-pink-200">
+            <span className="sr-only">Open menu</span>
+            ☰
+          </button>
+          {/* Desktop menu */}
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex gap-6 text-white text-lg">
+              <a href="/menu" className="hover:text-pink-200 transition-colors">Menu</a>
+              <a href="/gallery" className="hover:text-pink-200 transition-colors">Gallery</a>
+              <a href="/about" className="hover:text-pink-200 transition-colors">About Us</a>
+              <a href="/admin" className="hover:text-pink-200 transition-colors">Admin</a>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -246,53 +229,45 @@ function About() {
             <br />
             Famous Chefs
           </h1>
+          <div className="carousel-buttons">
+            <button className="carousel-btn prev" onClick={prevChef}>
+              <span>&#8249;</span>
+            </button>
+            <button className="carousel-btn next" onClick={nextChef}>
+              <span>&#8250;</span>
+            </button>
+          </div>
         </div>
 
-        <div className="about-chefs-carousel relative overflow-x-auto hide-scrollbar">
+        <div className="chefs-carousel">
           <div 
-            className="chefs-track inline-flex gap-6 px-4"
+            className="chefs-track" 
             style={{ 
-              minWidth: 'min-content',
-              scrollBehavior: 'smooth'
+              transform: `translateX(-${currentChefIndex * (28 + 3)}%)`,
+              transition: 'transform 0.5s ease-in-out'
             }}
           >
             {chefs.map((chef, index) => (
               <div key={index} className="chef-card">
-                <div className="chef-image-container relative rounded-2xl overflow-hidden mb-4 border-2 border-pink-300">
-                  <img 
-                    src={chef.image} 
-                    alt={chef.name} 
-                    className="w-full h-[240px] object-cover"
-                  />
+                <div className="chef-image-container">
+                  <img src={chef.image} alt={chef.name} />
+                  <div className="chef-overlay"></div>
                 </div>
-                <div className="text-center px-3">
-                  <h3 className="text-lg font-serif text-gray-800 mb-1">{chef.name}</h3>
-                  <p className="text-xs font-medium text-pink-600">{chef.designation}</p>
-                </div>
+                <h3>{chef.name}</h3>
+                <p>{chef.designation}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="review-section bg-gradient-to-br from-pink-50 to-pink-100 py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-pink-700 mb-3">Share Your Experience</h2>
-            <p className="text-pink-500">We'd love to hear about your sweet moments with us!</p>
-          </div>
-          
-          <div className="review-form-container p-8">
-            <CreateReview />
-          </div>
-        </div>
-      </section>
+      <CreateReview/>
 
       {/* Footer Section */}
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="Logo" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Logo" />
           </div>
 
           <div className="footer-sections">
@@ -342,4 +317,3 @@ function About() {
 }
 
 export default About;
-

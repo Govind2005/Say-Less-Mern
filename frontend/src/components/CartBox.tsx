@@ -62,10 +62,10 @@ const CartBox: React.FC = () => {
 
   return (
     <div className='relative z-10 '>
-      <button onClick={toggleCart} className="fixed top-4 right-4 bg-[#FFC978] text-white p-2 rounded-full shadow-md cursor-pointer">
+      <button onClick={toggleCart} className="fixed top-20 right-4 bg-[#FFC978] text-white p-2 rounded-full shadow-md cursor-pointer">
         <FaBagShopping size={24} />
         {cart.length > 0 && (
-          <span className="fixed top-4 right-4 bg-[#D86F45] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
+          <span className="fixed top-20 right-4 bg-[#D86F45] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow">
             {cart.reduce((sum, item) => sum + item.quantity, 0)}
           </span>
         )}

@@ -1,6 +1,12 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HamperSection = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/menu');
+  };
+
   return (
     <div className="relative w-full bg-gray-900 min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-16 flex mr-auto gap-[200px]">
@@ -21,7 +27,10 @@ const HamperSection = () => {
             </p>
             
             <div className="inline-block">
-              <button className="border-2 border-pink-600 text-pink-600 px-12 py-4 rounded-full hover:bg-pink-800 hover:text-gray-900 transition-all duration-300 text-lg">
+              <button 
+                onClick={handleClick}
+                className="border-2 border-pink-600 text-pink-600 px-12 py-4 rounded-full hover:bg-pink-800 hover:text-gray-900 transition-all duration-300 text-lg cursor-pointer"
+              >
                 TREAT YOURSELF TO
               </button>
             </div>
@@ -30,11 +39,14 @@ const HamperSection = () => {
 
         {/* Image Section */}
         <div className="pl-12 -ml-48"> 
-          <div className="rounded-3xl overflow-hidden mr-[100px]"> {/* Updated to 100px spacing for hashtag */}
+          <div 
+            className="rounded-3xl overflow-hidden mr-[100px] cursor-pointer" 
+            onClick={handleClick}
+          > 
             <img 
               src="https://images.unsplash.com/photo-1534432182912-63863115e106?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Luxury Gift Hamper" 
-              className="w-[550px] h-[600px] object-cover rounded-3xl"
+              className="w-[550px] h-[600px] object-cover rounded-3xl hover:scale-105 transition-transform duration-300"
             />
           </div>
         </div>
