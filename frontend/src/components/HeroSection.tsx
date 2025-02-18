@@ -73,7 +73,7 @@ const HeroSection = () => {
 
   // Add navigation handler
   const handleOrderClick = () => {
-    navigate('/menuitems');
+    navigate('/menu');
   };
 
   return (

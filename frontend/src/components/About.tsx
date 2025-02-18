@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import './About.css';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
-import { useScrollDirection } from '../hooks/useScrollDirection';
 import ScrollReveal from 'scrollreveal'
 import CreateReview from './AddReview';
 
 function About() {
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
-  const isNavbarVisible = useScrollDirection();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -119,23 +116,32 @@ function About() {
   return (
     <div className="app">
       {/* Add Navigation Bar */}
-      <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
-        <div className="nav-links">
-          <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
-          <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
-          <div className="logo-container cursor-pointer">
-          <Link to="/" >
-            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
-          </Link>
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 w-full z-40 bg-pink-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <a href="/" >
+              <img 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                alt="Bindi's" 
+                className="h-6 sm:h-8 object-contain cursor-pointer" 
+              />
+            </a>
           </div>
-          
-          <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
-          <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
-        </div>
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
+          {/* Mobile menu button */}
+          <button className="md:hidden p-2 text-pink-100 hover:text-pink-200">
+            <span className="sr-only">Open menu</span>
+            ☰
+          </button>
+          {/* Desktop menu */}
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex gap-6 text-white text-lg">
+              <a href="/menu" className="hover:text-pink-200 transition-colors">Menu</a>
+              <a href="/gallery" className="hover:text-pink-200 transition-colors">Gallery</a>
+              <a href="/about" className="hover:text-pink-200 transition-colors">About Us</a>
+              <a href="/admin" className="hover:text-pink-200 transition-colors">Admin</a>
+            </div>
+          </div>
         </div>
       </nav>
 

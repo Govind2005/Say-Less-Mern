@@ -263,27 +263,6 @@ function HomePage() {
 
   return (
     <div className="app">
-
-
-      {/* Navigation Bar */}
-      {/* <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
-        </div>
-        <div className="nav-links">
-          <Link to="/admin" className={location.pathname === "/" ? "active" : ""}>Admin</Link>
-          <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
-          <div className="logo-container cursor-pointer">
-          <Link to="/" >
-            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
-          </Link>
-          </div>
-          <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
-          <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
-        </div>
-      </nav> */}
       
       <Routes>
         <Route path="/" element={
@@ -342,7 +321,7 @@ Our Delicacies!
                         <button 
                           onClick={() => {
                             setSelectedImage(null);
-                            navigate('/menuitems');
+                            navigate('/menu');
                           }}
                           className="px-6 py-3 bg-white/20 text-white rounded-full
                             hover:bg-white/30 transform hover:scale-105 transition-all duration-300

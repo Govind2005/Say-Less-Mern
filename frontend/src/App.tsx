@@ -1,7 +1,6 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreateItem from "./pages/CreateItem";
-import MenuPage from "./pages/MenuPage";
 import MenuItems from "./pages/MenuItems";
 import CartPage from "./pages/CartPage";
 import AdminPage from "./pages/AdminPage";
@@ -21,8 +20,7 @@ function App() {
         <Route path="*" element={<HomePage />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/about" element={<About />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/menuitems" element={<MenuItems />} />
+        <Route path="/menu" element={<MenuItems />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route 
