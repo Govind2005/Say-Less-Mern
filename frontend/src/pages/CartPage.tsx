@@ -259,6 +259,7 @@ const CartPage = () => {
               </div>
               <div className="flex items-center gap-3">
                 <button
+                  title="Decrease quantity"
                   onClick={() => updateQuantity(item._id, item.quantity - 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
@@ -266,6 +267,7 @@ const CartPage = () => {
                 </button>
                 <span className='px-2'>{item.quantity}</span>
                 <button
+                  title="Increase quantity"
                   onClick={() => updateQuantity(item._id, item.quantity + 1)}
                   className="px-3 py-3 rounded-md bg-[#F4D0D0] hover:bg-[#F1A1A1] cursor-pointer"
                 >
