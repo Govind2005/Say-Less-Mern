@@ -238,40 +238,8 @@
     "status": "created"
   },
   {
-    "order_id": "order_Pwl1yaGLjVZ1MJ",
-    "amount": 100000,
-    "currency": "INR",
-    "status": "created"
-  },
-  {
-    "order_id": "order_PwlTIeowO1aEGY",
-    "amount": 600000,
-    "currency": "INR",
-    "status": "paid",
-    "payment_id": "pay_PwlTWWN2exLiVt"
-  },
-  {
-    "order_id": "order_PwlvCendjM6Zvc",
-    "amount": 600000,
-    "currency": "INR",
-    "status": "created"
-  },
-  {
-    "order_id": "order_PwpnSUzI9m3sgj",
-    "amount": 135000,
-    "currency": "INR",
-    "status": "paid",
-    "payment_id": "pay_PwpncQGrsa1U8T"
-  },
-  {
-    "order_id": "order_PwpoTgbdeCIVst",
-    "amount": 135000,
-    "currency": "INR",
-    "status": "created"
-  },
-  {
-    "order_id": "order_PwpowK3WIU2Bir",
-    "amount": 135000,
+    "order_id": "order_PwnaLw4bvk99cx",
+    "amount": 106000,
     "currency": "INR",
     "status": "created"
   }

@@ -6,10 +6,13 @@ import Gallery from '../components/Gallery.tsx';
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { useScrollDirection } from '../hooks/useScrollDirection';
 import ScrollReveal from 'scrollreveal';
+import HeroSection from '../components/HeroSection.tsx';
+import HamperSection from '../components/HamperSection.tsx';
+import Services from '../components/Services.tsx';
 
 function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
+  
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
@@ -44,27 +47,27 @@ function HomePage() {
     {
       image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275127/Cupcakee_bqaymf.jpg',
       title: 'Eggless Delight',
-      description: 'Indulge in Rich, Moist, and Flavorful treats—100% Eggless, 100% Delicious, and crafted for Pure guilt-free indulgence in every bite!'
+      description: 'Indulge in rich, moist treats—100% Eggless and delicious for pure guilt-free indulgence!'
     },
     {
       image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275046/Brownie_5_ujeowd.jpg',
       title: 'Variety Assured',
-      description: 'From Fudgy Brownies to Creamy Ice Creams and Cakes, discover endless Flavors and Treats made for every Sweet Craving!'
+      description: 'From Fudgy Brownies to Creamy Ice Creams, discover flavors for every craving!'
     },
     {
       image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275046/Brownie_2_gzgbwa.jpg',
       title: 'Handcrafted Love',
-      description: 'Every Treat is made in small batches with Precision, and the Finest ingredients, ensuring Homemade Goodness in every bite!'
+      description: 'Every treat is made in small batches with precision and finest ingredients for homemade goodness!'
     },
     {
       image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739275047/Brownie_Tub_3_m11kmr.jpg',
       title: 'Quality Maintain',
-      description: 'At Bindi\'s Cupcakery, we USE ONLY THE FINEST INGREDIENTS, ensuring our desserts are 100% EGGLESS, PRESERVATIVE-FREE, AND FRESHLY MADE.'
+      description: 'Using only the finest ingredients, ensuring 100% eggless and preservative-free desserts.'
     },
     {
       image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739242354/cld-sample-4.jpg',
       title: 'Custom Orders',
-      description: 'We specialize in creating personalized desserts for your special occasions. From birthday cakes to wedding treats, we make your sweet dreams come true!'
+      description: 'Personalized desserts for your special occasions, making your sweet dreams come true!'
     }
   ];
 
@@ -76,7 +79,7 @@ function HomePage() {
     },
     {
       image: 'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274473/222_u7w8gn.jpg',
-      title: 'Customer Favorite',
+      title: 'Top Favorite',
       name: 'Chocolate Donut'
     },
     {
@@ -137,11 +140,8 @@ function HomePage() {
       if (response.ok) {
         const data = await response.json();
 
-          // Filter out reviews that are not visible
-          const visibleReviews = data.data.filter((review: any) => review.visible); 
-
         // Add random image to each review
-        const reviewsWithImages = visibleReviews.map((review: any) => ({
+        const reviewsWithImages = data.data.map((review: any) => ({
           ...review,
           imageUrl: generateRandomImage() // Add the random image URL to each review
         }));
@@ -196,30 +196,6 @@ function HomePage() {
   const prevService = () => {
     setCurrentServiceIndex((prev) => 
       prev === 0 ? services.length - 3 : prev - 1
-    );
-  };
-
-  const nextProduct = () => {
-    setCurrentProductIndex((prev) => 
-      prev === products.length - 3 ? 0 : prev + 1
-    );
-  };
-
-  const prevProduct = () => {
-    setCurrentProductIndex((prev) => 
-      prev === 0 ? products.length - 3 : prev - 1
-    );
-  };
-
-  const nextChef = () => {
-    setCurrentChefIndex((prev) => 
-      prev === chefs.length - 3 ? 0 : prev + 1
-    );
-  };
-
-  const prevChef = () => {
-    setCurrentChefIndex((prev) => 
-      prev === 0 ? chefs.length - 3 : prev - 1
     );
   };
 
@@ -342,10 +318,80 @@ function HomePage() {
     setShowPromo(false);
   };
 
+  // Update the useEffect hook with faster scroll speed
+  useEffect(() => {
+    const servicesCarousel = document.querySelector('.services-carousel');
+    
+    if (servicesCarousel) {
+      const handleWheel = (e: WheelEvent) => {
+        e.preventDefault();
+        
+        // Increase scroll speed by using a larger multiplier (changed from 0.5 to 1.5)
+        const scrollAmount = e.deltaY * 1.5;
+        
+        servicesCarousel.scrollBy({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
+      };
+
+      servicesCarousel.addEventListener('wheel', handleWheel as EventListener);
+      
+      return () => {
+        servicesCarousel.removeEventListener('wheel', handleWheel as EventListener);
+      };
+    }
+  }, []);
+
+  // Add these useEffect hooks after the existing services scroll hook
+  useEffect(() => {
+    const productsCarousel = document.querySelector('.products-carousel');
+    
+    if (productsCarousel) {
+      const handleWheel = (e: WheelEvent) => {
+        e.preventDefault();
+        const scrollAmount = e.deltaY * 1.5;
+        
+        productsCarousel.scrollBy({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
+      };
+
+      productsCarousel.addEventListener('wheel', handleWheel as EventListener);
+      
+      return () => {
+        productsCarousel.removeEventListener('wheel', handleWheel as EventListener);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    const chefsCarousel = document.querySelector('.chefs-carousel');
+    
+    if (chefsCarousel) {
+      const handleWheel = (e: WheelEvent) => {
+        e.preventDefault();
+        const scrollAmount = e.deltaY * 1.5;
+        
+        chefsCarousel.scrollBy({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
+      };
+
+      chefsCarousel.addEventListener('wheel', handleWheel as EventListener);
+      
+      return () => {
+        chefsCarousel.removeEventListener('wheel', handleWheel as EventListener);
+      };
+    }
+  }, []);
+
   return (
     <div className="app">
       {/* Promotional Popup */}
-      {showPromo && (
+      {/* {showPromo && (
         <div className="promo-overlay" onClick={handleClosePromo}>
           <div className="promo-popup" onClick={(e) => e.stopPropagation()}>
             <button 
@@ -367,11 +413,11 @@ function HomePage() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
 
       {/* Navigation Bar */}
-      <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
+      {/* <nav className={`navbar ${!isNavbarVisible ? 'hidden' : ''}`}>
         <div className="rain-container">
           {Array.from({ length: 10 }).map((_, index) => (
             <div key={index} className="raindrop" />
@@ -382,179 +428,26 @@ function HomePage() {
           <Link to="/about" className={location.pathname === "/about" ? "active" : ""}>About</Link>
           <div className="logo-container cursor-pointer">
           <Link to="/" >
-            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
+            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="logo" />
           </Link>
           </div>
           <Link to="/menu" className={location.pathname === "/menu" ? "active" : ""}>Product</Link>
           <Link to="/gallery" className={location.pathname === "/gallery" ? "active" : ""}>Gallery</Link>
         </div>
-      </nav>
-
+      </nav> */}
+      
       <Routes>
         <Route path="/" element={
           <>
-            {/* Hero Section with Pagination */}
-            <div className="slider">
-              {slides.map((slide, index) => (
-                <img 
-                  key={index}
-                  src={slide.image} 
-                  alt={`slide-${index}`} 
-                  className={`hero-image ${index === currentSlide ? 'active' : ''}`}
-                />
-              ))}
-              
-              <button className="arrow-btn prev" onClick={prevSlide}>
-                <span>&#8249;</span>
-              </button>
-              <button className="arrow-btn next" onClick={nextSlide}>
-                <span>&#8250;</span>
-              </button>
-
-              <section className="hero">
-                <div className={`hero-content ${currentSlide === 1 ? 'slide-in' : ''}`}>
-                  <h2>{slides[currentSlide].tagline}</h2>
-                  <h1>{slides[currentSlide].heading.split('\n').map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i === 0 && <br />}
-                    </span>
-                  ))}</h1>
-                  <button className="learn-more">Learn More</button>
-                </div>
-              </section>
-            </div>
-
-            {/* About Section */}
-            <section className="about-section">
-              <div className="about-decoration"></div>
-              <div className="about-rain-container">
-                {Array.from({ length: 10 }).map((_, index) => (
-                  <div key={index} className="about-raindrop" />
-                ))}
-              </div>
-              <h1 className="section-title">Where Flavor Meets Love!</h1>
-              <div className="about-content">
-                <div className="about-left">
-                  <h2>Why Us?</h2>
-                  <p className="main-text">
-                    We create Experiences! Every dessert is Handcrafted with love, 
-                    using 100% VEGETERIAN, EGGLESS, and Preservative-FREE Ingredients.
-                  </p>
-                  <ul className="features-list">
-                    <li>Premium Quality Ingredients</li>
-                    <li>100% Eggless Recipes</li>
-                    <li>Fresh Daily Preparations</li>
-                  </ul>
-                  <button className="learn-more light">Learn More</button>
-                </div>
-
-                <div className="about-center">
-                  <div className="image-container">
-                    <div className="image-frame"></div>
-                    <div className="flower-decoration"></div>
-                    <div className="flower-decoration"></div>
-                    <div className="flower-decoration"></div>
-                    <div className="flower-decoration"></div>
-                    <img 
-                      src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274920/about_p50wfw.jpg" 
-                      alt="Featured dessert" 
-                    />
-                  </div>
-                </div>
-
-                <div className="about-right">
-                  <h2>Our Features</h2>
-                  <p className="main-text">
-                    We don't just bake treats—we create personalized experiences 
-                    that bring joy to every celebration and special moment.
-                  </p>
-                  <ul className="features-list">
-                    <li>Wholesome & Pure</li>
-                    <li>Custom Hampers</li>
-                    <li>Drool-Worthy Aesthetics</li>
-                  </ul>
-                  <button className="learn-more pink">Learn More</button>
-                </div>
-              </div>
-            </section>
-
-            {/* Subtle transition with rain */}
-            <div className="section-transition">
-              <div className="rain-container">
-                {Array.from({ length: 10 }).map((_, index) => (
-                  <div key={index} className="raindrop" />
-                ))}
-              </div>
-            </div>
+            <HeroSection/>
 
             {/* Custom Hampers Section */}
-            <section className="hampers-section">
-              <div className="hampers-content">
-                <div className="hampers-image" onClick={() => window.open('https://www.youtube.com/watch?v=YOUR_VIDEO_ID', '_blank')}>
-                  <img 
-                    src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274987/Truffle_Balls_b5qsk5.jpg" 
-                    alt="Custom Hampers" 
-                  />
-                  <div className="play-button">
-                    <span>▶</span>
-                  </div>
-                </div>
-                <div className="hampers-text">
-                  <h2>Custom Hampers</h2>
-                  <p>
-                    Celebrate every occasion with a touch of sweetness! Our CUSTOM 
-                    DESSERT HAMPERS are designed to make your special moments 
-                    even more delightful—whether it's a birthday, wedding, or festive 
-                    gathering. Because the best memories are made with LOVE, 
-                    LAUGHTER, AND A BOX FULL OF SWEETNESS!
-                  </p>
-                  <button className="learn-more">
-                    <span>Learn More</span>
-                  </button>
-                </div>
-              </div>
-            </section>
+            <HamperSection/>
 
             {/* Services Section */}
-            <section className="services-section">
-              <div className="section-header">
-                <h1 className="section-title">
-                  Best Services We Provide
-                  <br />
-                  For Our Clients
-                </h1>
-                <div className="carousel-buttons">
-                  <button className="carousel-btn prev" onClick={prevService}>
-                    <span>&#8249;</span>
-                  </button>
-                  <button className="carousel-btn next" onClick={nextService}>
-                    <span>&#8250;</span>
-                  </button>
-                </div>
-              </div>
+            <Services/>
 
-              <div className="services-carousel">
-                <div 
-                  className="services-track" 
-                  style={{ 
-                    transform: `translateX(-${currentServiceIndex * (28 + 3)}%)`,
-                    transition: 'transform 0.5s ease-in-out'
-                  }}
-                >
-                  {services.map((service, index) => (
-                    <div key={index} className="service-card">
-                      <div className="service-image-container">
-                        <img src={service.image} alt={service.title} />
-                      </div>
-                      <h3>{service.title}</h3>
-                      <p>{service.description}</p>
-                      
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
+            {/* Chefs */}
 
             {/* Gallery Section */}
             <section className="gallery-section">
@@ -620,56 +513,7 @@ function HomePage() {
               )}
             </section>
 
-            {/* Products Section - Moved below gallery */}
-            <section className="products-section">
-              <div className="section-header">
-                <h1 className="section-title">
-                  Delicious Cup Cakes Made
-                  <br />
-                  With Love!
-                </h1>
-                <div className="carousel-buttons">
-                  <button className="carousel-btn prev" onClick={prevProduct}>
-                    <span>&#8249;</span>
-                  </button>
-                  <button className="carousel-btn next" onClick={nextProduct}>
-                    <span>&#8250;</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="products-carousel">
-                <div 
-                  className="products-track" 
-                  style={{ 
-                    transform: `translateX(-${currentProductIndex * 40}%)`,
-                    transition: 'transform 0.5s ease-in-out'
-                  }}
-                >
-                  {products.map((product, index) => (
-                    <div key={index} className="product-card">
-                      <div className="product-image">
-                        <img src={product.image} alt={product.name} />
-                      </div>
-                      <h3>{product.title}</h3>
-                      <p>{product.name}</p>
-                    </div>
-                  ))}
-                  
-                  {/* Add the Season Seller card */}
-                  <div className="product-card">
-                    <div className="product-image">
-                      <img 
-                        src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739242354/samples/dessert-on-a-plate.jpg" 
-                        alt="Season Seller" 
-                      />
-                    </div>
-                    <h3>Season Seller</h3>
-                    <p>Special Dessert</p>
-                  </div>
-                </div>
-              </div>
-            </section>
+        
 
             {/* Add rain transition between products and chefs sections */}
             <div className="section-transition">
@@ -681,44 +525,42 @@ function HomePage() {
             </div>
 
             {/* Chefs Section */}
-            <section className="chefs-section">
+            {/* <section className="chefs-section">
               <div className="section-header">
                 <h1 className="section-title">
                   Experienced & Most
                   <br />
                   Famous Chefs
                 </h1>
-                <div className="carousel-buttons">
-                  <button className="carousel-btn prev" onClick={prevChef}>
-                    <span>&#8249;</span>
-                  </button>
-                  <button className="carousel-btn next" onClick={nextChef}>
-                    <span>&#8250;</span>
-                  </button>
-                </div>
               </div>
 
-              <div className="chefs-carousel">
+              <div className="chefs-carousel relative overflow-x-auto hide-scrollbar">
                 <div 
-                  className="chefs-track" 
+                  className="chefs-track inline-flex gap-6 px-4"
                   style={{ 
-                    transform: `translateX(-${currentChefIndex * (28 + 3)}%)`,
-                    transition: 'transform 0.5s ease-in-out'
+                    minWidth: 'min-content',
+                    scrollBehavior: 'smooth'
                   }}
                 >
                   {chefs.map((chef, index) => (
                     <div key={index} className="chef-card">
-                      <div className="chef-image-container">
-                        <img src={chef.image} alt={chef.name} />
-                        <div className="chef-overlay"></div>
+                      <div className="relative rounded-2xl overflow-hidden mb-4 border-2 border-pink-300">
+                        <img 
+                          src={chef.image} 
+                          alt={chef.name} 
+                          className="w-full h-[240px] object-cover"
+                        />
                       </div>
-                      <h3>{chef.name}</h3>
-                      <p>{chef.designation}</p>
+                      
+                      <div className="text-center px-3">
+                        <h3 className="text-lg font-serif text-gray-800 mb-1">{chef.name}</h3>
+                        <p className="text-xs font-medium text-pink-600">{chef.designation}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
-            </section>
+            </section> */}
 
             {/* Reviews Section */}
             <section className="reviews-section bg-gradient-to-br from-pink-50 to-pink-100 py-16">
@@ -775,7 +617,7 @@ function HomePage() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Bindi's Cupcakery" />
+            <img src="https://res.cloudinary.com/duqllfqxd/image/upload/v1739274748/logo_pzf5wc.png" alt="Bindi's Cupcakery" />
           </div>
           
           <div className="footer-sections">
