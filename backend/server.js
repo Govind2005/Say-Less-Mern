@@ -10,7 +10,7 @@ import bodyParser from "body-parser";
 import path from "path";
 import Razorpay from "razorpay";
 import fs from "fs";
-import { v2 as cloudinary } from 'cloudinary';
+
 import { fileURLToPath } from "url";
 
 const validateWebhookSignature = Razorpay.validateWebhookSignature;
@@ -238,3 +238,7 @@ app.post("/verify-otp", (req, res) => {
     otpStore.delete(phone); // Remove OTP after successful verification
     return res.json({ message: "OTP verified successfully" });
 });
+
+// Cloudinary SetUp
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));

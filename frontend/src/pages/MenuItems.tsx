@@ -274,38 +274,92 @@ const MenuPage = () => {
                         fontFamily: '"Bodoni Moda", serif',
                         justifyContent: "flex-end",
                         padding: "15px",
-                        color: "#fff"
+                        color: "#fff",
                       }}
-                    >
-                      <h2 style={{ color: "white", fontSize: "1.6rem", fontWeight: "bold", fontFamily: '"Bodoni Moda", serif', marginBottom: "5px" }}>
-                        {item.name}
-                      </h2>
-                      <p style={{ fontSize: "1rem", fontFamily: '"Bodoni Moda", serif', fontWeight: "500" }}>Type: {item.type}</p>
-                      <p style={{ fontFamily: '"Bodoni Moda", serif', fontSize: "1rem" }}>
-                        Price: <span style={{ fontFamily: '"Bodoni Moda", serif', fontWeight: "bold" }}>${item.price}</span>
-                      </p>
-                      <button
-                        style={{
-                          background: "transparent",
-                          color: "white",
-                          fontSize: "1rem",
-                          padding: "10px 25px",
-                          border: "2px solid white",
-                          fontFamily: '"Bodoni Moda", serif',
-                          borderRadius: "5px",
-                          // cursor: "pointer",
-                          fontWeight: "bold",
-                          textTransform: "uppercase",
-                          transition: "background 0.3s ease, color 0.3s ease",
-                          cursor: item.available ? 'pointer' : 'not-allowed'
-                        
-                        }}
-                        onClick={() => item.available && handleAddToCart(item)}
-                        disabled={!item.available}
-                      >
-                        {item.available ? "Add to Cart" : "Out of Stock"}
-                      </button>
-                    </div>
+>
+  {/* Greyish blur overlay on the image when not available */}
+  {!item.available && (
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backdropFilter: "blur(5px)",
+        WebkitBackdropFilter: "blur(5px)",
+        backgroundColor: "rgba(128, 128, 128, 0.4)", // greyish tint
+        zIndex: 5,
+      }}
+    ></div>
+  )}
+
+  <h2
+    style={{
+      color: "white",
+      fontSize: "1.6rem",
+      fontWeight: "bold",
+      fontFamily: '"Bodoni Moda", serif',
+      marginBottom: "5px",
+    }}
+  >
+    {item.name}
+  </h2>
+  <p
+    style={{
+      fontSize: "1rem",
+      fontFamily: '"Bodoni Moda", serif',
+      fontWeight: "500",
+    }}
+  >
+    Type: {item.type}
+  </p>
+  <p style={{ fontFamily: '"Bodoni Moda", serif', fontSize: "1rem" }}>
+    Price:{" "}
+    <span style={{ fontFamily: '"Bodoni Moda", serif', fontWeight: "bold" }}>
+      ${item.price}
+    </span>
+  </p>
+  <button
+    style={{
+      background: "transparent",
+      color: "white",
+      fontSize: "1rem",
+      padding: "10px 25px",
+      border: "2px solid white",
+      fontFamily: '"Bodoni Moda", serif',
+      borderRadius: "5px",
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      transition: "background 0.3s ease, color 0.3s ease",
+      cursor: item.available ? "pointer" : "not-allowed",
+    }}
+    onClick={() => item.available && handleAddToCart(item)}
+    disabled={!item.available}
+  >
+    {item.available ? "Add to Cart" : "Out of Stock"}
+  </button>
+
+  {/* One-line Out of Stock banner centered in the image */}
+  {!item.available && (
+    <div
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        color: "white",
+        fontSize: "1.8rem",
+        fontFamily: '"Bodoni Moda", serif',
+        textTransform: "uppercase",
+        zIndex: 10,
+      }}
+    >
+      Out of Stock
+    </div>
+  )}
+</div>
+
                   </div>
                 </>
               );

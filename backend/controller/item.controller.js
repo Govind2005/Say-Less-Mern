@@ -1,5 +1,6 @@
 import Item from "../models/item.js";
 import mongoose from "mongoose";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const getItems = async (req, res) => {
   try {
@@ -24,13 +25,28 @@ const { id } = req.params;
 
 export const createItem = async (req, res) => {
   const item = req.body;
-  const newItem = new Item(item);
+  console.log(req.body);
   try {
-    await newItem.save();
-    res.status(201).json({ success: true, data: newItem });
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    
+    const image_url = req.body.image_url;
+      console.log("Received image payload size:", image_url.length);
+        const cloudinary_res = await cloudinary.uploader.upload(image_url, {
+            folder: "Bindi Pics",
+        });
+    const image_link = cloudinary_res.secure_url;
+      console.log(cloudinary_res);
+  item.image = image_link;
+  const newItem = new Item(item);
+  await newItem.save();
+      return res.status(201).json({success: true, data: newItem, message: "Uploading image successfully"})
   } catch (error) {
     console.log("error: " + error.message);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: "Uploading image failed" });
   }
 };
 export const updateItem = async (req, res) => {

@@ -24,14 +24,17 @@ const CreateItem = () => {
         price:0,
         available:""
     });
-    const handleAddItem = async () => {
+    const [preview, SetPreview] = useState("");
+    const handleAddItem = async (e:any) => {
+        e.preventDefault();
+        if (!preview) return;
         try {
             const response = await fetch('http://localhost:4000/api/item', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newItem)
+                body: JSON.stringify({...newItem, image_url: preview })
             });
 
             if (response.ok) {
@@ -53,7 +56,23 @@ const CreateItem = () => {
             console.error('Error creating item:', error);
         }
     };
-
+    const handleFileUpload = (e: any) => {
+        const file = e.target.files[0];
+        if (!file) return;
+      
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          const result = reader.result;
+          if (result && typeof result === "string") {
+            SetPreview(result);
+          }
+        };
+        reader.readAsDataURL(file);
+      };
+      
+      function refreshPage() {
+        window.location.reload();
+      }
     return (
         <>
         <AdminNavbar/>
@@ -81,15 +100,16 @@ const CreateItem = () => {
             onChange={(e) => setNewItem({ ...newItem, type: e.target.value })}
             className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        
-        <input 
-            type="text"
-            placeholder="Image Link"
-            name="image"
-            value={newItem.image}
-            onChange={(e) => setNewItem({ ...newItem, image: e.target.value })}
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div>
+            <input 
+                type="file"
+                placeholder="Add Your File"
+                name="image"
+                onChange={(e) => { handleFileUpload(e); setNewItem({ ...newItem, image: e.target.value }) }}
+                className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+                        <img src={ preview } />        
+        </div>
         
         <input 
             type="number"
@@ -111,7 +131,7 @@ const CreateItem = () => {
         />
         
         <button 
-            onClick={handleAddItem}
+            onClick={(e) => { handleAddItem(e); refreshPage(); }}
             className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300 mb-4"
         >
             <h2 className="font-bold text-lg">Add Item</h2>
