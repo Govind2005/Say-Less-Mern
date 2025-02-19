@@ -203,8 +203,59 @@ const CartPage = () => {
     paymentHandler;
   };
 
-  
-  
+  const payLater = async () => {
+    try {
+      // Set paid to false for pickup orders
+      setPaid(false);
+
+      // Prepare order data
+      const orderData = {
+        name,
+        phoneNumber,
+        items: cartItems,
+        total,
+        orderDate,
+        paid: false // Use false directly since state update might not be immediate
+      };
+
+      // Save to database
+      const dbResponse = await fetch('http://localhost:4000/api/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const dbData = await dbResponse.json();
+      
+      if (dbData.success) {
+        setMessageStatus('Order saved successfully!');
+        
+        // Create WhatsApp message
+        let message = "🎂 *New Order:*\n\n";
+        cartItems.forEach(item => {
+          message += `*${item.name}* x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}\n`;
+          if (item.special) message += `Special: ${item.special}\n`;
+        });
+        message += "\nName: " + name;
+        message += "\nNumber: " + phoneNumber;
+        message += `\nTotal: ₹${total.toFixed(2)}`;
+        message += "\nPayment: On Pickup";
+        
+        // Encode the message for URL
+        const encodedMessage = encodeURIComponent(message);
+        
+        // Open WhatsApp with the message
+        window.open(`https://wa.me/919119682899?text=${encodedMessage}`, '_blank');
+      } else {
+        setMessageStatus('Failed to save order to database.');
+      }
+    } catch (error) {
+      console.error(error);
+      setMessageStatus('Error occurred while saving order.');
+    }
+  };
 
   return (
     <>
@@ -339,7 +390,6 @@ const CartPage = () => {
               <div className="flex gap-4">
                 <button
                   onClick={async(e) => {
-                    // Set paid to true for online payment
                     setPaid(true);
                     handleButtonClick(); 
                     paymentHandler(e);
@@ -351,59 +401,7 @@ const CartPage = () => {
                   Pay Now
                 </button>
                 <button
-                  onClick={async () => {
-                    try {
-                      // Set paid to false for pickup orders
-                      setPaid(false);
-
-                      // Prepare order data
-                      const orderData = {
-                        name,
-                        phoneNumber,
-                        items: cartItems,
-                        total,
-                        orderDate,
-                        paid: false // Use false directly since state update might not be immediate
-                      };
-
-                      // Save to database
-                      const dbResponse = await fetch('http://localhost:4000/api/order', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(orderData),
-                      });
-
-                      const dbData = await dbResponse.json();
-                      
-                      if (dbData.success) {
-                        setMessageStatus('Order saved successfully!');
-                        
-                        // Create WhatsApp message
-                        let message = "🎂 *New Order:*\n\n";
-                        cartItems.forEach(item => {
-                          message += `*${item.name}* x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}\n`;
-                          if (item.special) message += `Special: ${item.special}\n`;
-                        });
-                        message += "\nName: " + name;
-                        message += "\nNumber: " + phoneNumber;
-                        message += `\nTotal: ₹${total.toFixed(2)}`;
-                        message += "\nPayment: On Pickup";
-                        
-                        // Encode the message for URL
-                        const encodedMessage = encodeURIComponent(message);
-                        
-                        // Open WhatsApp with the message
-                        window.open(`https://wa.me/919119682899?text=${encodedMessage}`, '_blank');
-                      } else {
-                        setMessageStatus('Failed to save order to database.');
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      setMessageStatus('Error occurred while saving order.');
-                    }
-                  }}
+                  onClick={payLater}
                   disabled={!(name && phoneNumber)}
                   className="px-6 py-3 rounded-lg border-2 border-[#7A3E3E] text-[#7A3E3E] text-lg disabled:bg-gray-400 disabled:border-gray-400 disabled:text-gray-600 hover:bg-[#7A3E3E] hover:text-white transition-colors"
                   title="Contact via WhatsApp for pickup order"
@@ -417,7 +415,67 @@ const CartPage = () => {
       )}
       <p className="mt-5 text-center">{messageStatus}</p>
       </div>
-      
+      <footer className="w-full bg-[#FF4D8D] text-white py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Logo Section */}
+          <div className="flex justify-center mb-16">
+            <div className="w-[200px] bg-[#FFE0E9] p-4 rounded-lg">
+              <img 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                alt="Bindi's Cupcakery"
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            {/* Get In Touch */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Get In Touch
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
+              <p>Parle Point, Surat, Gujarat</p>
+              <p>8849130189 - 9978677790</p>
+            </div>
+
+            {/* Opening Hours */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Opening Hours
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
+              <p>Mon – Sat, 11AM – 7PM</p>
+              <p>Sunday: Closed</p>
+            </div>
+
+            {/* Follow Us */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Follow Us
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
+              <div className="flex justify-center gap-6">
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
+                  <FaFacebookF />
+                </a>
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
+                  <FaInstagram />
+                </a>
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
+                  <FaYoutube />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-center mt-16 pt-8 border-t border-pink-400">
+            <p>© Domain. All Rights Reserved. Designed by Bindi's Cupcakery</p>
+          </div>
+        </div>
+      </footer>
       </>
   );
 };
