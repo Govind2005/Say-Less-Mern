@@ -7,25 +7,29 @@ const Services = () => {
 
     useEffect(() => {
         const container = containerRef.current;
-        if (container) {
-            const preventScroll = (e: WheelEvent) => {
-                e.preventDefault();
+        const scrollContainer = scrollRef.current;
+
+        if (container && scrollContainer) {
+            const handleWheel = (e: WheelEvent) => {
+                // Get the element that the mouse is currently over
+                const target = e.target as Node;
+                
+                // Check if the mouse is over the scrolling container or its children
+                if (scrollContainer.contains(target)) {
+                    e.preventDefault();
+                    scrollContainer.scrollLeft += e.deltaY;
+                }
+                // If outside, let the default vertical scroll happen
             };
             
-            container.addEventListener('wheel', preventScroll, { passive: false });
+            // Add the wheel event listener to the document
+            container.addEventListener('wheel', handleWheel, { passive: false });
             
             return () => {
-                container.removeEventListener('wheel', preventScroll);
+                container.removeEventListener('wheel', handleWheel);
             };
         }
     }, []);
-
-    const handleWheel = (e: React.WheelEvent) => {
-        e.preventDefault();
-        if (scrollRef.current) {
-            scrollRef.current.scrollLeft += e.deltaY;
-        }
-    };
 
     const services = [
         {
@@ -72,7 +76,6 @@ const Services = () => {
                 {/* Services Cards Container */}
                 <div 
                     ref={scrollRef}
-                    onWheel={handleWheel}
                     className="relative overflow-hidden"
                 >
                     <div className="flex gap-8 w-max px-4">

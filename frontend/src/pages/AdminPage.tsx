@@ -58,11 +58,10 @@ const AdminPage = () => {
           <h2 className="text-2xl font-semibold text-pink-700 mb-6 text-center">Bakery Information</h2>
           <Card className="p-8 bg-white rounded-xl shadow-lg">
             <div className="grid gap-6 md:grid-cols-2">
-              {[{ icon: Coffee, label: 'Bakery Name', value: 'Sweet Treats Bakery' },
-                { icon: Mail, label: 'Email', value: 'sweettreats@example.com' },
-                { icon: Phone, label: 'Contact', value: '+91 9876543210' },
-                { icon: MapPin, label: 'Location', value: 'Baker Street, Bangalore' },
-                { icon: Clock, label: 'Serving Since', value: '1/5/2022' }
+              {[{ icon: Coffee, label: 'Bakery Name', value: "Bindi's Cupcakery" },
+                { icon: Mail, label: 'Instagram', value: '@bindis_cupcakery' },
+                { icon: Phone, label: 'Contact', value: '9978677790' },
+                { icon: MapPin, label: 'Location', value: 'Cloud kitchen in parle point , surat' },
               ].map((info, index) => (
                 <div key={index} className="flex items-center gap-4 bg-pink-50 p-4 rounded-lg">
                   <info.icon className="h-5 w-5 text-pink-600" />
