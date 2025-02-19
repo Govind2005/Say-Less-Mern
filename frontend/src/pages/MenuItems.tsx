@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import CartBox from "../components/CartBox";
 import toast from "react-hot-toast";
 import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
+import ScrollReveal from 'scrollreveal';
 
 // interface CartItem {
 //   _id: string;
@@ -12,6 +14,8 @@ import { FaSearch, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 //   special?: string;  // Optional special instructions
 //   customize?: string; // Optional customization
 // }
+// Footer
+
 const MenuPage = () => {
   const [items, setItems] = useState<{ _id: string; image: string; name: string; type: string; price: number; available: boolean; special?: string }[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +26,7 @@ const MenuPage = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [specialHampers, setSpecialHampers] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20; // Number of items per page// State for special hampers filter
+  const itemsPerPage = 15; // Number of items per page// State for special hampers filter
 
   useEffect(() => {
     fetchItems();
@@ -32,36 +36,56 @@ const MenuPage = () => {
     document.head.appendChild(link);
   }, []);
 
-    const fetchItems = async () => {
-        try {
-            const response = await fetch('http://localhost:4000/api/item');
-            if (response.ok) {
-                const data = await response.json();
-                setItems(data.data);
-                setLoading(false);
-            } else {
-                setError('Failed to fetch items');
-                setLoading(false);
-            }
-        } catch (error : unknown) {
-            setError('Error fetching items: ' + (error as Error).message);
+  const fetchItems = async () => {
+    try {
+        const response = await fetch('http://localhost:4000/api/item');
+        if (response.ok) {
+            const data = await response.json();
+            setItems(data.data);
+            setLoading(false);
+        } else {
+            setError('Failed to fetch items');
             setLoading(false);
         }
-    };
-    useEffect(() => {
-      const handler = setTimeout(() => {
+    } catch (error : unknown) {
+        setError('Error fetching items: ' + (error as Error).message);
+        setLoading(false);
+    }
+};
+
+useEffect(() => {
+    const handler = setTimeout(() => {
         setDebouncedSearch(searchTerm);
-      }, 500);
-      return () => clearTimeout(handler); // Cleanup on unmount or new input
-  }, [searchTerm]);
-    // Filtered Items based on category selection
-    const filteredItems = items.filter(
-      (item) =>
+        setCurrentPage(1); // Reset to first page when searching
+    }, 500);
+    return () => clearTimeout(handler);
+}, [searchTerm]);
+
+// Filtered Items based on category selection
+const filteredItems = items.filter(
+    (item) =>
         (category === "All" || item.type.toLowerCase() === category.toLowerCase()) &&
         (debouncedSearch === "" || item.name.toLowerCase().includes(debouncedSearch.toLowerCase())) &&
         (specialHampers === "All" || item.type === specialHampers)
-    );
+);
 
+const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+  
+const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+};
+
+const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+};
+
+if (loading) return <div>Loading...</div>;
+if (error) return <div>Error: {error}</div>;
+
+  
     const handleAddToCart = (item: any) => {
       const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
       const existingItemIndex = existingCart.findIndex((cartItem: any) => cartItem._id === item._id);
@@ -105,22 +129,9 @@ const MenuPage = () => {
       localStorage.setItem('cartCount', totalItems.toString());
       console.log('Added to cart:', item.name);
     };
-  
-  
-    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
-    const nextPage = () => {
-      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
     
-    const prevPage = () => {
-      if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+  
+    
 
   return (
     <>
@@ -230,154 +241,145 @@ const MenuPage = () => {
 
 </div>
 
-            {/* Items Grid */}
-            <div 
-              style={{ 
-                display: "grid", 
-                gridTemplateColumns: "repeat(auto-fill, minmax(400px, 2fr))", // Fewer columns
-                gridAutoRows: "10px", // Bigger row height to make images squarer
-                gap: "25px", 
-                padding: "20px"
+  {/* Items Grid */}
+  <div 
+    style={{ 
+      display: "grid", 
+      gridTemplateColumns: "repeat(auto-fill, minmax(400px, 2fr))", // Fewer columns
+      gridAutoRows: "10px", // Bigger row height to make images squarer
+      gap: "25px", 
+      padding: "20px"
+    }}
+  >
+  {currentItems.length > 0 ? (
+    currentItems.map((item) => {
+      const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
+      
+      return (
+        <>
+          <div
+            key={item._id}
+            style={{
+              position: "relative",
+              // borderRadius: "30px",
+              overflow: "hidden",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+              transition: "transform 0.3s ease-in-out",
+              fontFamily: '"Bodoni Moda", serif',
+              cursor: "pointer",
+              gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
+            onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+          >
+            <img
+              src={item.image}
+              alt={item.name}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                transition: "opacity 0.3s ease"
               }}
-        >
-          {currentItems.length > 0 ? (
-            currentItems.map((item) => {
-              const randomHeight = Math.floor(Math.random() * 200) + 180; // 180px - 380px
-              
-              return (
-                <>
-                  <div
-                    key={item._id}
-                    style={{
-                      position: "relative",
-                      // borderRadius: "30px",
-                      overflow: "hidden",
-                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-                      transition: "transform 0.3s ease-in-out",
-                      fontFamily: '"Bodoni Moda", serif',
-                      cursor: "pointer",
-                      gridRowEnd: `span ${Math.floor(randomHeight / 15)}` // Adjusted row span
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.03)"}
-                    onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        transition: "opacity 0.3s ease"
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        bottom: "0",
-                        left: "0",
-                        width: "100%",
-                        height: "100%",
-                        background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
-                        display: "flex",
-                        flexDirection: "column",
-                        fontFamily: '"Bodoni Moda", serif',
-                        justifyContent: "flex-end",
-                        padding: "15px",
-                        color: "#fff",
-                      }}
->
-  {/* Greyish blur overlay on the image when not available */}
-  {!item.available && (
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backdropFilter: "blur(5px)",
-        WebkitBackdropFilter: "blur(5px)",
-        backgroundColor: "rgba(128, 128, 128, 0.4)", // greyish tint
-        zIndex: 5,
-      }}
-    ></div>
-  )}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                background: "linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
+                display: "flex",
+                flexDirection: "column",
+                fontFamily: '"Bodoni Moda", serif',
+                justifyContent: "flex-end",
+                padding: "15px",
+                color: "#fff",
+              }}
+            >
+              {/* Greyish blur overlay on the image when not available */}
+              {!item.available && (
+                <div
+                className="absolute top-0 left-0 w-full h-full backdrop-blur-[5px] bg-[rgba(128,128,128,0.4)] z-[5]"
 
-  <h2
-    style={{
-      color: "white",
-      fontSize: "1.6rem",
-      fontWeight: "bold",
-      fontFamily: '"Bodoni Moda", serif',
-      marginBottom: "5px",
-    }}
-  >
-    {item.name}
-  </h2>
-  <p
-    style={{
-      fontSize: "1rem",
-      fontFamily: '"Bodoni Moda", serif',
-      fontWeight: "500",
-    }}
-  >
-    Type: {item.type}
-  </p>
-  <p style={{ fontFamily: '"Bodoni Moda", serif', fontSize: "1rem" }}>
-    Price:{" "}
-    <span style={{ fontFamily: '"Bodoni Moda", serif', fontWeight: "bold" }}>
-      ${item.price}
-    </span>
-  </p>
-  <button
-    style={{
-      background: "transparent",
-      color: "white",
-      fontSize: "1rem",
-      padding: "10px 25px",
-      border: "2px solid white",
-      fontFamily: '"Bodoni Moda", serif',
-      borderRadius: "5px",
-      fontWeight: "bold",
-      textTransform: "uppercase",
-      transition: "background 0.3s ease, color 0.3s ease",
-      cursor: item.available ? "pointer" : "not-allowed",
-    }}
-    onClick={() => item.available && handleAddToCart(item)}
-    disabled={!item.available}
-  >
-    {item.available ? "Add to Cart" : "Out of Stock"}
-  </button>
+                ></div>
+              )}
 
-  {/* One-line Out of Stock banner centered in the image */}
-  {!item.available && (
-    <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        color: "white",
-        fontSize: "1.8rem",
-        fontFamily: '"Bodoni Moda", serif',
-        textTransform: "uppercase",
-        zIndex: 10,
-      }}
-    >
-      Out of Stock
-    </div>
-  )}
-</div>
+              <h2
+                style={{
+                  color: "white",
+                  fontSize: "1.6rem",
+                  fontWeight: "bold",
+                  fontFamily: '"Bodoni Moda", serif',
+                  marginBottom: "5px",
+                }}
+              >
+                {item.name}
+              </h2>
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontFamily: '"Bodoni Moda", serif',
+                  fontWeight: "500",
+                }}
+              >
+                Type: {item.type}
+              </p>
+              <p style={{ fontFamily: '"Bodoni Moda", serif', fontSize: "1rem" }}>
+                Price:{" "}
+                <span style={{ fontFamily: '"Bodoni Moda", serif', fontWeight: "bold" }}>
+                  ${item.price}
+                </span>
+              </p>
+              <button
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  fontSize: "1rem",
+                  padding: "10px 25px",
+                  border: "2px solid white",
+                  fontFamily: '"Bodoni Moda", serif',
+                  borderRadius: "5px",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                  transition: "background 0.3s ease, color 0.3s ease",
+                  cursor: item.available ? "pointer" : "not-allowed",
+                }}
+                onClick={() => item.available && handleAddToCart(item)}
+                disabled={!item.available}
+              >
+                {item.available ? "Add to Cart" : "Out of Stock"}
+              </button>
 
-                  </div>
-                </>
-              );
-            })):(
-              <p style={{ textAlign: "center", fontSize: "1.2rem", color: "#7A3E3E" }}>No items found</p>
-            )}
-        </div>
-        {totalPages > 1 && (
+              {/* One-line Out of Stock banner centered in the image */}
+              {!item.available && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    color: "white",
+                    fontSize: "1.8rem",
+                    fontFamily: '"Bodoni Moda", serif',
+                    textTransform: "uppercase",
+                    zIndex: 10,
+                  }}
+                >
+                  Out of Stock
+                </div>
+              )}
+            </div>
+
+          </div>
+        </>
+      );
+      })):(
+        <p style={{ textAlign: "center", fontSize: "1.2rem", color: "#7A3E3E" }}>No items found</p>
+      )}
+  </div>
+  {totalPages > 1 && (
   <div className="flex justify-center items-center mt-6 gap-2">
     {/* Previous Button */}
     <button
@@ -417,10 +419,10 @@ const MenuPage = () => {
     </button>
   </div>
 )}
-
       </div>
     </>
   );
+
 };
 
 export default MenuPage;
