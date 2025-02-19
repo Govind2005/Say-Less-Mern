@@ -26,7 +26,7 @@ export const getOrders = async (req, res) => {
 
 
 export const createOrder = async (req, res) => {
-    const { name, phoneNumber, items, total } = req.body;
+    const { name, phoneNumber, items, total,paid } = req.body;
 // Create an array of item references with quantities
 const orderItems = await Promise.all(
   items.map(async (cartItem) => {
@@ -39,7 +39,8 @@ const orderItems = await Promise.all(
       quantity: cartItem.quantity,  // Store quantity
       name: item.name,
       special: cartItem.special,
-      customize:cartItem.customize
+      customize:cartItem.customize,
+      paid:cartItem.paid
     };
   })
 );
@@ -52,6 +53,7 @@ const newOrder = new Order({
   phoneNumber,
   items: validOrderItems,
   total,
+  paid
 });
 
 try {

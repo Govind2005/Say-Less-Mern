@@ -269,25 +269,29 @@ function Gallery() {
       </section>
 
       {/* Footer Section */}
-      <footer className="footer">
+      <footer className="footer relative" 
+        style={{
+          background:"rgb(259, 70, 117)",
+          zIndex: 1
+        }}>
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Logo" />
+            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Bindi's Cupcakery" />
           </div>
-
+          
           <div className="footer-sections">
             <div className="footer-info">
               <h3>Get In Touch</h3>
               <p>Parle Point, Surat, Gujarat</p>
               <p>8849130189 - 9978677790</p>
             </div>
-
-            <div className="footer-hours">
+            
+            <div className="footer-hours" >
               <h3>Opening Hours</h3>
               <p>Mon – Sat, 11AM – 7PM</p>
               <p>Sunday: Closed</p>
             </div>
-
+            
             <div className="footer-social">
               <h3>Follow Us</h3>
               <div className="social-icons">
@@ -304,7 +308,7 @@ function Gallery() {
             </div>
           </div>
         </div>
-
+        
         <div className="footer-bottom">
           <p><span>© Domain</span>. All Rights Reserved. Designed by Bindi's Cupcakery</p>
         </div>

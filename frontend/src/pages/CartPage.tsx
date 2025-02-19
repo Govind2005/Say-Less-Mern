@@ -22,6 +22,7 @@ interface CartItem {
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [paid,setPaid] = useState(true);
   const [name, setName] = useState('');
   const [messageStatus, setMessageStatus] = useState('');
   const [orderDate, setOrderDate] = useState<string>(new Date().toISOString().split('T')[0]); // Set default date to today
@@ -66,15 +67,6 @@ const CartPage: React.FC = () => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-  // Customization
-
-  // const handleCustomizeChange = (itemId: string, value: string) => {
-  //   const updatedCart = cartItems.map(item =>
-  //     item._id === itemId ? { ...item, customize: value } : item
-  //   );
-  //   setCartItems(updatedCart);
-  //   localStorage.setItem('cart', JSON.stringify(updatedCart));
-  // };
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -184,6 +176,7 @@ const CartPage: React.FC = () => {
           items: cartItems,
           total,
           orderDate,
+          paid
         };
 
         const dbResponse = await fetch('http://localhost:4000/api/order', {
@@ -295,27 +288,36 @@ const CartPage: React.FC = () => {
   
   return (
     <>
-    <nav >
-        <div className="rain-container">
-          {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="raindrop" />
-          ))}
-        </div>
-        <div className="nav-links">
-          <Link  to="/admin" onClick={handleChange} >Admin</Link>
-          <Link to="/about" onClick={handleChange} >About</Link>
-          <div className="logo-container cursor-pointer">
-          <Link to="/" >
-            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="logo" />
-          </Link>
+    <nav className="fixed top-0 w-full z-40 bg-pink-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <a href="/">
+              <img 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                alt="Bindi's" 
+                className="h-6 sm:h-8 object-contain cursor-pointer" 
+              />
+            </a>
           </div>
-          <Link to="/menu" onClick={handleChange}>Product</Link>
-          <Link to="/gallery" onClick={handleChange}>Gallery</Link>
+          {/* Mobile menu button */}
+          <button className="md:hidden p-2 text-pink-100 hover:text-pink-200">
+            <span className="sr-only">Open menu</span>
+            ☰
+          </button>
+          {/* Desktop menu */}
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex gap-6 text-white text-lg">
+              <a href="/menu" className="hover:text-pink-200 transition-colors">Menu</a>
+              <a href="/gallery" className="hover:text-pink-200 transition-colors">Gallery</a>
+              <a href="/about" className="hover:text-pink-200 transition-colors">About Us</a>
+              <a href="/admin" className="hover:text-pink-200 transition-colors">Admin</a>
+            </div>
+          </div>
         </div>
       </nav>
       <ToastContainer position="top-center" autoClose={3000} />
       {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
-    <div className="p-10 font-sans">
+    <div className="p-10 mt-24 font-sans">
       <h1 className="text-center text-5xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
 
       {cartItems.length === 0 ? (
@@ -413,16 +415,83 @@ const CartPage: React.FC = () => {
 
             <div className="flex justify-between items-center mt-5">
               <div className="text-[#7A3E3E] text-xl font-bold">
-                Total: ₹{total.toFixed(2)}
-                </div>
-              <button
-                disabled={!(name && phoneNumber)}
-                    onClick={async (e) => { sendOtp() }}
-                className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400"
-              >
-                Confirm Order
-              </button>
-              
+                Total: ${total.toFixed(2)}
+              </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={async(e) => {
+                    // Set paid to true for online payment
+                    setPaid(true);
+                    handleButtonClick(); 
+                    paymentHandler(e);
+                  }}
+                  disabled={!(name && phoneNumber)}
+                  className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400 hover:bg-[#8A4E4E] transition-colors"
+                  title="Pay now using online payment"
+                >
+                  Pay Now
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      // Set paid to false for pickup orders
+                      setPaid(false);
+
+                      // Prepare order data
+                      const orderData = {
+                        name,
+                        phoneNumber,
+                        items: cartItems,
+                        total,
+                        orderDate,
+                        paid: false // Use false directly since state update might not be immediate
+                      };
+
+                      // Save to database
+                      const dbResponse = await fetch('http://localhost:4000/api/order', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(orderData),
+                      });
+
+                      const dbData = await dbResponse.json();
+                      
+                      if (dbData.success) {
+                        setMessageStatus('Order saved successfully!');
+                        
+                        // Create WhatsApp message
+                        let message = "🎂 *New Order:*\n\n";
+                        cartItems.forEach(item => {
+                          message += `*${item.name}* x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}\n`;
+                          if (item.special) message += `Special: ${item.special}\n`;
+                        });
+                        message += "\nName: " + name;
+                        message += "\nNumber: " + phoneNumber;
+                        message += `\nTotal: ₹${total.toFixed(2)}`;
+                        message += "\nPayment: On Pickup";
+                        
+                        // Encode the message for URL
+                        const encodedMessage = encodeURIComponent(message);
+                        
+                        // Open WhatsApp with the message
+                        window.open(`https://wa.me/919119682899?text=${encodedMessage}`, '_blank');
+                      } else {
+                        setMessageStatus('Failed to save order to database.');
+                      }
+                    } catch (error) {
+                      console.error(error);
+                      setMessageStatus('Error occurred while saving order.');
+                    }
+                  }}
+                  disabled={!(name && phoneNumber)}
+                  className="px-6 py-3 rounded-lg border-2 border-[#7A3E3E] text-[#7A3E3E] text-lg disabled:bg-gray-400 disabled:border-gray-400 disabled:text-gray-600 hover:bg-[#7A3E3E] hover:text-white transition-colors"
+                  title="Contact via WhatsApp for pickup order"
+                >
+                  Pay on Pickup
+                </button>
+              </div>
             </div>
               </div>
               <div>
@@ -461,6 +530,7 @@ const CartPage: React.FC = () => {
       )}
       <p className="mt-5 text-center">{messageStatus}</p>
       </div>
+      
       </>
   );
 };
