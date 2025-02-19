@@ -139,7 +139,7 @@ if (error) return <div>Error: {error}</div>;
           <div className="flex items-center">
             <a href="/">
               <img 
-                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739984546/wgqfebkwfrmmvjttplmx.svg" 
                 alt="Bindi's" 
                 className="h-6 sm:h-8 object-contain cursor-pointer" 
               />
@@ -167,7 +167,7 @@ if (error) return <div>Error: {error}</div>;
         <CartBox />
       </div>
 
-      <div className="mt-16" style={{backgroundColor:"#fff6fd", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
+      <div className="mt-16" style={{backgroundColor:"#e6c9da", padding: "40px", fontFamily: '"Bodoni Moda", serif'}}>
             
            {/* Fancy Heading with SVG Lines */}
             <h1 style={{
@@ -327,7 +327,7 @@ if (error) return <div>Error: {error}</div>;
               <p style={{ fontFamily: '"Bodoni Moda", serif', fontSize: "1rem" }}>
                 Price:{" "}
                 <span style={{ fontFamily: '"Bodoni Moda", serif', fontWeight: "bold" }}>
-                  ${item.price}
+                  ₹{item.price}
                 </span>
               </p>
               <button

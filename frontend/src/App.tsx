@@ -11,6 +11,7 @@ import Gallery from "./components/Gallery";
 import About from "./components/About";
 import ReviewPage from "./pages/ReviewPage";
 import OrderPage from "./pages/OrderPage";
+import MenuPage from './pages/MenuPage';
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/menupage" element={<MenuPage />} />
       </Routes>
     </BrowserRouter>
   );

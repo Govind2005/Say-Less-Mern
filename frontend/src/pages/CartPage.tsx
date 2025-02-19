@@ -20,7 +20,6 @@ interface CartItem {
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [paid,setPaid] = useState(true);
   const [name, setName] = useState('');
   const [messageStatus, setMessageStatus] = useState('');
   const [orderDate, setOrderDate] = useState<string>(new Date().toISOString().split('T')[0]); // Set default date to today
@@ -213,7 +212,6 @@ const CartPage: React.FC = () => {
   const payLater = async () => {
     try {
       // Set paid to false for pickup orders
-      setPaid(false);
 
       // Prepare order data
       const orderData = {
@@ -264,11 +262,7 @@ const CartPage: React.FC = () => {
     }
   };
 
-  const handleChange = () => {
-    setTimeout(() => {
-      window.location.reload();
-    }, 100); // 1000 milliseconds = 1 second
-  };
+  
 
   // Function to send OTP
   const sendOtp = async () => {
@@ -341,7 +335,7 @@ const CartPage: React.FC = () => {
           <div className="flex items-center">
             <a href="/">
               <img 
-                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739984546/wgqfebkwfrmmvjttplmx.svg" 
                 alt="Bindi's" 
                 className="h-6 sm:h-8 object-contain cursor-pointer" 
               />
@@ -365,8 +359,8 @@ const CartPage: React.FC = () => {
       </nav>
       <ToastContainer position="top-center" autoClose={3000} />
       {/* <CartBox cart={cartItems} setCart={setCartItems} /> */}
-    <div className="p-10 mt-24 font-sans">
-      <h1 className="text-center text-5xl mb-8 text-[#7A3E3E]">Shopping Cart</h1>
+    <div className="p-10 bg-pink-100 mt-16 font-sans">
+      <h1 className="text-center text-5xl mb-8 text-[#7A3E3E]">Checkout</h1>
 
       {cartItems.length === 0 ? (
         <p className="text-center text-lg">Your cart is empty</p>
@@ -381,7 +375,9 @@ const CartPage: React.FC = () => {
               />
               <div className="grow">
                 <h3 className="text-[#7A3E3E] text-2xl">{item.name}</h3>
-                <p className="text-[#B56576] text-lg">₹{item.price}</p>
+                <span className="text-lg font-semibold">
+                  ₹{(item.price * item.quantity).toFixed(2)}
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 <button
@@ -463,12 +459,11 @@ const CartPage: React.FC = () => {
 
             <div className="flex justify-between items-center mt-5">
               <div className="text-[#7A3E3E] text-xl font-bold">
-                Total: ${total.toFixed(2)}
+                Total: ₹{total.toFixed(2)}
               </div>
               <div className="flex gap-4">
                 <button
                   onClick={async() => {
-                    setPaid(true);
                     await handleButtonClick(); 
                   }}
                   disabled={!(name && phoneNumber)}

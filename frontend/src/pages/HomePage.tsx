@@ -354,13 +354,7 @@ Our Delicacies!
             <div className="relative" style={{ zIndex: 1 }}>
               <Services/>
             </div>
-
-
-            
-
-        
-
-            
+      
 
             {/* Reviews Section - higher z-index */}
             <section className="reviews-section relative bg-gradient-to-br from-pink-500 to-pink-100 py-300" 

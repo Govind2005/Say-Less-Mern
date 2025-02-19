@@ -129,7 +129,7 @@ const EditItemPage = () => {
                         />
                         <h2 style={{ color: "#7A3E3E", fontSize: "1.8rem", marginTop: "15px" }}>{item.name}</h2>
                         <p style={{ color: "#B56576", fontSize: "1.2rem", fontWeight: "500" }}>Type: {item.type}</p>
-                        <p style={{ color: "#6D6875", fontSize: "1.2rem" }}>Price: <span style={{ fontWeight: "bold", color: "#7A3E3E" }}>${item.price}</span></p>
+                        <p style={{ color: "#6D6875", fontSize: "1.2rem" }}>Price: <span style={{ fontWeight: "bold", color: "#7A3E3E" }}>₹{item.price}</span></p>
                         <p style={{
                             backgroundColor: item.available ? "#D8E2DC" : "#FFC2D1",
                             color: "#7A3E3E",

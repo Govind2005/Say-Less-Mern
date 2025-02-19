@@ -92,7 +92,7 @@ const HeroSection = () => {
                 scrollToTop();
               }}>
                 <img 
-                  src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                  src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739984546/wgqfebkwfrmmvjttplmx.svg" 
                   alt="Bindi's" 
                   className="h-6 sm:h-8 object-contain cursor-pointer" 
                 />
@@ -138,7 +138,7 @@ const HeroSection = () => {
             playsInline
             preload="auto"
           >
-            <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4" />
+            <source src="/WhatsApp Video 2025-02-19 at 21.51.31_d4281ffc.mp4" type="video/mp4" />
           </video>
         </div>
 

@@ -4,7 +4,7 @@ const HamperSection = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/menu');
+    navigate('/menupage');
   };
 
   return (

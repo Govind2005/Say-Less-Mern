@@ -6,6 +6,7 @@ import CreateReview from './AddReview';
 
 function About() {
   const [currentChefIndex, setCurrentChefIndex] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -115,24 +116,29 @@ function About() {
 
   return (
     <div className="app">
-      {/* Add Navigation Bar */}
       {/* Navigation Bar */}
       <nav className="fixed top-0 w-full z-40 bg-pink-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <div className="flex items-center">
-            <a href="/" >
+            <a href="/">
               <img 
-                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739984546/wgqfebkwfrmmvjttplmx.svg" 
                 alt="Bindi's" 
                 className="h-6 sm:h-8 object-contain cursor-pointer" 
               />
             </a>
           </div>
+          
           {/* Mobile menu button */}
-          <button className="md:hidden p-2 text-pink-100 hover:text-pink-200">
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 text-pink-100 hover:text-pink-200"
+            title="Toggle menu"
+          >
             <span className="sr-only">Open menu</span>
-            ☰
+            {isMobileMenuOpen ? '✕' : '☰'}
           </button>
+
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-8">
             <div className="flex gap-6 text-white text-lg">
@@ -141,6 +147,44 @@ function About() {
               <a href="/about" className="hover:text-pink-200 transition-colors">About Us</a>
               <a href="/admin" className="hover:text-pink-200 transition-colors">Admin</a>
             </div>
+          </div>
+        </div>
+
+        {/* Mobile menu dropdown */}
+        <div 
+          className={`md:hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+        >
+          <div className="px-4 py-3 bg-pink-800 space-y-2">
+            <a 
+              href="/menu" 
+              className="block text-white hover:text-pink-200 transition-colors py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Menu
+            </a>
+            <a 
+              href="/gallery" 
+              className="block text-white hover:text-pink-200 transition-colors py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Gallery
+            </a>
+            <a 
+              href="/about" 
+              className="block text-white hover:text-pink-200 transition-colors py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              About Us
+            </a>
+            <a 
+              href="/admin" 
+              className="block text-white hover:text-pink-200 transition-colors py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Admin
+            </a>
           </div>
         </div>
       </nav>

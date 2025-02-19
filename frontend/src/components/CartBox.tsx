@@ -105,7 +105,9 @@ const CartBox: React.FC = () => {
                   />
                   <div className="flex-1">
                     <h5 className="text-[#7A3E3E] text-xl">{item.name}</h5>
-                    <p className="text-[#B56576]">${item.price}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg font-semibold">₹{(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                   <button
@@ -138,8 +140,8 @@ const CartBox: React.FC = () => {
                 </div>  
               ))}
                 </div>
-                <div>
-                  Total Price: {total}
+                <div className="text-lg font-bold mt-4 border-t pt-2">
+                  Total: ₹{total.toFixed(2)}
                 </div>
               </>
           )}

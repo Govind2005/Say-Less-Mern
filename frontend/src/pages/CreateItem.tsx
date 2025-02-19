@@ -76,72 +76,75 @@ const CreateItem = () => {
     return (
         <>
         <AdminNavbar/>
-        <div className="mt-32">
+        <div className="mt-16 min-h-screen bg-pink-50 py-10">
+            <h1 className="text-4xl font-semibold text-center mb-8 text-pink-800">Create New Item</h1>
             
-        
-    <h1 className="text-3xl font-semibold text-center mb-6">Create New Item</h1>
-    
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <input 
-            type="text"
-            placeholder="Name"
-            name="name"
-            value={newItem.name}
-            onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+            <div className="max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg border border-pink-200">
+                <input 
+                    type="text"
+                    placeholder="Name"
+                    name="name"
+                    value={newItem.name}
+                    onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+                    className="w-full p-3 mb-4 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-pink-300"
+                />
+                
+                <input 
+                    type="text"
+                    placeholder="Type"
+                    name="type"
+                    value={newItem.type}
+                    onChange={(e) => setNewItem({ ...newItem, type: e.target.value })}
+                    className="w-full p-3 mb-4 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-pink-300"
+                />
 
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <input 
-            type="text"
-            placeholder="Type"
-            name="type"
-            value={newItem.type}
-            onChange={(e) => setNewItem({ ...newItem, type: e.target.value })}
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <div>
-            <input 
-                type="file"
-                placeholder="Add Your File"
-                name="image"
-                onChange={(e) => { handleFileUpload(e); setNewItem({ ...newItem, image: e.target.value }) }}
-                className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-                        <img src={ preview } />        
+                <div className="mb-4">
+                    <input 
+                        type="file"
+                        placeholder="Add Your File"
+                        name="image"
+                        onChange={(e) => { handleFileUpload(e); setNewItem({ ...newItem, image: e.target.value }) }}
+                        className="w-full p-3 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"
+                    />
+                    {preview && (
+                        <div className="mt-4 rounded-lg overflow-hidden border border-pink-200">
+                            <img 
+                                src={preview} 
+                                alt="Item preview" 
+                                className="w-full h-48 object-cover"
+                            />
+                        </div>
+                    )}
+                </div>
+                
+                <input 
+                    type="number"
+                    placeholder="Price"
+                    name="price"
+                    value={newItem.price}
+                    onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })}
+                    className="w-full p-3 mb-4 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-pink-300"
+                />
+                
+                <input 
+                    type="text"
+                    placeholder="Available (true/false)"
+                    name="available"
+                    value={newItem.available}
+                    onChange={(e) => setNewItem({ ...newItem, available: e.target.value })}
+                    className="w-full p-3 mb-6 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-pink-300"
+                />
+                
+                <button 
+                    onClick={(e) => { handleAddItem(e); refreshPage(); }}
+                    className="w-full bg-pink-600 text-white p-4 rounded-lg hover:bg-pink-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                    <span className="font-bold text-lg">Add Item</span>
+                </button>
+            </div>
         </div>
-        
-        <input 
-            type="number"
-            placeholder="Price"
-            name="price"
-            value={newItem.price}
-            onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })}
+        </>
+    );
+};
 
-            className="w-full p-3 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <input 
-            type="text"
-            placeholder="true/false"
-            name="available"
-            value={newItem.available}
-            onChange={(e) => setNewItem({ ...newItem, available: e.target.value })}
-            className="w-full p-3 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        
-        <button 
-            onClick={(e) => { handleAddItem(e); refreshPage(); }}
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-300 mb-4"
-        >
-            <h2 className="font-bold text-lg">Add Item</h2>
-        </button>
-
-        
-    </div>
-    </div>
-</>
-
-    )
-}
 export default CreateItem;

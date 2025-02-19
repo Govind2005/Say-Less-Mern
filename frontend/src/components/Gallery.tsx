@@ -195,7 +195,7 @@ function Gallery() {
           <div className="flex items-center">
             <a href="/">
               <img 
-                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739984546/wgqfebkwfrmmvjttplmx.svg" 
                 alt="Bindi's" 
                 className="h-6 sm:h-8 object-contain cursor-pointer" 
               />

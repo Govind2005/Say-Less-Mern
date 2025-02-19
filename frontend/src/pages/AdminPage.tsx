@@ -1,5 +1,5 @@
 import { Link} from 'react-router-dom';
-import { Cake, ShoppingCart, Box, Activity, Coffee, Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Cake, ShoppingCart, Box, Activity, Coffee, Mail, Phone, MapPin} from "lucide-react";
 import { Card } from '../components/ui/card';
 import AdminNavbar from '../components/AdminNavbar';
 import LoginPage from './LoginPage';
