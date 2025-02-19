@@ -179,7 +179,7 @@ const CartPage: React.FC = () => {
           items: cartItems,
           total,
           orderDate,
-          paid
+          paid:true
         };
 
         const dbResponse = await fetch('http://localhost:4000/api/order', {

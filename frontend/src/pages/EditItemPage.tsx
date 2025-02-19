@@ -62,7 +62,7 @@ const EditItemPage = () => {
     return (
         <>
         <AdminNavbar/>
-        <div className="mt-32" style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
+        <div className="mt-16" style={{ backgroundColor: "#FDE2F4", padding: "40px", fontFamily: "'Poppins', sans-serif" }}>
             {/* Filter Bar */}
             <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
                 {["All", "Cake", "Cupcakes", "Pastry", "Donut", "Cookie"].map((cat) => (
