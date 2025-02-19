@@ -2,7 +2,7 @@ import { useState, useEffect, SetStateAction } from 'react';
 // import CartBox from '../components/CartBox';
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTrashAlt, FaYoutube } from "react-icons/fa";
 
 interface CartItem {
   _id: string;
