@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const scrollGalleryImages = [
   'https://res.cloudinary.com/duqllfqxd/image/upload/v1739274475/111_rtm1vj.jpg',
@@ -10,7 +11,7 @@ const scrollGalleryImages = [
 ];
 
 const buttonColors = [
-  'bg-violet-600', 'bg-indigo-600', 'bg-blue-600', 'bg-green-600', 'bg-yellow-600', 'bg-orange-600'
+  'bg-pink-200', 'bg-pink-300', 'bg-pink-400', 'bg-pink-500', 'bg-pink-600','bg-pink-700'
 ];
 
 const buttonText = [
@@ -23,6 +24,7 @@ const buttonText = [
 ];
 
 const CurtainGallery = () => {
+  const navigate = useNavigate();
   const [scrollY, setScrollY] = useState(0);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
@@ -69,9 +71,11 @@ const CurtainGallery = () => {
         })}
       </div>
 
-      {/* The "Order Now" button with smooth background color transition */}
+      {/* The "Order Now" button with navigation and cursor pointer */}
       <button
-        className={`fixed bottom-4 left-4 py-12 px-24 text-white text-2xl rounded-full font-bold transition-all duration-500 ease-in-out ${buttonColors[activeImageIndex]}`}
+        onClick={() => navigate('/menu')}
+        className={`fixed bottom-4 left-4 py-12 px-24 text-white text-2xl rounded-full font-bold transition-all duration-500 ease-in-out cursor-pointer ${buttonColors[activeImageIndex]}`}
+        title={buttonText[activeImageIndex]}
       >
         {buttonText[activeImageIndex]}
       </button>

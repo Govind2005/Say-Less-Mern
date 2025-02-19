@@ -4,6 +4,7 @@ import Item from './item.js';
 const orderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phoneNumber: { type: String, required: true },
+  paid: {type: Boolean},
   items: [
     {
       // Reference to the Item model

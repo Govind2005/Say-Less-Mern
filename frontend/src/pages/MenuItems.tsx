@@ -365,6 +365,7 @@ const MenuPage = () => {
 )}
 
       </div>
+      
     </>
   );
 };
