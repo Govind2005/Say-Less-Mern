@@ -1,10 +1,8 @@
-import { useState, useEffect, useRef} from 'react';
+import { useState, useEffect } from 'react';
 // import CartBox from '../components/CartBox';
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { FaTrashAlt } from "react-icons/fa";
-import { Link } from 'react-router';
-import axios from "axios";
+import { FaTrashAlt, FaFacebookF, FaYoutube, FaInstagram } from "react-icons/fa";
 import { MdCancel } from "react-icons/md"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -144,6 +142,11 @@ const CartPage: React.FC = () => {
   const handleButtonClick = async () => {
     if (phoneNumber && name) {
       try {
+        await sendOtp(); // Send OTP when button is clicked
+      } catch (error) {
+        toast.error("Failed to send OTP. Please try again.");
+    }
+      try {
         let message = "🎂 *New Order:*\n\n";
         cartItems.forEach(item => {
           message += `*${item.name}* x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}\n`;
@@ -205,14 +208,60 @@ const CartPage: React.FC = () => {
       setMessageStatus('Please enter both name and phone number.');
       }
     
-      try {
-        await sendOtp(); // Send OTP when button is clicked
-        toast.success("OTP sent successfully!");
-      } catch (error) {
-        toast.error("Failed to send OTP. Please try again.");
+  };
+
+  const payLater = async () => {
+    try {
+      // Set paid to false for pickup orders
+      setPaid(false);
+
+      // Prepare order data
+      const orderData = {
+        name,
+        phoneNumber,
+        items: cartItems,
+        total,
+        orderDate,
+        paid: false // Use false directly since state update might not be immediate
+      };
+
+      // Save to database
+      const dbResponse = await fetch('http://localhost:4000/api/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const dbData = await dbResponse.json();
+      
+      if (dbData.success) {
+        setMessageStatus('Order saved successfully!');
+        
+        // Create WhatsApp message
+        let message = "🎂 *New Order:*\n\n";
+        cartItems.forEach(item => {
+          message += `*${item.name}* x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}\n`;
+          if (item.special) message += `Special: ${item.special}\n`;
+        });
+        message += "\nName: " + name;
+        message += "\nNumber: " + phoneNumber;
+        message += `\nTotal: ₹${total.toFixed(2)}`;
+        message += "\nPayment: On Pickup";
+        
+        // Encode the message for URL
+        const encodedMessage = encodeURIComponent(message);
+        
+        // Open WhatsApp with the message
+        window.open(`https://wa.me/919119682899?text=${encodedMessage}`, '_blank');
+      } else {
+        setMessageStatus('Failed to save order to database.');
+      }
+    } catch (error) {
+      console.error(error);
+      setMessageStatus('Error occurred while saving order.');
     }
-    paymentHandler;
-    
   };
 
   const handleChange = () => {
@@ -247,7 +296,7 @@ const CartPage: React.FC = () => {
     setIsOtpSent(false); // Close the modal
   };
   // Function to verify OTP
-  const verifyOtp = async () => {
+  const verifyOtp = async (e:any) => {
     if (!otp) {
       toast.error("Please enter the OTP.");
       return;
@@ -274,6 +323,7 @@ const CartPage: React.FC = () => {
         toast.success("OTP verified successfully!");
         setIsOtpSent(false); // Close OTP modal on success
         closeModal(); // Close modal if needed
+        paymentHandler(e);
       } else {
         toast.error(data.message || "Invalid OTP. Please try again.");
       }
@@ -284,8 +334,6 @@ const CartPage: React.FC = () => {
       setLoading(false);
     }
   };
-  
-  
   return (
     <>
     <nav className="fixed top-0 w-full z-40 bg-pink-700">
@@ -419,11 +467,9 @@ const CartPage: React.FC = () => {
               </div>
               <div className="flex gap-4">
                 <button
-                  onClick={async(e) => {
-                    // Set paid to true for online payment
+                  onClick={async() => {
                     setPaid(true);
-                    handleButtonClick(); 
-                    paymentHandler(e);
+                    await handleButtonClick(); 
                   }}
                   disabled={!(name && phoneNumber)}
                   className="px-6 py-3 rounded-lg bg-[#7A3E3E] text-white text-lg disabled:bg-gray-400 hover:bg-[#8A4E4E] transition-colors"
@@ -432,59 +478,7 @@ const CartPage: React.FC = () => {
                   Pay Now
                 </button>
                 <button
-                  onClick={async () => {
-                    try {
-                      // Set paid to false for pickup orders
-                      setPaid(false);
-
-                      // Prepare order data
-                      const orderData = {
-                        name,
-                        phoneNumber,
-                        items: cartItems,
-                        total,
-                        orderDate,
-                        paid: false // Use false directly since state update might not be immediate
-                      };
-
-                      // Save to database
-                      const dbResponse = await fetch('http://localhost:4000/api/order', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(orderData),
-                      });
-
-                      const dbData = await dbResponse.json();
-                      
-                      if (dbData.success) {
-                        setMessageStatus('Order saved successfully!');
-                        
-                        // Create WhatsApp message
-                        let message = "🎂 *New Order:*\n\n";
-                        cartItems.forEach(item => {
-                          message += `*${item.name}* x${item.quantity} - ₹${(item.price * item.quantity).toFixed(2)}\n`;
-                          if (item.special) message += `Special: ${item.special}\n`;
-                        });
-                        message += "\nName: " + name;
-                        message += "\nNumber: " + phoneNumber;
-                        message += `\nTotal: ₹${total.toFixed(2)}`;
-                        message += "\nPayment: On Pickup";
-                        
-                        // Encode the message for URL
-                        const encodedMessage = encodeURIComponent(message);
-                        
-                        // Open WhatsApp with the message
-                        window.open(`https://wa.me/919119682899?text=${encodedMessage}`, '_blank');
-                      } else {
-                        setMessageStatus('Failed to save order to database.');
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      setMessageStatus('Error occurred while saving order.');
-                    }
-                  }}
+                  onClick={payLater}
                   disabled={!(name && phoneNumber)}
                   className="px-6 py-3 rounded-lg border-2 border-[#7A3E3E] text-[#7A3E3E] text-lg disabled:bg-gray-400 disabled:border-gray-400 disabled:text-gray-600 hover:bg-[#7A3E3E] hover:text-white transition-colors"
                   title="Contact via WhatsApp for pickup order"
@@ -530,7 +524,67 @@ const CartPage: React.FC = () => {
       )}
       <p className="mt-5 text-center">{messageStatus}</p>
       </div>
-      
+      <footer className="w-full bg-[#FF4D8D] text-white py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Logo Section */}
+          <div className="flex justify-center mb-16">
+            <div className="w-[200px] bg-[#FFE0E9] p-4 rounded-lg">
+              <img 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                alt="Bindi's Cupcakery"
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            {/* Get In Touch */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Get In Touch
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
+              <p>Parle Point, Surat, Gujarat</p>
+              <p>8849130189 - 9978677790</p>
+            </div>
+
+            {/* Opening Hours */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Opening Hours
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
+              <p>Mon – Sat, 11AM – 7PM</p>
+              <p>Sunday: Closed</p>
+            </div>
+
+            {/* Follow Us */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Follow Us
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
+              <div className="flex justify-center gap-6">
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
+                  <FaFacebookF />
+                </a>
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
+                  <FaInstagram />
+                </a>
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
+                  <FaYoutube />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-center mt-16 pt-8 border-t border-pink-400">
+            <p>© Domain. All Rights Reserved. Designed by Bindi's Cupcakery</p>
+          </div>
+        </div>
+      </footer>
       </>
   );
 };

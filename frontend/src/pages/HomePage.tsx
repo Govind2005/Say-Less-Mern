@@ -262,7 +262,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="app">
+    <div className="relative min-h-screen">
       
       <Routes>
         <Route path="/" element={
@@ -415,56 +415,73 @@ Our Delicacies!
         <Route path="/gallery" element={<Gallery />} />
       </Routes>
 
-      {/* Footer - highest z-index */}
-      <footer className="footer relative" 
-        style={{
-          background:"rgb(259, 70, 117)",
-          zIndex: 1
-        }}>
-        <div className="footer-content">
-          <div className="footer-logo">
-            <img src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" alt="Bindi's Cupcakery" />
+      {/* Footer - Update z-index and positioning */}
+      <footer className="w-full bg-[#FF4D8D] text-white py-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Logo Section */}
+          <div className="flex justify-center mb-16">
+            <div className="w-[200px] bg-[#FFE0E9] p-4 rounded-lg">
+              <img 
+                src="https://res.cloudinary.com/dgtxyhdwa/image/upload/v1739618267/logo_kssytz.png" 
+                alt="Bindi's Cupcakery"
+                className="w-full h-auto"
+              />
+            </div>
           </div>
-          
-          <div className="footer-sections">
-            <div className="footer-info">
-              <h3>Get In Touch</h3>
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            {/* Get In Touch */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Get In Touch
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
               <p>Parle Point, Surat, Gujarat</p>
               <p>8849130189 - 9978677790</p>
             </div>
-            
-            <div className="footer-hours" >
-              <h3>Opening Hours</h3>
+
+            {/* Opening Hours */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Opening Hours
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
               <p>Mon – Sat, 11AM – 7PM</p>
               <p>Sunday: Closed</p>
             </div>
-            
-            <div className="footer-social">
-              <h3>Follow Us</h3>
-              <div className="social-icons">
-                <a href="#" className="social-icon">
+
+            {/* Follow Us */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-semibold mb-6 relative inline-block">
+                Follow Us
+                <div className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-12 h-[2px] bg-white"></div>
+              </h3>
+              <div className="flex justify-center gap-6">
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
                   <FaFacebookF />
                 </a>
-                <a href="#" className="social-icon">
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
                   <FaInstagram />
                 </a>
-                <a href="#" className="social-icon">
+                <a href="#" className="hover:text-pink-200 transition-colors text-xl">
                   <FaYoutube />
                 </a>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div className="footer-bottom">
-          <p><span>© Domain</span>. All Rights Reserved. Designed by Bindi's Cupcakery</p>
+
+          {/* Copyright */}
+          <div className="text-center mt-16 pt-8 border-t border-pink-400">
+            <p>© Domain. All Rights Reserved. Designed by Bindi's Cupcakery</p>
+          </div>
         </div>
       </footer>
 
-      {/* Scroll to top button - highest z-index */}
+      {/* Scroll to top button - Update z-index */}
       <button 
         className="scroll-to-top"
-        style={{ zIndex: 2 }}
+        style={{ zIndex: 20 }}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
         ↑
